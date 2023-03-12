@@ -17,43 +17,57 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Background(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Welcome to Sessions",
-              style: titleTextStyle,
-            ),
-            SizedBox(
-              height: size.height * 0.05,
-            ),
-            SvgPicture.asset(
-              "assets/icons/chat.svg",
-              height: size.height * 0.45,
-            ),
-            SizedBox(
-              height: size.height * 0.05,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                RoundedButton(
-                  title: "Login",
-                  onPress: () {
-                    navigatorPush(Loginscreen(), context);
-                  },
-                ),
-                RoundedButton(
-                  title: "SignUp",
-                  onPress: () {},
-                  color: kPrimaryLightColor,
-                  textColor: Colors.black,
-                )
-              ],
-            )
-          ],
-        ),
+      child: CenterBody(size: size),
+    );
+  }
+}
+
+class CenterBody extends StatelessWidget {
+  const CenterBody({
+    super.key,
+    required this.size,
+  });
+
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Welcome to Sessions",
+            style: titleTextStyle,
+          ),
+          SizedBox(
+            height: size.height * 0.05,
+          ),
+          SvgPicture.asset(
+            "assets/icons/chat.svg",
+            height: size.height * 0.45,
+          ),
+          SizedBox(
+            height: size.height * 0.05,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              RoundedButton(
+                title: "Login",
+                onPress: () {
+                  navigatorPush(Loginscreen(), context);
+                },
+              ),
+              RoundedButton(
+                title: "SignUp",
+                onPress: () {},
+                color: kPrimaryLightColor,
+                textColor: Colors.black,
+              )
+            ],
+          )
+        ],
       ),
     );
   }
