@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:sessions/Screens/login/components/body.dart';
+import 'package:sessions/Screens/Login/components/body.dart';
 
 class Loginscreen extends StatelessWidget {
   const Loginscreen({super.key});

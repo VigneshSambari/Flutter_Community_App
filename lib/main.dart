@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sessions/Screens/Welcome/welcome_screen.dart';
+import 'package:sessions/screens/welcome/welcome_screen.dart';
 import 'package:sessions/constants.dart';
 
 void main() {

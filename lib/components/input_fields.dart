@@ -28,15 +28,15 @@ class _OutlinedInputFieldState extends State<OutlinedInputField> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
       width: size.width * 0.84,
       child: TextFormField(
         onTapOutside: (value) {
           setState(() {
-            passwordVisible = true;
+            passwordVisible = false;
           });
         },
-        obscureText: widget.password ? passwordVisible : false,
+        obscureText: widget.password ? !passwordVisible : false,
         decoration: InputDecoration(
           prefixIcon: Container(
             padding: EdgeInsets.only(left: 10),
@@ -50,7 +50,7 @@ class _OutlinedInputFieldState extends State<OutlinedInputField> {
                     });
                   },
                   child: Icon(
-                    passwordVisible ? Icons.visibility : Icons.visibility_off,
+                    !passwordVisible ? Icons.visibility : Icons.visibility_off,
                     color: kPrimaryColor,
                   ),
                 )

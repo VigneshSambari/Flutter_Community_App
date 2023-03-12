@@ -2,8 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sessions/Screens/Welcome/components/background.dart';
-import 'package:sessions/Screens/login/login_screen.dart';
+import 'package:sessions/screens/signup/signup_screen.dart';
+import 'package:sessions/screens/welcome/components/background.dart';
+import 'package:sessions/Screens/Login/login_screen.dart';
 import 'package:sessions/components/styles.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/utils/navigations.dart';
@@ -61,7 +62,9 @@ class CenterBody extends StatelessWidget {
               ),
               RoundedButton(
                 title: "SignUp",
-                onPress: () {},
+                onPress: () {
+                  navigatorPush(SignUpScreen(), context);
+                },
                 color: kPrimaryLightColor,
                 textColor: Colors.black,
               )
