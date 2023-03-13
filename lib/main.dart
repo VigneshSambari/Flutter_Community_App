@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sessions/components/side_menu.dart';
+import 'package:sessions/screens/entryPoint/entry_point.dart';
 import 'package:sessions/screens/welcome/welcome_screen.dart';
 import 'package:sessions/constants.dart';
 
@@ -16,10 +18,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Sessions',
       theme: ThemeData(
+        fontFamily: "Intel",
         primarySwatch: kPrimarySwatch,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: const WelcomeScreen(),
+      home: const SideMenu(),
     );
   }
 }

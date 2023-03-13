@@ -109,3 +109,30 @@ class SocialMediaTray extends StatelessWidget {
     );
   }
 }
+
+class NavHighlighter extends StatelessWidget {
+  const NavHighlighter({
+    super.key,
+    required this.isActive,
+  });
+
+  final bool isActive;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 200),
+      margin: EdgeInsets.only(
+        bottom: 2,
+      ),
+      height: 4,
+      width: isActive ? 20 : 0,
+      decoration: BoxDecoration(
+        color: lightColor,
+        borderRadius: BorderRadius.all(
+          Radius.circular(15),
+        ),
+      ),
+    );
+  }
+}
