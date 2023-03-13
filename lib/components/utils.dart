@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sessions/constants.dart';
@@ -131,6 +132,42 @@ class NavHighlighter extends StatelessWidget {
         color: lightColor,
         borderRadius: BorderRadius.all(
           Radius.circular(15),
+        ),
+      ),
+    );
+  }
+}
+
+class InfoCard extends StatelessWidget {
+  const InfoCard({
+    super.key,
+    required this.title,
+    required this.subtitle,
+  });
+
+  final String title, subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundColor: Colors.white24,
+        child: Icon(
+          CupertinoIcons.person,
+          color: Colors.white,
+        ),
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      subtitle: Text(
+        subtitle,
+        style: TextStyle(
+          color: Colors.white60,
         ),
       ),
     );

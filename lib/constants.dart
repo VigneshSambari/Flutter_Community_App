@@ -26,3 +26,4 @@ const Color backgroundColorDark = Color(0xFF25254B);
 const Color shadowColorLight = Color(0xFF4A5367);
 const Color shadowColorDark = Colors.black;
 const lightColor = Color.fromARGB(255, 243, 204, 255);
+const highligherColor = Color(0xFF9E7AAE);
