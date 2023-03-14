@@ -26,73 +26,75 @@ class _SideMenuState extends State<SideMenu> {
           width: 275,
           height: size.height,
           child: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              //mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                InfoCard(
-                  title: "VickySam1901",
-                  subtitle: "Student",
-                ),
-                SideMenuCategory(
-                  title: "Browse",
-                ),
-                ...browseMenu.map(
-                  (menu) => SideMenuTile(
-                    isActive: selectedMenuItem == menu,
-                    menu: menu,
-                    press: () {
-                      menu.input!.change(true);
-                      setState(() {
-                        selectedMenuItem = menu;
-                      });
-                      Future.delayed(
-                        Duration(milliseconds: 100),
-                        () {
-                          menu.input!.change(false);
-                        },
-                      );
-                    },
-                    riveInit: (artboard) {
-                      StateMachineController controller =
-                          RiveUtils.getRiveController(
-                        artboard,
-                        stateMachineName: menu.stateMachineName,
-                      );
-                      menu.input = controller.findSMI("active") as SMIBool;
-                    },
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                //mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  InfoCard(
+                    title: "VickySam1901",
+                    subtitle: "Student",
                   ),
-                ),
-                SideMenuCategory(
-                  title: "History",
-                ),
-                ...historyMenus.map(
-                  (menu) => SideMenuTile(
-                    isActive: selectedMenuItem == menu,
-                    menu: menu,
-                    press: () {
-                      menu.input!.change(true);
-                      setState(() {
-                        selectedMenuItem = menu;
-                      });
-                      Future.delayed(
-                        Duration(milliseconds: 100),
-                        () {
-                          menu.input!.change(false);
-                        },
-                      );
-                    },
-                    riveInit: (artboard) {
-                      StateMachineController controller =
-                          RiveUtils.getRiveController(
-                        artboard,
-                        stateMachineName: menu.stateMachineName,
-                      );
-                      menu.input = controller.findSMI("active") as SMIBool;
-                    },
+                  SideMenuCategory(
+                    title: "Browse",
                   ),
-                ),
-              ],
+                  ...browseMenu.map(
+                    (menu) => SideMenuTile(
+                      isActive: selectedMenuItem == menu,
+                      menu: menu,
+                      press: () {
+                        menu.input!.change(true);
+                        setState(() {
+                          selectedMenuItem = menu;
+                        });
+                        Future.delayed(
+                          Duration(milliseconds: 100),
+                          () {
+                            menu.input!.change(false);
+                          },
+                        );
+                      },
+                      riveInit: (artboard) {
+                        StateMachineController controller =
+                            RiveUtils.getRiveController(
+                          artboard,
+                          stateMachineName: menu.stateMachineName,
+                        );
+                        menu.input = controller.findSMI("active") as SMIBool;
+                      },
+                    ),
+                  ),
+                  SideMenuCategory(
+                    title: "History",
+                  ),
+                  ...historyMenus.map(
+                    (menu) => SideMenuTile(
+                      isActive: selectedMenuItem == menu,
+                      menu: menu,
+                      press: () {
+                        menu.input!.change(true);
+                        setState(() {
+                          selectedMenuItem = menu;
+                        });
+                        Future.delayed(
+                          Duration(milliseconds: 100),
+                          () {
+                            menu.input!.change(false);
+                          },
+                        );
+                      },
+                      riveInit: (artboard) {
+                        StateMachineController controller =
+                            RiveUtils.getRiveController(
+                          artboard,
+                          stateMachineName: menu.stateMachineName,
+                        );
+                        menu.input = controller.findSMI("active") as SMIBool;
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -130,6 +132,7 @@ class SideMenuTile extends StatelessWidget {
           children: [
             AnimatedPositioned(
               duration: Duration(milliseconds: 200),
+              curve: Curves.fastOutSlowIn,
               height: 56,
               width: isActive ? 275 : 0,
               child: Container(
@@ -237,3 +240,45 @@ List<RiveAsset> historyMenus = [
     src: "assets/riveAssets/icons.riv",
   ),
 ];
+
+class MenuBurgerButton extends StatelessWidget {
+  const MenuBurgerButton({
+    super.key,
+    required this.press,
+    required this.riveInit,
+  });
+
+  final VoidCallback press;
+  final ValueChanged<Artboard> riveInit;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: GestureDetector(
+        onTap: press,
+        child: Container(
+          height: 40,
+          width: 40,
+          margin: EdgeInsets.only(
+            left: 15,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                offset: Offset(0, 3),
+                blurRadius: 8,
+              )
+            ],
+          ),
+          child: RiveAnimation.asset(
+            "assets/riveAssets/menu_button.riv",
+            onInit: riveInit,
+          ),
+        ),
+      ),
+    );
+  }
+}

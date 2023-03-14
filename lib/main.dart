@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sessions/components/side_menu.dart';
 import 'package:sessions/constants.dart';
+import 'package:sessions/screens/entryPoint/entry_point.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: kPrimarySwatch,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: const SideMenu(),
+      home: const EntryPoint(),
     );
   }
 }
