@@ -83,24 +83,32 @@ class RoundedInputField extends StatelessWidget {
     required this.fieldName,
     this.iconColor = kPrimaryColor,
     required this.iconData,
+    this.scale = 0.85,
+    this.extensible = false,
   });
 
   final String fieldName;
   final Color iconColor;
+  final double scale;
   final IconData iconData;
+  final bool extensible;
 
   @override
   Widget build(BuildContext context) {
     return TextFieldContainer(
       widget: TextField(
+        maxLines: extensible ? 10 : 1,
+        minLines: 1,
         decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: fieldName,
-            icon: Icon(
-              Icons.person_4,
-              color: iconColor,
-            )),
+          border: InputBorder.none,
+          hintText: fieldName,
+          icon: Icon(
+            iconData,
+            color: iconColor,
+          ),
+        ),
       ),
+      scale: scale,
     );
   }
 }
@@ -109,14 +117,16 @@ class TextFieldContainer extends StatelessWidget {
   const TextFieldContainer({
     super.key,
     required this.widget,
+    required this.scale,
   });
 
   final Widget widget;
+  final double scale;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      width: size.width * 0.85,
+      width: size.width * scale,
       margin: EdgeInsets.symmetric(
         vertical: 10,
       ),
