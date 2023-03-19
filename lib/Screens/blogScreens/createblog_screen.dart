@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, sized_box_for_whitespace
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'dart:io';
@@ -155,7 +155,7 @@ class _CreateBlogState extends State<CreateBlog> {
                       Container(
                         padding: EdgeInsets.all(10),
                         width: size.width * 0.69,
-                        height: selectedFiles.isEmpty ? 0 : size.height * 0.26,
+                        height: selectedFiles.isEmpty ? 0 : size.height * 0.2,
                         decoration: BoxDecoration(
                           //color: Colors.black,
                           borderRadius: BorderRadius.circular(5),
@@ -176,6 +176,12 @@ class _CreateBlogState extends State<CreateBlog> {
                           },
                         ),
                       ),
+                      Container(
+                        width: size.width * 0.5,
+                        child: selectedFiles.isEmpty
+                            ? null
+                            : RoundedButton(title: "Upload", onPress: () {}),
+                      )
                     ],
                   ),
                 ),

@@ -150,7 +150,7 @@ class SelectedFileTile extends StatelessWidget {
           color: kPrimaryColor,
           width: 1,
         ),
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
         children: [

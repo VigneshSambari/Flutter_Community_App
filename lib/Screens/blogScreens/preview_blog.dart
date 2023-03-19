@@ -15,9 +15,14 @@ class PreviewBlog extends StatelessWidget {
           title: "Preview",
           backgroundColor: kPrimaryColor,
           actions: [
-            Icon(
-              Icons.edit,
-              color: Colors.grey,
+            GestureDetector(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Icon(
+                  Icons.edit,
+                  color: Colors.white,
+                ),
+              ),
             )
           ]),
     );
