@@ -139,7 +139,6 @@ class SelectedFileTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.symmetric(vertical: 2.5),
       alignment: Alignment.centerLeft,

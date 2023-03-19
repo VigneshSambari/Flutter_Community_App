@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:sessions/components/appbar.dart';
 
-import 'package:sessions/components/input_fields.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/screens/blogScreens/components/blog_utils.dart';
 

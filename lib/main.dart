@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sessions/constants.dart';
-import 'package:sessions/screens/blogScreens/components/createblog_screen.dart';
-
-import 'package:sessions/screens/entryPoint/entry_point.dart';
+import 'package:sessions/screens/blogScreens/preview_blog.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +20,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: kPrimarySwatch,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: const CreateBlog(),
+      home: const PreviewBlog(),
     );
   }
 }

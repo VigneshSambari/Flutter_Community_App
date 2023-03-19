@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:sessions/constants.dart';
 
 class CurvedAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;

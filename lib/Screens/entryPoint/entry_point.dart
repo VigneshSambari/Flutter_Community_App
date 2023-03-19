@@ -4,7 +4,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
-import 'package:sessions/components/appbar.dart';
 import 'package:sessions/components/navbar.dart';
 import 'package:sessions/components/side_menu.dart';
 import 'package:sessions/constants.dart';
