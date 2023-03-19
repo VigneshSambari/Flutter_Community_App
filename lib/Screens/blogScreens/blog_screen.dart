@@ -1,10 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:sessions/components/appbar.dart';
+
 import 'package:sessions/components/input_fields.dart';
-import 'package:sessions/components/navbar.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/screens/blogScreens/components/blog_utils.dart';
 
@@ -26,33 +25,32 @@ class BlogScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      extendBody: true,
-      //resizeToAvoidBottomInset: false,
-      appBar: CurvedAppBar(
-        title: "Blogs",
-        backgroundColor: kPrimaryColor,
-        actions: [],
-      ),
-      body: Container(
-        width: size.width,
-        padding: EdgeInsets.all(2),
-        child: ListView.builder(
-          scrollDirection: Axis.vertical,
-          itemCount: widgets.length,
-          itemBuilder: (BuildContext context, int index) {
-            if (index == 0) {
-              return RoundedInputField(
-                fieldName: "Search",
-                iconData: Icons.search,
-                scale: 0.85,
-              );
-            }
-            return BlogTile();
-          },
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        CurvedAppBar(
+          title: "Blogs",
+          backgroundColor: backgroundColor2.withOpacity(0.1),
+          actions: [],
         ),
-      ),
-      bottomNavigationBar: NavBarAnimated(),
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+            ),
+            width: size.width,
+            height: size.height,
+            padding: EdgeInsets.all(2),
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              itemCount: widgets.length,
+              itemBuilder: (BuildContext context, int index) {
+                return BlogTile();
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

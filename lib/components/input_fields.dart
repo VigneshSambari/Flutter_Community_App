@@ -97,7 +97,7 @@ class RoundedInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFieldContainer(
       widget: TextField(
-        maxLines: extensible ? 10 : 1,
+        maxLines: extensible ? 10 : 2,
         minLines: 1,
         decoration: InputDecoration(
           border: InputBorder.none,
