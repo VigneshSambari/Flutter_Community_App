@@ -10,12 +10,13 @@ class OutlinedInputField extends StatefulWidget {
     required this.hintText,
     required this.prefixIcon,
     this.password = false,
+    this.enabled = true,
   });
 
   final String labelText;
   final String hintText;
   final Icon prefixIcon;
-  final bool password;
+  final bool password, enabled;
 
   @override
   State<OutlinedInputField> createState() => _OutlinedInputFieldState();
@@ -83,32 +84,36 @@ class RoundedInputField extends StatelessWidget {
     required this.fieldName,
     this.iconColor = kPrimaryColor,
     required this.iconData,
-    this.scale = 0.85,
     this.extensible = false,
+    this.height = 0,
+    this.enabled = true,
   });
 
   final String fieldName;
   final Color iconColor;
-  final double scale;
+  final double height;
   final IconData iconData;
-  final bool extensible;
+  final bool extensible, enabled;
 
   @override
   Widget build(BuildContext context) {
     return TextFieldContainer(
       widget: TextField(
+        enabled: enabled,
         maxLines: extensible ? 10 : 2,
         minLines: 1,
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: fieldName,
-          icon: Icon(
-            iconData,
-            color: iconColor,
-          ),
+          icon: iconData == Icons.abc
+              ? null
+              : Icon(
+                  iconData,
+                  color: iconColor,
+                ),
         ),
       ),
-      scale: scale,
+      height: height,
     );
   }
 }
@@ -117,16 +122,18 @@ class TextFieldContainer extends StatelessWidget {
   const TextFieldContainer({
     super.key,
     required this.widget,
-    required this.scale,
+    this.height = 0,
   });
 
+  final double height;
   final Widget widget;
-  final double scale;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      width: size.width * scale,
+      height: height == 0 ? null : height,
+      width: size.width,
       margin: EdgeInsets.symmetric(
         vertical: 10,
       ),
@@ -136,6 +143,29 @@ class TextFieldContainer extends StatelessWidget {
         borderRadius: BorderRadius.circular(25),
       ),
       child: widget,
+    );
+  }
+}
+
+class SizedInputField extends StatelessWidget {
+  const SizedInputField({
+    super.key,
+    this.enabled = true,
+    required this.fieldName,
+    this.height = 50,
+  });
+
+  final String fieldName;
+  final bool enabled;
+  final double height;
+  @override
+  Widget build(BuildContext context) {
+    return RoundedInputField(
+      fieldName: fieldName,
+      iconData: Icons.abc,
+      height: height,
+      extensible: false,
+      enabled: enabled,
     );
   }
 }

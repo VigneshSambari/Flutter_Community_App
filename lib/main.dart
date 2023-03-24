@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/screens/blogScreens/createblog_screen.dart';
 import 'package:sessions/screens/blogScreens/preview_blog.dart';
+import 'package:sessions/screens/profile/create_profile.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: kPrimarySwatch,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: const PreviewBlog(),
+      home: CreateProfile(),
     );
   }
 }

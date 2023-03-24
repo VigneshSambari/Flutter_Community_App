@@ -41,6 +41,7 @@ dependencies:
   shared_preferences: ^2.0.18
   dotted_border: ^2.0.0+3
   carousel_slider: ^4.2.1
+  video_player: ^2.6.0
 
 dev_dependencies:
   flutter_test:

@@ -28,6 +28,7 @@ class BlogScreen extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       children: [
         CurvedAppBar(
+          leading: Container(),
           title: "Blogs",
           backgroundColor: backgroundColor2.withOpacity(0.1),
           actions: [],

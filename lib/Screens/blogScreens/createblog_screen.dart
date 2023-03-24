@@ -37,13 +37,14 @@ class _CreateBlogState extends State<CreateBlog> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: CurvedAppBar(
+        leading: Container(),
         title: "Create Blog",
         backgroundColor: kPrimaryColor,
         actions: [],
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(5),
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             //mainAxisAlignment: MainAxisAlignment.center,
@@ -51,14 +52,12 @@ class _CreateBlogState extends State<CreateBlog> {
             children: [
               RoundedInputField(
                 fieldName: "Title",
-                iconData: Icons.title,
-                scale: 0.95,
+                iconData: (Icons.title),
                 extensible: false,
               ),
               RoundedInputField(
                 fieldName: "Body",
                 iconData: Icons.text_snippet,
-                scale: 0.95,
                 extensible: true,
               ),
               Flexible(
@@ -68,121 +67,130 @@ class _CreateBlogState extends State<CreateBlog> {
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   height: selectedFiles.isEmpty
                       ? size.height * 0.3
-                      : size.height * 0.5,
+                      : size.height * 0.55,
                   width: size.width * 0.9,
                   decoration: boxDecoration,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Upload images/videos",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Upload images/videos",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Please choose only:",
-                            style: TextStyle(color: Colors.grey[700]),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Please choose only:",
+                                style: TextStyle(color: Colors.grey[700]),
+                              ),
+                              ...typeAllowed.map((type) => type),
+                            ],
                           ),
-                          ...typeAllowed.map((type) => type),
-                        ],
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          selectedFiles.addAll(await pickFilesBlog());
-                          setState(() {
-                            selectedFiles;
-                          });
-                        },
-                        child: Container(
-                          width: size.width * 0.7,
-                          height: 110,
-                          margin: EdgeInsets.symmetric(
-                            horizontal: size.width * 0.04,
-                            vertical: 10,
-                          ),
-                          decoration: BoxDecoration(
-                            color: lightColor,
-                          ),
-                          child: DottedBorder(
-                            color: kPrimaryColor,
-                            borderType: BorderType.Rect,
-                            strokeWidth: 1.5,
-                            padding: EdgeInsets.symmetric(
+                        ),
+                        GestureDetector(
+                          onTap: () async {
+                            selectedFiles.addAll(await pickFilesBlog());
+                            print(selectedFiles);
+                            setState(() {
+                              selectedFiles;
+                            });
+                          },
+                          child: Container(
+                            width: size.width * 0.7,
+                            height: 110,
+                            margin: EdgeInsets.symmetric(
                               horizontal: size.width * 0.04,
                               vertical: 10,
                             ),
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.folder_copy,
-                                    size: 40,
-                                    color: kPrimaryColor,
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    "Choose files here...",
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: kPrimaryColor.withOpacity(0.9),
+                            decoration: BoxDecoration(
+                              color: lightColor,
+                            ),
+                            child: DottedBorder(
+                              color: kPrimaryColor,
+                              borderType: BorderType.Rect,
+                              strokeWidth: 1.5,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: size.width * 0.04,
+                                vertical: 10,
+                              ),
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.folder_copy,
+                                      size: 40,
+                                      color: kPrimaryColor,
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Text(
-                                    "(Max file size: 10MB)",
-                                    style: TextStyle(
-                                      color: kPrimaryColor.withOpacity(0.5),
-                                      fontSize: 10,
+                                    SizedBox(
+                                      height: 10,
                                     ),
-                                  ),
-                                ],
+                                    Text(
+                                      "Choose files here...",
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: kPrimaryColor.withOpacity(0.9),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Text(
+                                      "(Max file size: 10MB)",
+                                      style: TextStyle(
+                                        color: kPrimaryColor.withOpacity(0.5),
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        width: size.width * 0.69,
-                        height: selectedFiles.isEmpty ? 0 : size.height * 0.2,
-                        decoration: BoxDecoration(
-                          //color: Colors.black,
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(
-                            color: kPrimaryColor,
-                            width: 1.5,
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          width: size.width * 0.69,
+                          height: selectedFiles.isEmpty ? 0 : size.height * 0.2,
+                          decoration: BoxDecoration(
+                            //color: Colors.black,
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                              color: kPrimaryColor,
+                              width: 1.5,
+                            ),
+                          ),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: selectedFiles.length,
+                            itemBuilder: (context, index) {
+                              return SelectedFileTile(
+                                removeTile: removeSelected,
+                                index: index,
+                                title:
+                                    selectedFiles[index].path.split('/').last,
+                              );
+                            },
                           ),
                         ),
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: selectedFiles.length,
-                          itemBuilder: (context, index) {
-                            return SelectedFileTile(
-                              removeTile: removeSelected,
-                              index: index,
-                              title: selectedFiles[index].path.split('/').last,
-                            );
-                          },
-                        ),
-                      ),
-                      Container(
-                        width: size.width * 0.5,
-                        child: selectedFiles.isEmpty
-                            ? null
-                            : RoundedButton(title: "Upload", onPress: () {}),
-                      )
-                    ],
+                        Container(
+                          width: size.width * 0.5,
+                          child: selectedFiles.isEmpty
+                              ? null
+                              : RoundedButton(title: "Upload", onPress: () {}),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),

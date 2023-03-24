@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -172,4 +174,34 @@ class InfoCard extends StatelessWidget {
       ),
     );
   }
+}
+
+Color getRandomColor() {
+  Random random = Random();
+  return Color.fromARGB(
+    255,
+    random.nextInt(256),
+    random.nextInt(256),
+    random.nextInt(256),
+  );
+}
+
+Color getRandomColorFromList() {
+  List<Color> myColors = [
+    Colors.red,
+    Colors.green,
+    Colors.blue,
+    Colors.amber,
+    Colors.black,
+    Colors.pink,
+    Colors.purple,
+    Colors.brown,
+    Colors.blueGrey,
+    Colors.deepOrangeAccent,
+    Colors.deepPurpleAccent,
+    Colors.cyan,
+  ];
+  Random random = Random();
+  int index = random.nextInt(myColors.length);
+  return myColors[index];
 }
