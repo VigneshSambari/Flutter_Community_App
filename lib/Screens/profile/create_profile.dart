@@ -1,28 +1,38 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sized_box_for_whitespace
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sized_box_for_whitespace, prefer_const_constructors_in_immutables
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sessions/components/appbar.dart';
 import 'package:sessions/components/buttons.dart';
 import 'package:sessions/components/drop_downs.dart';
+
 import 'package:sessions/components/input_fields.dart';
-import 'package:sessions/components/styles.dart';
-import 'package:sessions/components/utils.dart';
+
 import 'package:sessions/constants.dart';
 
-class CreateProfile extends StatelessWidget {
+import 'package:sessions/screens/profile/components/profile_image_utils.dart';
+import 'package:sessions/screens/profile/components/tiles.dart';
+
+class CreateProfile extends StatefulWidget {
   CreateProfile({super.key});
+
+  @override
+  State<CreateProfile> createState() => _CreateProfileState();
+}
+
+class _CreateProfileState extends State<CreateProfile> {
   final List<String> collegeDropDown = [
     "NIT Kurukshetra",
     "NIT Warangal",
     "NIT Agartala",
     "None"
   ];
+
   final List<String> specializationDropDown = [
     "ECE",
     "CSE",
     "IT",
   ];
+
   final List<String> designationDropDown = [
     "Student",
     "Teacher",
@@ -45,6 +55,15 @@ class CreateProfile extends StatelessWidget {
     LinkTile(),
     LinkTile(),
   ];
+
+  String appDirectoryPath = "";
+  String profilePicPath = "";
+
+  void addProfilePic(String path) {
+    setState(() {
+      profilePicPath = path;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +88,39 @@ class CreateProfile extends StatelessWidget {
             children: [
               Container(
                 width: size.width,
-                height: 250,
+                height: 230,
+                decoration: BoxDecoration(
+                  color: kPrimaryLightColor,
+                  borderRadius: BorderRadius.circular(15),
+                ),
                 margin: EdgeInsets.all(5),
-                child: SvgPicture.asset("assets/icons/chat.svg"),
+                child: Stack(
+                  children: [
+                    Center(
+                      child: AddImageIcon(
+                        setProfile: addProfilePic,
+                      ),
+                    ),
+                    Stack(
+                      children: [
+                        profilePicPath == ""
+                            ? SizedBox()
+                            : ProfileImage(
+                                profilePicPath: profilePicPath, size: size),
+                        Positioned(
+                          bottom: 10,
+                          right: 10,
+                          child: AddImageIcon(
+                            setProfile: addProfilePic,
+                            plusRadius: 10,
+                            iconSize: 15,
+                            picIconSize: 40,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -103,98 +152,14 @@ class CreateProfile extends StatelessWidget {
                 options: designationDropDown,
                 fieldName: "Select your Designation",
               ),
-              SizedBox(
-                width: size.width,
-                child: Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    Container(
-                      width: size.width * 0.5,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: RoundedInputField(
-                              fieldName: "Interest",
-                              iconData: Icons.abc,
-                              height: 50,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    InterestClip(title: "Sports"),
-                    InterestClip(title: "Coding"),
-                    InterestClip(title: "Placement"),
-                    InterestClip(title: "Sports"),
-                    InterestClip(title: "Coding"),
-                    InterestClip(title: "Placement"),
-                  ],
-                ),
-              ),
+              InterestsTile(size: size),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
                   color: kPrimaryLightColor,
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.all(10),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-                        decoration: BoxDecoration(
-                          color: kPrimaryColor.withOpacity(0.6),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Add links to enhance your profile",
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  "For example: Github, Linkedin, Leetcode...",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            GestureDetector(
-                              onTap: () {},
-                              child: CircleAvatar(
-                                child: Icon(Icons.add),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxHeight: 250,
-                        ),
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: linkTiles.length,
-                          itemBuilder: (context, index) {
-                            return linkTiles[index];
-                          },
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                child: AddLinksBox(linkTiles: linkTiles),
               ),
               RoundedButton(
                 title: "Save",
@@ -202,75 +167,6 @@ class CreateProfile extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class LinkTile extends StatelessWidget {
-  const LinkTile({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Container(
-      margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-      decoration: BoxDecoration(
-        color: kPrimaryColor.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Container(
-            width: size.width * 0.26,
-            child: SizedInputField(
-              fieldName: "Site...",
-            ),
-          ),
-          Container(
-            width: size.width * 0.5,
-            child: SizedInputField(
-              fieldName: "Link...",
-            ),
-          ),
-          GestureDetector(
-            onTap: () {},
-            child: CircleAvatar(
-              backgroundColor: Colors.black,
-              child: Icon(
-                Icons.check,
-                color: Colors.green,
-                weight: 100,
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class InterestClip extends StatelessWidget {
-  const InterestClip({super.key, required this.title});
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(5),
-      padding: EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: getRandomColorFromList(),
-      ),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-          color: Colors.white,
         ),
       ),
     );

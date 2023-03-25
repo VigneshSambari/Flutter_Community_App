@@ -99,7 +99,6 @@ class _CreateBlogState extends State<CreateBlog> {
                         GestureDetector(
                           onTap: () async {
                             selectedFiles.addAll(await pickFilesBlog());
-                            print(selectedFiles);
                             setState(() {
                               selectedFiles;
                             });

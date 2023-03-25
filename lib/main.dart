@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sessions/constants.dart';
-import 'package:sessions/screens/blogScreens/createblog_screen.dart';
-import 'package:sessions/screens/blogScreens/preview_blog.dart';
 import 'package:sessions/screens/profile/create_profile.dart';
 
 void main() {

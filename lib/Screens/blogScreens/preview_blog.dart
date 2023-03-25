@@ -1,9 +1,8 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, override_on_non_overriding_member
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:sessions/components/appbar.dart';
-import 'package:sessions/components/styles.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/utils/navigations.dart';
 import 'package:video_player/video_player.dart';
@@ -79,16 +78,14 @@ class VideoPlayerCustom extends StatelessWidget {
 
 final List<Widget> imageSliders = imgList
     .map((item) => Container(
-          child: Container(
-            margin: EdgeInsets.all(5),
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              child: Image.file(
-                File(
-                    "/data/user/0/com.example.sessions/cache/file_picker/IMG_20230319_110518.jpg"),
-                fit: BoxFit.fitWidth,
-                width: 1000,
-              ),
+          margin: EdgeInsets.all(5),
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            child: Image.file(
+              File(
+                  "/data/user/0/com.example.sessions/cache/file_picker/IMG_20230319_110518.jpg"),
+              fit: BoxFit.fitWidth,
+              width: 1000,
             ),
           ),
         ))
