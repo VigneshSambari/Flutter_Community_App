@@ -20,13 +20,13 @@ class LinkTile extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Container(
+          SizedBox(
             width: size.width * 0.26,
             child: SizedInputField(
               fieldName: "Site...",
             ),
           ),
-          Container(
+          SizedBox(
             width: size.width * 0.5,
             child: SizedInputField(
               fieldName: "Link...",
@@ -159,7 +159,7 @@ class InterestsTile extends StatelessWidget {
       child: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
-          Container(
+          SizedBox(
             width: size.width * 0.5,
             child: Row(
               children: [

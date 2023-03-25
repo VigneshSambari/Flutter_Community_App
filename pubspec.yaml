@@ -38,11 +38,12 @@ dependencies:
   flutter_svg: ^2.0.3
   rive: ^0.10.2
   file_picker: ^5.2.6
-  shared_preferences: ^2.0.18
   dotted_border: ^2.0.0+3
   carousel_slider: ^4.2.1
   video_player: ^2.6.0
   path_provider: ^2.0.14
+  shared_preferences: ^2.0.20
+  json_serializable: ^6.6.1
 
 dev_dependencies:
   flutter_test:

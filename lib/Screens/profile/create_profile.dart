@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sized_box_for_whitespace, prefer_const_constructors_in_immutables
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:sessions/components/appbar.dart';
 import 'package:sessions/components/buttons.dart';
@@ -11,6 +13,8 @@ import 'package:sessions/constants.dart';
 
 import 'package:sessions/screens/profile/components/profile_image_utils.dart';
 import 'package:sessions/screens/profile/components/tiles.dart';
+import 'package:sessions/screens/profile/components/util_classes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateProfile extends StatefulWidget {
   CreateProfile({super.key});
@@ -20,49 +24,35 @@ class CreateProfile extends StatefulWidget {
 }
 
 class _CreateProfileState extends State<CreateProfile> {
-  final List<String> collegeDropDown = [
-    "NIT Kurukshetra",
-    "NIT Warangal",
-    "NIT Agartala",
-    "None"
-  ];
+  ProfileInputVariables inputVariables = ProfileInputVariables(
+    firstName: "",
+    lastName: "",
+    profilePic: "",
+    userName: "",
+  );
 
-  final List<String> specializationDropDown = [
-    "ECE",
-    "CSE",
-    "IT",
-  ];
+  ProfileInputControllers inputControllers = ProfileInputControllers();
 
-  final List<String> designationDropDown = [
-    "Student",
-    "Teacher",
-    "Professor",
-    "Doctor",
-    "Student",
-  ];
-
-  final List<String> interestDropDown = [
-    "Coding",
-    "Web development",
-    "Placement",
-    "Android Development",
-    "AI/ML",
-  ];
-
-  final List<LinkTile> linkTiles = [
-    LinkTile(),
-    LinkTile(),
-    LinkTile(),
-    LinkTile(),
-  ];
-
-  String appDirectoryPath = "";
-  String profilePicPath = "";
+  String saveString = "";
 
   void addProfilePic(String path) {
     setState(() {
-      profilePicPath = path;
+      inputVariables.profilePic = path;
     });
+  }
+
+  Future<void> saveProfileData(ProfileInputVariables data) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String dataString = jsonEncode(data.toJson());
+    prefs.setString("profileData", dataString);
+  }
+
+  Future<void> loadData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final jsonData = prefs.getString("profileData");
+    if (jsonData != null) {
+      dynamic data = jsonDecode(jsonData);
+    }
   }
 
   @override
@@ -103,10 +93,12 @@ class _CreateProfileState extends State<CreateProfile> {
                     ),
                     Stack(
                       children: [
-                        profilePicPath == ""
+                        inputVariables.profilePic == ""
                             ? SizedBox()
                             : ProfileImage(
-                                profilePicPath: profilePicPath, size: size),
+                                profilePicPath: inputVariables.profilePic,
+                                size: size,
+                              ),
                         Positioned(
                           bottom: 10,
                           right: 10,
@@ -139,17 +131,17 @@ class _CreateProfileState extends State<CreateProfile> {
               SizedInputField(fieldName: "UserName"),
               CustomDropdownButton(
                 prefixIcon: Icons.school,
-                options: collegeDropDown,
+                options: inputVariables.collegeDropDown,
                 fieldName: "Select your College",
               ),
               CustomDropdownButton(
                 prefixIcon: Icons.science,
-                options: specializationDropDown,
+                options: inputVariables.specializationDropDown,
                 fieldName: "Select your Specialization",
               ),
               CustomDropdownButton(
                 prefixIcon: Icons.work,
-                options: designationDropDown,
+                options: inputVariables.designationDropDown,
                 fieldName: "Select your Designation",
               ),
               InterestsTile(size: size),
@@ -159,11 +151,14 @@ class _CreateProfileState extends State<CreateProfile> {
                   color: kPrimaryLightColor,
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child: AddLinksBox(linkTiles: linkTiles),
+                child: AddLinksBox(linkTiles: inputVariables.linkTiles),
               ),
               RoundedButton(
                 title: "Save",
-                onPress: () {},
+                onPress: () async {
+                  //await saveProfileData(inputVariables);
+                  await loadData();
+                },
               ),
             ],
           ),
@@ -171,4 +166,11 @@ class _CreateProfileState extends State<CreateProfile> {
       ),
     );
   }
+}
+
+class ProfileInputControllers {
+  TextEditingController firstName = TextEditingController();
+  TextEditingController lastName = TextEditingController();
+  TextEditingController userName = TextEditingController();
+  TextEditingController interests = TextEditingController();
 }

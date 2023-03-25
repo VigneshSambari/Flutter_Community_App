@@ -1,6 +1,11 @@
+// ignore_for_file: prefer_const_constructors, unused_import
+
 import 'package:flutter/material.dart';
 import 'package:sessions/constants.dart';
+import 'package:sessions/screens/blogScreens/blog_screen.dart';
+import 'package:sessions/screens/entryPoint/entry_point.dart';
 import 'package:sessions/screens/profile/create_profile.dart';
+import 'package:sessions/screens/profile/view_profile.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +25,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: kPrimarySwatch,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: CreateProfile(),
+      home: ViewProfile(),
     );
   }
 }
