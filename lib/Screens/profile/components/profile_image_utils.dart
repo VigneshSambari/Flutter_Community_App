@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -49,15 +51,17 @@ class AddImageIcon extends StatelessWidget {
   }
 }
 
-class ProfileImage extends StatelessWidget {
-  const ProfileImage({
+class CoverPhoto extends StatelessWidget {
+  const CoverPhoto({
     super.key,
     required this.profilePicPath,
     required this.size,
+    this.height = 230,
   });
 
   final String profilePicPath;
   final Size size;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +70,36 @@ class ProfileImage extends StatelessWidget {
       child: Image.file(
         File(profilePicPath),
         fit: BoxFit.cover,
-        height: 230,
+        height: height == 0 ? null : height,
         width: size.width,
+      ),
+    );
+  }
+}
+
+class ProfileImage extends StatelessWidget {
+  const ProfileImage({
+    super.key,
+    required this.profilePicPath,
+    required this.radius,
+  });
+
+  final String profilePicPath;
+
+  final double radius;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipOval(
+      child: CircleAvatar(
+        backgroundColor: kPrimaryLightColor,
+        radius: radius,
+        child: Image.file(
+          File(profilePicPath),
+          fit: BoxFit.fitHeight,
+          height: radius * 3,
+          width: radius * 3,
+        ),
       ),
     );
   }

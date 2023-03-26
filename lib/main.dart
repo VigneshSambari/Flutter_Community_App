@@ -5,6 +5,7 @@ import 'package:sessions/constants.dart';
 import 'package:sessions/screens/blogScreens/blog_screen.dart';
 import 'package:sessions/screens/entryPoint/entry_point.dart';
 import 'package:sessions/screens/profile/create_profile.dart';
+import 'package:sessions/screens/profile/bottom_sheet.dart';
 import 'package:sessions/screens/profile/view_profile.dart';
 
 void main() {

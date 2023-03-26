@@ -16,6 +16,41 @@ import 'package:sessions/screens/profile/components/tiles.dart';
 import 'package:sessions/screens/profile/components/util_classes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+List<LinkTile> linkTiles = [
+  LinkTile(),
+  LinkTile(),
+  LinkTile(),
+  LinkTile(),
+];
+
+List<String> collegeDropDown = [
+  "NIT Kurukshetra",
+  "NIT Warangal",
+  "NIT Agartala",
+  "None"
+];
+List<String> specializationDropDown = [
+  "ECE",
+  "CSE",
+  "IT",
+];
+
+List<String> designationDropDown = [
+  "Student",
+  "Teacher",
+  "Professor",
+  "Doctor",
+  "Student",
+];
+
+List<String> interestDropDown = [
+  "Coding",
+  "Web development",
+  "Placement",
+  "Android Development",
+  "AI/ML",
+];
+
 class CreateProfile extends StatefulWidget {
   CreateProfile({super.key});
 
@@ -25,11 +60,13 @@ class CreateProfile extends StatefulWidget {
 
 class _CreateProfileState extends State<CreateProfile> {
   ProfileInputVariables inputVariables = ProfileInputVariables(
-    firstName: "",
-    lastName: "",
-    profilePic: "",
-    userName: "",
-  );
+      firstName: "",
+      lastName: "",
+      profilePic: "",
+      userName: "",
+      coverPhoto: "",
+      designation: "",
+      specialization: "");
 
   ProfileInputControllers inputControllers = ProfileInputControllers();
 
@@ -38,6 +75,12 @@ class _CreateProfileState extends State<CreateProfile> {
   void addProfilePic(String path) {
     setState(() {
       inputVariables.profilePic = path;
+    });
+  }
+
+  void addCoverPhoto(String path) {
+    setState(() {
+      inputVariables.coverPhoto = path;
     });
   }
 
@@ -50,9 +93,7 @@ class _CreateProfileState extends State<CreateProfile> {
   Future<void> loadData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final jsonData = prefs.getString("profileData");
-    if (jsonData != null) {
-      dynamic data = jsonDecode(jsonData);
-    }
+    if (jsonData != null) {}
   }
 
   @override
@@ -78,39 +119,97 @@ class _CreateProfileState extends State<CreateProfile> {
             children: [
               Container(
                 width: size.width,
-                height: 230,
-                decoration: BoxDecoration(
-                  color: kPrimaryLightColor,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                margin: EdgeInsets.all(5),
+                height: 300,
                 child: Stack(
                   children: [
-                    Center(
-                      child: AddImageIcon(
-                        setProfile: addProfilePic,
+                    Container(
+                      width: size.width,
+                      height: 230,
+                      decoration: BoxDecoration(
+                        color: kPrimaryLightColor,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      margin: EdgeInsets.all(5),
+                      child: Stack(
+                        children: [
+                          Center(
+                            child: AddImageIcon(
+                              setProfile: addCoverPhoto,
+                            ),
+                          ),
+                          Stack(
+                            children: [
+                              inputVariables.coverPhoto == ""
+                                  ? SizedBox()
+                                  : CoverPhoto(
+                                      profilePicPath: inputVariables.coverPhoto,
+                                      size: size,
+                                    ),
+                              inputVariables.coverPhoto == ""
+                                  ? SizedBox()
+                                  : Positioned(
+                                      bottom: 10,
+                                      right: 10,
+                                      child: AddImageIcon(
+                                        setProfile: addCoverPhoto,
+                                        plusRadius: 10,
+                                        iconSize: 15,
+                                        picIconSize: 40,
+                                      ),
+                                    ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    Stack(
-                      children: [
-                        inputVariables.profilePic == ""
-                            ? SizedBox()
-                            : ProfileImage(
-                                profilePicPath: inputVariables.profilePic,
-                                size: size,
+                    Positioned(
+                      left: 15,
+                      bottom: 10,
+                      child: Container(
+                        width: size.width * 0.25,
+                        height: size.width * 0.25,
+                        child: Padding(
+                          padding: EdgeInsets.all(1),
+                          child: Stack(
+                            children: [
+                              CircleAvatar(
+                                radius: 60,
+                                child: CircleAvatar(
+                                  radius: 53.5,
+                                  backgroundColor: kPrimaryLightColor,
+                                  child: Center(
+                                    child: AddImageIcon(
+                                      setProfile: addProfilePic,
+                                      picIconSize: 27,
+                                      plusRadius: 6,
+                                      iconSize: 13,
+                                    ),
+                                  ),
+                                ),
                               ),
-                        Positioned(
-                          bottom: 10,
-                          right: 10,
-                          child: AddImageIcon(
-                            setProfile: addProfilePic,
-                            plusRadius: 10,
-                            iconSize: 15,
-                            picIconSize: 40,
+                              inputVariables.profilePic == ""
+                                  ? SizedBox()
+                                  : ProfileImage(
+                                      radius: 60,
+                                      profilePicPath: inputVariables.profilePic,
+                                    ),
+                              inputVariables.profilePic == ""
+                                  ? SizedBox()
+                                  : Positioned(
+                                      bottom: 0,
+                                      right: 0,
+                                      child: AddImageIcon(
+                                        setProfile: addProfilePic,
+                                        plusRadius: 7,
+                                        iconSize: 10,
+                                        picIconSize: 28,
+                                      ),
+                                    ),
+                            ],
                           ),
                         ),
-                      ],
-                    )
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -131,17 +230,17 @@ class _CreateProfileState extends State<CreateProfile> {
               SizedInputField(fieldName: "UserName"),
               CustomDropdownButton(
                 prefixIcon: Icons.school,
-                options: inputVariables.collegeDropDown,
+                options: collegeDropDown,
                 fieldName: "Select your College",
               ),
               CustomDropdownButton(
                 prefixIcon: Icons.science,
-                options: inputVariables.specializationDropDown,
+                options: specializationDropDown,
                 fieldName: "Select your Specialization",
               ),
               CustomDropdownButton(
                 prefixIcon: Icons.work,
-                options: inputVariables.designationDropDown,
+                options: designationDropDown,
                 fieldName: "Select your Designation",
               ),
               InterestsTile(size: size),
@@ -151,7 +250,7 @@ class _CreateProfileState extends State<CreateProfile> {
                   color: kPrimaryLightColor,
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child: AddLinksBox(linkTiles: inputVariables.linkTiles),
+                child: AddLinksBox(linkTiles: linkTiles),
               ),
               RoundedButton(
                 title: "Save",

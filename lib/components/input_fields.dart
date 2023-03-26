@@ -40,7 +40,9 @@ class _OutlinedInputFieldState extends State<OutlinedInputField> {
         obscureText: widget.password ? !passwordVisible : false,
         decoration: InputDecoration(
           prefixIcon: Container(
-            padding: EdgeInsets.only(left: 10),
+            // padding: EdgeInsets.only(
+            //   left: widget.prefixIcon.icon == null ? 0 : 10,
+            // ),
             child: widget.prefixIcon,
           ),
           suffixIcon: widget.password
@@ -132,7 +134,7 @@ class TextFieldContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      height: height == 0 ? null : height,
+      //height: height == 0 ? null : height,
       width: size.width,
       margin: EdgeInsets.symmetric(
         vertical: 10,
@@ -152,7 +154,7 @@ class SizedInputField extends StatelessWidget {
     super.key,
     this.enabled = true,
     required this.fieldName,
-    this.height = 50,
+    this.height = 60,
   });
 
   final String fieldName;
