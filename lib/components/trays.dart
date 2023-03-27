@@ -7,11 +7,11 @@ class ProfileNameEditTray extends StatelessWidget {
   const ProfileNameEditTray({
     super.key,
     required this.title,
-    required this.onPressed,
+    required this.icon,
   });
 
   final String title;
-  final VoidCallback onPressed;
+  final Widget icon;
 
   @override
   Widget build(BuildContext context) {
@@ -36,19 +36,7 @@ class ProfileNameEditTray extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            right: 0,
-            child: GestureDetector(
-              onTap: onPressed,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2.5),
-                child: Icon(
-                  Icons.edit,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          )
+          Positioned(right: 0, child: icon)
         ],
       ),
     );

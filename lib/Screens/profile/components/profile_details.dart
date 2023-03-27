@@ -39,7 +39,16 @@ class ProfileDetails extends StatelessWidget {
           children: [
             ProfileNameEditTray(
               title: "Profile Info.",
-              onPressed: () {},
+              icon: GestureDetector(
+                onTap: () {},
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2.5),
+                  child: Icon(
+                    Icons.edit,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             ),
             ProfileInfoTile(
               iconUrl: "assets/profileicons/name.png",

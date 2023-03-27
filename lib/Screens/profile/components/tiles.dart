@@ -234,10 +234,12 @@ class ProfileInfoTile extends StatelessWidget {
     required this.title,
     required this.subTitle,
     required this.iconUrl,
+    this.trailing = const SizedBox(),
   });
 
   final String title, iconUrl;
   final Widget subTitle;
+  final Widget trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -248,6 +250,7 @@ class ProfileInfoTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: ListTile(
+        trailing: trailing,
         leading: CircleAvatar(
           backgroundColor: Colors.transparent,
           radius: 25,
@@ -260,6 +263,57 @@ class ProfileInfoTile extends StatelessWidget {
           ),
         ),
         subtitle: subTitle,
+      ),
+    );
+  }
+}
+
+class ConnectionRoomTile extends StatelessWidget {
+  const ConnectionRoomTile({
+    super.key,
+    required this.title,
+    required this.subTitle,
+    required this.iconUrl,
+    this.trailing = const SizedBox(),
+  });
+
+  final String title, iconUrl;
+  final String subTitle;
+  final Widget trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 4, horizontal: 5),
+      decoration: BoxDecoration(
+        color: kPrimaryLightColor,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: ListTile(
+        trailing: trailing,
+        leading: CircleAvatar(
+          backgroundColor: Colors.transparent,
+          radius: 25,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(50),
+            child: Image.network(
+              iconUrl,
+              width: 50,
+              height: 50,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        subtitle: Text(
+          subTitle,
+          style: TextStyle(fontSize: 16),
+        ),
       ),
     );
   }

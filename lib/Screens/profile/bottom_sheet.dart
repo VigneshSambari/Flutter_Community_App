@@ -2,9 +2,29 @@
 
 import 'package:flutter/material.dart';
 import 'package:sessions/constants.dart';
-import 'package:sessions/screens/profile/components/grids.dart';
-import 'package:sessions/screens/profile/components/profile_details.dart';
+import 'package:sessions/screens/profile/components/tabbar.dart';
+import 'package:sessions/screens/profile/components/tiles.dart';
 import 'package:sessions/screens/profile/components/utils.dart';
+
+List<InterestClip> interests = [
+  InterestClip(title: "Coding"),
+  InterestClip(title: "Sleeping"),
+  InterestClip(title: "VideoGames"),
+  InterestClip(title: "Coding"),
+  InterestClip(title: "Sleeping"),
+  InterestClip(title: "Games"),
+  InterestClip(title: "Playing"),
+];
+
+List<LinkClip> links = [
+  LinkClip(title: "Github", url: "www.google.com"),
+  LinkClip(title: "Linkedin", url: "www.google.com"),
+  LinkClip(title: "GooglePhotos", url: "www.google.com"),
+  LinkClip(title: "Instagram", url: "www.google.com"),
+  LinkClip(title: "Youtube", url: "www.google.com"),
+  LinkClip(title: "Social", url: "www.google.com"),
+  LinkClip(title: "Facebook", url: "www.google.com"),
+];
 
 class MyBottomSheet extends StatefulWidget {
   final double minHeight;
@@ -18,16 +38,24 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
   late double _currentHeight;
   DraggableScrollableController controller = DraggableScrollableController();
   double maxHeight = 700;
+
   @override
   void initState() {
     _currentHeight = widget.minHeight - 65;
+
     controller.addListener(() {
       setState(() {
-        _currentHeight = controller.pixels;
+        _currentHeight = controller.pixels - 80;
       });
     });
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -36,11 +64,12 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
     maxHeight = size.height;
     return DraggableScrollableSheet(
       controller: controller,
-      //snap: true,
+      snap: true,
       minChildSize: widget.minHeight / MediaQuery.of(context).size.height,
       maxChildSize: maxHeight / MediaQuery.of(context).size.height,
       initialChildSize: widget.minHeight / MediaQuery.of(context).size.height,
       builder: (BuildContext context, ScrollController scrollController) {
+        //print(_currentHeight);
         return Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -76,81 +105,6 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
           ),
         );
       },
-    );
-  }
-}
-
-class AnimatedTabBar extends StatefulWidget {
-  const AnimatedTabBar({Key? key}) : super(key: key);
-
-  @override
-  _AnimatedTabBarState createState() => _AnimatedTabBarState();
-}
-
-class _AnimatedTabBarState extends State<AnimatedTabBar>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 3, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Column(
-        children: [
-          Container(
-            margin: EdgeInsets.all(5),
-            height: 50,
-            //color: kPrimaryLightColor,
-            child: TabBar(
-              controller: _tabController,
-              tabs: [
-                Icon(
-                  Icons.person_2_outlined,
-                  size: 32.5,
-                ),
-                Icon(
-                  Icons.grid_view_rounded,
-                  size: 32.5,
-                ),
-                Icon(
-                  Icons.people_alt_outlined,
-                  size: 32.5,
-                ),
-              ],
-              indicatorSize: TabBarIndicatorSize.tab,
-              labelStyle: TextStyle(fontSize: 16.0),
-              labelColor: kPrimaryColor,
-              unselectedLabelColor: backgroundColor2.withOpacity(0.6),
-              indicator: BoxDecoration(
-                shape: BoxShape.circle,
-                color: kPrimaryLightColor,
-              ),
-            ),
-          ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                ProfileDetails(),
-                GridBlogs(),
-                Center(child: Text('Tab 3')),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
