@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:sessions/components/input_fields.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LinkTile extends StatelessWidget {
   const LinkTile({super.key});
@@ -70,6 +71,48 @@ class InterestClip extends StatelessWidget {
           color: Colors.white,
         ),
       ),
+    );
+  }
+}
+
+class LinkClip extends StatelessWidget {
+  const LinkClip({super.key, required this.title, required this.url});
+  final String title, url;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        if (!await launchUrl(Uri.parse(url))) {}
+      },
+      child: Container(
+          margin: EdgeInsets.all(5),
+          padding: EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: getRandomColorFromList(),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Icon(
+                Icons.open_in_new_outlined,
+                color: Colors.white,
+                size: 22,
+              )
+            ],
+          )),
     );
   }
 }
@@ -180,6 +223,112 @@ class InterestsTile extends StatelessWidget {
           InterestClip(title: "Coding"),
           InterestClip(title: "Placement"),
         ],
+      ),
+    );
+  }
+}
+
+class ProfileInfoTile extends StatelessWidget {
+  const ProfileInfoTile({
+    super.key,
+    required this.title,
+    required this.subTitle,
+    required this.iconUrl,
+  });
+
+  final String title, iconUrl;
+  final Widget subTitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 7, horizontal: 5),
+      decoration: BoxDecoration(
+        color: kPrimaryLightColor,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Colors.transparent,
+          radius: 25,
+          child: Image.asset(iconUrl),
+        ),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        subtitle: subTitle,
+      ),
+    );
+  }
+}
+
+class RowTextTile extends StatelessWidget {
+  const RowTextTile({
+    super.key,
+    required this.leftTitle,
+    required this.rightTitle,
+  });
+
+  final String leftTitle, rightTitle;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 7),
+      child: Wrap(
+        children: [
+          TextTile(title: leftTitle),
+          SizedBox(width: 10),
+          Text(
+            ":",
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(width: 10),
+          TextTile(
+            title: rightTitle,
+            backgroundColor: kPrimaryLightColor,
+            textColor: kPrimaryDarkColor,
+            fontWeight: FontWeight.w100,
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class TextTile extends StatelessWidget {
+  const TextTile({
+    super.key,
+    required this.title,
+    this.backgroundColor = kPrimaryLightColor,
+    this.textColor = Colors.black,
+    this.fontWeight = FontWeight.bold,
+  });
+
+  final String title;
+  final Color backgroundColor, textColor;
+  final FontWeight fontWeight;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(7.5),
+      ),
+      child: Text(
+        title,
+        style: TextStyle(
+          color: textColor,
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+        ),
       ),
     );
   }

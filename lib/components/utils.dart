@@ -205,3 +205,14 @@ Color getRandomColorFromList() {
   int index = random.nextInt(myColors.length);
   return myColors[index];
 }
+
+Color getRandomRGB() {
+  List<Color> myColors = [
+    Colors.red,
+    Colors.green,
+    Colors.blue,
+  ];
+  Random random = Random();
+  int index = random.nextInt(myColors.length);
+  return myColors[index];
+}
