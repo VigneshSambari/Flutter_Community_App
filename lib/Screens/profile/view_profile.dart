@@ -42,24 +42,27 @@ class ViewProfileBody extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
 
     return SingleChildScrollView(
-      child: Container(
-        // padding: EdgeInsets.symmetric(5),
-        height: size.height,
-        width: size.width,
-        child: Stack(
-          children: [
-            PhotoTray(
-              coverPhoto: "",
-              profilePic: "",
-              userName: "VickySam1901",
-            ),
-            MyBottomSheet(
-              minHeight: size.height * 0.65,
-            ),
-          ],
+        child: Column(
+      children: [
+        Container(
+          // padding: EdgeInsets.symmetric(5),
+          height: size.height,
+          width: size.width,
+          child: Stack(
+            children: [
+              PhotoTray(
+                coverPhoto: "",
+                profilePic: "",
+                userName: "VickySam1901",
+              ),
+              MyBottomSheet(
+                minHeight: size.height * 0.675,
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      ],
+    ));
   }
 }
 
