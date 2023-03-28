@@ -2,8 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:sessions/components/appbar.dart';
-
-import 'package:sessions/constants.dart';
 import 'package:sessions/screens/blogScreens/components/blog_utils.dart';
 
 List<Widget> widgets = [
@@ -30,7 +28,7 @@ class BlogScreen extends StatelessWidget {
         CurvedAppBar(
           leading: Container(),
           title: "Blogs",
-          backgroundColor: backgroundColor2.withOpacity(0.1),
+          //backgroundColor: backgroundColor2.withOpacity(0.1),
           actions: [],
         ),
         Expanded(
@@ -43,9 +41,15 @@ class BlogScreen extends StatelessWidget {
             padding: EdgeInsets.all(2),
             child: ListView.builder(
               scrollDirection: Axis.vertical,
-              itemCount: widgets.length,
+              itemCount: widgets.length + 1,
               itemBuilder: (BuildContext context, int index) {
-                return BlogTile();
+                if (index != widgets.length) {
+                  return BlogTile();
+                } else {
+                  return SizedBox(
+                    height: 100,
+                  );
+                }
               },
             ),
           ),

@@ -22,12 +22,7 @@ class ViewProfile extends StatelessWidget {
             ),
           ),
         ],
-        leading: IconButton(
-          onPressed: () {},
-          icon: Icon(
-            Icons.arrow_back_ios,
-          ),
-        ),
+        leading: Container(),
       ),
       body: ViewProfileBody(),
     );

@@ -31,3 +31,27 @@ class BlurDivider extends StatelessWidget {
     );
   }
 }
+
+class ConnectionRoomButton extends StatelessWidget {
+  const ConnectionRoomButton({super.key, required this.title});
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(7),
+        color: kPrimaryColor,
+      ),
+      child: Text(
+        title,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 17,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+}

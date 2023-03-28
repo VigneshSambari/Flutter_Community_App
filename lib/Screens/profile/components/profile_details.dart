@@ -1,8 +1,11 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last
 
 import 'package:flutter/material.dart';
+import 'package:sessions/components/styles.dart';
 import 'package:sessions/components/trays.dart';
+import 'package:sessions/constants.dart';
 import 'package:sessions/screens/profile/components/tiles.dart';
+import 'package:sessions/screens/profile/components/utils.dart';
 
 List<InterestClip> interests = [
   InterestClip(title: "Coding"),
@@ -59,6 +62,14 @@ class ProfileDetails extends StatelessWidget {
               title: "Name",
             ),
             ProfileInfoTile(
+              iconUrl: "assets/profileicons/mail.png",
+              subTitle: Text(
+                "vickysam@gmail.com",
+                style: TextStyle(fontSize: 16),
+              ),
+              title: "Email",
+            ),
+            ProfileInfoTile(
               iconUrl: "assets/profileicons/specialization.png",
               subTitle: Text(
                 "Electronics and Communication",
@@ -91,6 +102,116 @@ class ProfileDetails extends StatelessWidget {
                 }).toList(),
               ),
               title: "Links",
+            ),
+            SizedBox(
+              height: 100,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ProfileConnections extends StatelessWidget {
+  const ProfileConnections({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var ConnectionRoomButtom;
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: 15,
+        vertical: 3,
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: ProfileNameEditTray(
+                    title: "Connections",
+                    icon: Container(),
+                  ),
+                ),
+                PopupMenuButton(
+                  iconSize: 32.5,
+                  shape: Border.all(
+                    width: 2,
+                    color: kPrimaryColor,
+                  ),
+                  itemBuilder: (BuildContext context) {
+                    return <PopupMenuEntry>[
+                      PopupMenuItem(
+                        child: Text(
+                          'Connections',
+                          style: popUpMenuItemStyle(),
+                        ),
+                        value: 1,
+                      ),
+                      PopupMenuItem(
+                        child: Text(
+                          'Rooms',
+                          style: popUpMenuItemStyle(),
+                        ),
+                        value: 2,
+                      ),
+                    ];
+                  },
+                  onSelected: (value) {
+                    // Do something when a menu item is selected
+                  },
+                  icon: Icon(
+                    Icons.arrow_drop_down_circle,
+                    color: backgroundColor2.withOpacity(0.85),
+                  ),
+                ),
+              ],
+            ),
+            ConnectionRoomTile(
+              iconUrl:
+                  "https://images.pexels.com/photos/15784893/pexels-photo-15784893.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+              subTitle: "Room desc",
+              title: "Room Name",
+              trailing: ConnectionRoomButton(title: "connect"),
+            ),
+            ConnectionRoomTile(
+              iconUrl:
+                  "https://images.pexels.com/photos/15784893/pexels-photo-15784893.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+              subTitle: "Room desc",
+              title: "Room Name",
+              trailing: ConnectionRoomButton(title: "connect"),
+            ),
+            ConnectionRoomTile(
+              iconUrl:
+                  "https://images.pexels.com/photos/15784893/pexels-photo-15784893.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+              subTitle: "Room desc",
+              title: "Room Name",
+              trailing: ConnectionRoomButton(title: "connect"),
+            ),
+            ConnectionRoomTile(
+              iconUrl:
+                  "https://images.pexels.com/photos/15784893/pexels-photo-15784893.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+              subTitle: "Room desc",
+              title: "Room Name",
+              trailing: ConnectionRoomButton(title: "connect"),
+            ),
+            ConnectionRoomTile(
+              iconUrl:
+                  "https://images.pexels.com/photos/15784893/pexels-photo-15784893.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+              subTitle: "Room desc",
+              title: "Room Name",
+              trailing: ConnectionRoomButton(title: "connect"),
+            ),
+            ConnectionRoomTile(
+              iconUrl:
+                  "https://images.pexels.com/photos/15784893/pexels-photo-15784893.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+              subTitle: "Room desc",
+              title: "Room Name",
+              trailing: ConnectionRoomButton(title: "connect"),
             ),
           ],
         ),

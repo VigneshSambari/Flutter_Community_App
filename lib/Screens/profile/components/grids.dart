@@ -32,16 +32,17 @@ class GridBlogs extends StatelessWidget {
     // Calculate the width of each grid cell dynamically based on the number of images that can fit in a row.
 
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 7),
-        child: GridView.builder(
-          shrinkWrap: true,
-          itemCount: images.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: crossAxisCount,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-          ),
-          itemBuilder: (BuildContext context, int index) {
+      padding: EdgeInsets.symmetric(horizontal: 7),
+      child: GridView.builder(
+        shrinkWrap: true,
+        itemCount: images.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: crossAxisCount,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+        ),
+        itemBuilder: (BuildContext context, int index) {
+          if (index != images.length) {
             return ClipRRect(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20.0),
@@ -53,7 +54,13 @@ class GridBlogs extends StatelessWidget {
                     .cover, // Set the fit property of the image to cover the entire cell
               ),
             );
-          },
-        ));
+          } else {
+            return SizedBox(
+              height: 100,
+            );
+          }
+        },
+      ),
+    );
   }
 }

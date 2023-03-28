@@ -7,7 +7,8 @@ import 'package:sessions/constants.dart';
 import 'package:sessions/utils/rive_utils.dart';
 
 class NavBarAnimated extends StatefulWidget {
-  const NavBarAnimated({super.key});
+  const NavBarAnimated({super.key, required this.changeScreen});
+  final Function changeScreen;
 
   @override
   State<NavBarAnimated> createState() => _NavBarAnimatedState();
@@ -33,6 +34,7 @@ class _NavBarAnimatedState extends State<NavBarAnimated> {
             bottomNavs.length,
             (index) => GestureDetector(
               onTap: () {
+                widget.changeScreen(index);
                 bottomNavs[index].input!.change(true);
                 if (bottomNavs[index] != selectedBottomNav) {
                   setState(() {
@@ -78,15 +80,15 @@ class _NavBarAnimatedState extends State<NavBarAnimated> {
 
 List<RiveAsset> bottomNavs = [
   RiveAsset(
-    artboard: "CHAT",
-    stateMachineName: "CHAT_Interactivity",
-    title: "Chat",
+    artboard: "HOME",
+    stateMachineName: "HOME_interactivity",
+    title: "Home",
     src: "assets/riveAssets/icons.riv",
   ),
   RiveAsset(
-    artboard: "SEARCH",
-    stateMachineName: "SEARCH_Interactivity",
-    title: "Search",
+    artboard: "CHAT",
+    stateMachineName: "CHAT_Interactivity",
+    title: "Chat",
     src: "assets/riveAssets/icons.riv",
   ),
   RiveAsset(
@@ -96,15 +98,15 @@ List<RiveAsset> bottomNavs = [
     src: "assets/riveAssets/icons.riv",
   ),
   RiveAsset(
-    artboard: "BELL",
-    stateMachineName: "BELL_Interactivity",
-    title: "Notifications",
-    src: "assets/riveAssets/icons.riv",
-  ),
-  RiveAsset(
     artboard: "USER",
     stateMachineName: "USER_Interactivity",
     title: "Profile",
+    src: "assets/riveAssets/icons.riv",
+  ),
+  RiveAsset(
+    artboard: "BELL",
+    stateMachineName: "BELL_Interactivity",
+    title: "Notifications",
     src: "assets/riveAssets/icons.riv",
   ),
 ];

@@ -8,6 +8,7 @@ import 'package:sessions/components/navbar.dart';
 import 'package:sessions/components/side_menu.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/screens/blogScreens/blog_screen.dart';
+import 'package:sessions/screens/profile/view_profile.dart';
 import 'package:sessions/utils/rive_utils.dart';
 
 class EntryPoint extends StatefulWidget {
@@ -21,10 +22,46 @@ class _EntryPointState extends State<EntryPoint>
     with SingleTickerProviderStateMixin {
   late SMIBool sideBarClosed;
   bool isMenuClosed = true;
+  Widget currentScreen = BlogScreen();
 
   late AnimationController _animationController;
   late Animation<double> animation;
   late Animation<double> scaleAnimation;
+
+  void changeScreen(int val) {
+    if (val == 0) {
+      currentScreen = BlogScreen();
+    } else if (val == 1) {
+      currentScreen = Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        color: Colors.white,
+        alignment: Alignment.center,
+        child: Text("Screen 2"),
+      );
+    } else if (val == 2) {
+      currentScreen = Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        color: Colors.white,
+        alignment: Alignment.center,
+        child: Text("Screen 3"),
+      );
+    } else if (val == 3) {
+      currentScreen = ViewProfile();
+    } else {
+      currentScreen = Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        color: Colors.white,
+        alignment: Alignment.center,
+        child: Text("Screen 5"),
+      );
+    }
+    setState(() {
+      currentScreen;
+    });
+  }
 
   @override
   void initState() {
@@ -82,7 +119,7 @@ class _EntryPointState extends State<EntryPoint>
                     borderRadius: BorderRadius.all(
                       Radius.circular(animation.value == 0 ? 0 : 25),
                     ),
-                    child: BlogScreen(),
+                    child: currentScreen,
                   ),
                 ),
               ),
@@ -123,7 +160,9 @@ class _EntryPointState extends State<EntryPoint>
           borderRadius: BorderRadius.all(
             Radius.circular(animation.value == 0 ? 0 : 25),
           ),
-          child: NavBarAnimated(),
+          child: NavBarAnimated(
+            changeScreen: changeScreen,
+          ),
         ),
       ),
     );
