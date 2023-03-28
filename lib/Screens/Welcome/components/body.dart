@@ -38,7 +38,7 @@ class CenterBody extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Welcome to Sessions",
+            "Welcome to Community Application",
             style: titleTextStyle,
           ),
           SizedBox(
