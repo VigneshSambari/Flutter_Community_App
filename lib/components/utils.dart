@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names
 
 import 'dart:math';
 
@@ -215,4 +215,46 @@ Color getRandomRGB() {
   Random random = Random();
   int index = random.nextInt(myColors.length);
   return myColors[index];
+}
+
+Widget BackButtonNav() {
+  return Builder(
+    builder: (context) => Container(
+      padding: EdgeInsets.all(5),
+      child: GestureDetector(
+        onTap: () {
+          navigatorPop(context);
+        },
+        child: Icon(
+          Icons.arrow_back_ios,
+          color: Colors.white,
+        ),
+      ),
+    ),
+  );
+}
+
+class ClipTitle extends StatelessWidget {
+  const ClipTitle({super.key, required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 10,
+      ),
+      width: size.width,
+      child: Text(
+        title,
+        style: TextStyle(
+          color: backgroundColor2.withOpacity(0.825),
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
 }

@@ -120,7 +120,6 @@ class ProfileConnections extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var ConnectionRoomButtom;
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: 15,

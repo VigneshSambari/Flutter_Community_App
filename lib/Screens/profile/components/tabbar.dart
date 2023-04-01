@@ -1,8 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, library_private_types_in_public_api, sort_child_properties_last
 
 import 'package:flutter/material.dart';
-import 'package:sessions/components/styles.dart';
-import 'package:sessions/components/trays.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/screens/profile/components/grids.dart';
 import 'package:sessions/screens/profile/components/profile_details.dart';
