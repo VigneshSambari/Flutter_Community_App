@@ -171,3 +171,50 @@ class SizedInputField extends StatelessWidget {
     );
   }
 }
+
+class SearchBar extends StatelessWidget {
+  const SearchBar({super.key, required this.controller});
+
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.symmetric(
+          horizontal: 5,
+          vertical: 5,
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        height: 50,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: kPrimaryLightColor,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: controller,
+                maxLines: 1,
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 5,
+                    vertical: 10,
+                  ),
+                  hintText: "Search...",
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {},
+              child: Icon(
+                Icons.search_rounded,
+                color: kPrimaryColor,
+              ),
+            )
+          ],
+        ));
+  }
+}

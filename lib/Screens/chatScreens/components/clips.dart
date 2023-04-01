@@ -90,7 +90,7 @@ class _ExpandableWidgetState extends State<ExpandableWidget>
           margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           // height: size.width * 0.135,
           width: MediaQuery.of(context).size.width * _animation.value +
-              size.width * 0.25,
+              size.width * 0.3,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -189,6 +189,55 @@ class EventClip extends StatelessWidget {
             );
           },
         ),
+      ),
+    );
+  }
+}
+
+class StatusClip extends StatelessWidget {
+  const StatusClip({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 2.5),
+      child: Stack(
+        children: [
+          SizedBox(
+            width: size.width * 0.27,
+            height: size.height * 0.2,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.asset(
+                "assets/global/portrait.jpg",
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 5,
+            right: 5,
+            child: Wrap(
+              alignment: WrapAlignment.center,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(25),
+                  child: CircleAvatar(
+                    radius: 17,
+                    backgroundColor: kPrimaryLightColor,
+                    child: Image.asset(
+                      "assets/global/user.png",
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

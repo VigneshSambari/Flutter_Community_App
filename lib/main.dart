@@ -5,6 +5,8 @@ import 'package:sessions/constants.dart';
 import 'package:sessions/screens/blogScreens/blog_screen.dart';
 import 'package:sessions/screens/blogScreens/createblog_screen.dart';
 import 'package:sessions/screens/chatScreens/chat_entry.dart';
+import 'package:sessions/screens/chatScreens/chat_screen.dart';
+import 'package:sessions/screens/chatScreens/chats_display.dart';
 import 'package:sessions/screens/entryPoint/entry_point.dart';
 import 'package:sessions/screens/home/home_screen.dart';
 import 'package:sessions/screens/login/login_screen.dart';

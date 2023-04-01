@@ -22,39 +22,40 @@ class BlogScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        CurvedAppBar(
-          leading: Container(),
-          title: "Blogs",
-          //backgroundColor: backgroundColor2.withOpacity(0.1),
-          actions: [],
-        ),
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-            ),
-            width: size.width,
-            height: size.height,
-            padding: EdgeInsets.all(2),
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              itemCount: widgets.length + 1,
-              itemBuilder: (BuildContext context, int index) {
-                if (index != widgets.length) {
-                  return BlogTile();
-                } else {
-                  return SizedBox(
-                    height: 100,
-                  );
-                }
-              },
+    return Scaffold(
+      appBar: CurvedAppBar(
+        title: "Blogs",
+        actions: [],
+        leading: SizedBox(),
+      ),
+      body: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              width: size.width,
+              height: size.height,
+              padding: EdgeInsets.all(2),
+              child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: widgets.length + 1,
+                itemBuilder: (BuildContext context, int index) {
+                  if (index != widgets.length) {
+                    return BlogTile();
+                  } else {
+                    return SizedBox(
+                      height: 100,
+                    );
+                  }
+                },
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

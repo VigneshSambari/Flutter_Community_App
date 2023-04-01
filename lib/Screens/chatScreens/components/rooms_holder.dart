@@ -59,8 +59,7 @@ class _RoomHolderState extends State<RoomHolder> {
                   assetUrl: "assets/chatEntry/placement.png"),
               RoomClip(
                   title: "Projects", assetUrl: "assets/chatEntry/projects.png"),
-              RoomClip(
-                  title: "ChatAI", assetUrl: "assets/chatEntry/chatbot.png"),
+              RoomClip(title: "Chats", assetUrl: "assets/chatEntry/chat.png"),
               RoomClip(
                   title: "Sessions", assetUrl: "assets/chatEntry/sessions.png"),
             ],
