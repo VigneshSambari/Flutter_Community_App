@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: kPrimarySwatch,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: ChatEntry(),
+      home: EntryPoint(),
     );
   }
 }
