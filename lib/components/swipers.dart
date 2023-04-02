@@ -175,7 +175,7 @@ class _SwipeDownRowState extends State<SwipeDownRow> {
           ),
           AnimatedContainer(
             duration: Duration(milliseconds: 300),
-            height: _isOpen1 ? size.height * 0.32 : 0,
+            height: _isOpen1 ? size.height * 0.34 : 0,
             width: size.width,
             decoration: BoxDecoration(
               color: purpleGreen,
@@ -217,7 +217,7 @@ class _SwipeDownRowState extends State<SwipeDownRow> {
           AnimatedContainer(
             margin: EdgeInsets.symmetric(horizontal: 2, vertical: 5),
             duration: Duration(milliseconds: 300),
-            height: _isOpen2 ? size.height * 0.27 : 0,
+            height: _isOpen2 ? size.height * 0.28 : 0,
             width: size.width,
             decoration: BoxDecoration(
               color: purpleRed,
