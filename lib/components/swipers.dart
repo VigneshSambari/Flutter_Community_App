@@ -102,8 +102,8 @@ class _SwipeDownRowState extends State<SwipeDownRow> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Container(
-      height: 500,
+    return SizedBox(
+      height: size.height * 0.75,
       width: size.width,
       child: Stack(
         children: [
@@ -256,6 +256,76 @@ class _SwipeDownRowState extends State<SwipeDownRow> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class SwipeDownSheet extends StatefulWidget {
+  final Widget child;
+  final double height;
+
+  SwipeDownSheet({required this.child, required this.height});
+
+  @override
+  _SwipeDownSheetState createState() => _SwipeDownSheetState();
+}
+
+class _SwipeDownSheetState extends State<SwipeDownSheet> {
+  bool _isOpen = false;
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Column(
+      children: [
+        GestureDetector(
+          onVerticalDragUpdate: (details) {
+            if (!_isOpen && details.primaryDelta! > 0) {
+              setState(() {
+                _isOpen = true;
+              });
+            }
+          },
+          onVerticalDragEnd: (details) {
+            if (_isOpen && details.primaryVelocity! < 0) {
+              setState(() {
+                _isOpen = false;
+              });
+            }
+          },
+          child: Container(
+            height: 5,
+            width: _isOpen ? 0 : size.width / 2,
+            color: Colors.black,
+          ),
+        ),
+        AnimatedContainer(
+          height: _isOpen ? widget.height : 0,
+          width: size.width / 1.5,
+          duration: const Duration(milliseconds: 300),
+          child: Stack(
+            children: [
+              widget.child,
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.arrow_drop_up_rounded,
+                    color: kPrimaryColor,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _isOpen = false;
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
