@@ -3,10 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:sessions/components/appbar.dart';
 import 'package:sessions/components/input_fields.dart';
-import 'package:sessions/components/styles.dart';
 import 'package:sessions/components/utils.dart';
-import 'package:sessions/constants.dart';
-import 'package:sessions/screens/chatScreens/components/clips.dart';
 import 'package:sessions/screens/chatScreens/components/status.dart';
 import 'package:sessions/screens/chatScreens/components/tiles.dart';
 

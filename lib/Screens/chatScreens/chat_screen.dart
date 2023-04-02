@@ -1,16 +1,10 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last, sized_box_for_whitespace, avoid_unnecessary_containers, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, library_private_types_in_public_api, no_leading_underscores_for_local_identifiers, prefer_final_fields, unused_field
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:sessions/components/appbar.dart';
-import 'package:sessions/components/carousal_slider.dart';
 import 'package:sessions/components/circle_avatars.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
-import 'package:sessions/screens/blogScreens/preview_blog.dart';
 import 'package:sessions/screens/chatScreens/components/clips.dart';
-import 'package:sessions/screens/chatScreens/components/status.dart';
 
 List<EventClip> events = [
   EventClip(),
@@ -40,159 +34,266 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: CurvedAppBar(
-        title: "Chat",
-        actions: [
-          GestureDetector(
-            onTap: () {},
-            child: Padding(
-              padding: EdgeInsets.only(right: 10),
-              child: Icon(
+      body: Container(
+        width: size.width,
+        height: size.height,
+        child: Column(
+          children: [
+            ListTile(
+              tileColor: kPrimaryColor,
+              title: Text(
+                "Room Name",
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              subtitle: Text(
+                "Room description...",
+                style: TextStyle(
+                  color: kPrimaryLightColor,
+                ),
+              ),
+              leading: Wrap(
+                children: [
+                  BackButtonNav(),
+                  CircleNetworkPicture(),
+                ],
+              ),
+              trailing: Icon(
                 Icons.more_vert_rounded,
                 color: Colors.white,
               ),
             ),
-          )
-        ],
-        leading: Container(
-          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-          child: Row(
-            children: [
-              CircleNetworkPicture(),
-            ],
-          ),
-        ),
-      ),
-      body: Container(
-        width: size.width,
-        height: size.height,
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return Stack(
-              children: [
-                BottomSheetWidget(
-                  constraints: constraints,
-                  child: StatusSlider(),
-                  rightPosition: 0,
-                ),
-                BottomSheetWidget(
-                  constraints: constraints,
-                  child:
-                      CarouselSlider(height: size.height * 0.25, items: events),
-                  rightPosition: 25,
-                ),
-              ],
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class BottomSheetWidget extends StatefulWidget {
-  const BottomSheetWidget({
-    Key? key,
-    required this.constraints,
-    required this.child,
-    required this.rightPosition,
-  }) : super(key: key);
-  final BoxConstraints constraints;
-  final Widget child;
-  final double rightPosition;
-  @override
-  _BottomSheetWidgetState createState() => _BottomSheetWidgetState();
-}
-
-class _BottomSheetWidgetState extends State<BottomSheetWidget>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<Offset> _offsetAnimation;
-  bool _isSheetOpen = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
-
-    _offsetAnimation = Tween<Offset>(begin: Offset(0.0, -1), end: Offset.zero)
-        .animate(CurvedAnimation(parent: _controller, curve: Curves.ease));
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    return Stack(
-      children: [
-        Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: screenHeight * 0.65,
-          child: SlideTransition(
-            position: _offsetAnimation,
-            child: Stack(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
-                    ),
-                    color: kPrimaryLightColor,
-                  ),
-                  child: Center(
-                    child: widget.child,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: _isSheetOpen
-              ? screenHeight * 0.65
-              : widget.constraints.maxHeight - 45,
-          right: widget.rightPosition,
-          child: SlideTransition(
-            position: _offsetAnimation,
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _isSheetOpen = !_isSheetOpen;
-                  if (_isSheetOpen) {
-                    _controller.forward();
-                  } else {
-                    _controller.reverse();
-                  }
-                });
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: kPrimaryLightColor,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10),
-                  ),
-                ),
-                child: Icon(
-                  Icons.arrow_drop_down,
-                  color: kPrimaryColor,
-                ),
+            Container(
+              width: size.width,
+              child: Stack(
+                children: [
+                  SwipeDownRow(),
+                ],
               ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
+
+class SwipeDownRow extends StatefulWidget {
+  const SwipeDownRow({
+    super.key,
+  });
+
+  @override
+  State<SwipeDownRow> createState() => _SwipeDownRowState();
+}
+
+class _SwipeDownRowState extends State<SwipeDownRow> {
+  bool _isOpen1 = false;
+  bool _isOpen2 = false;
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
+    return Container(
+      height: 500,
+      width: size.width,
+      child: Stack(
+        children: [
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  _isOpen1 = true;
+                  setState(() {
+                    _isOpen1;
+                  });
+                },
+                onVerticalDragUpdate: (details) {
+                  if (!_isOpen1 && details.primaryDelta! > 0) {
+                    setState(() {
+                      _isOpen1 = true;
+                    });
+                  }
+                },
+                onVerticalDragEnd: (details) {
+                  if (_isOpen1 && details.primaryVelocity! < 0) {
+                    setState(() {
+                      _isOpen1 = false;
+                    });
+                  }
+                },
+                child: Container(
+                  height: 5,
+                  margin: EdgeInsets.all(1),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  width: size.width / 2 - 2,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _isOpen2 = true;
+                  });
+                },
+                onVerticalDragUpdate: (details) {
+                  if (!_isOpen2 && details.primaryDelta! > 0) {
+                    setState(() {
+                      _isOpen2 = true;
+                    });
+                  }
+                },
+                onVerticalDragEnd: (details) {
+                  if (_isOpen2 && details.primaryVelocity! < 0) {
+                    setState(() {
+                      _isOpen2 = false;
+                    });
+                  }
+                },
+                child: Container(
+                  height: 5,
+                  margin: EdgeInsets.all(1),
+                  padding: EdgeInsets.all(1),
+                  width: size.width / 2 - 2,
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          AnimatedContainer(
+            duration: Duration(milliseconds: 300),
+            height: _isOpen1 ? 200 : 0,
+            width: size.width,
+            color: Colors.red,
+            child: Stack(
+              children: [
+                SizedBox(),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.arrow_drop_up_rounded,
+                      color: kPrimaryColor,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isOpen1 = false;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          AnimatedContainer(
+            duration: Duration(milliseconds: 300),
+            height: _isOpen2 ? 200 : 0,
+            width: size.width,
+            color: Colors.green,
+            child: Stack(
+              children: [
+                SizedBox(),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.arrow_drop_up_rounded,
+                      color: kPrimaryColor,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isOpen2 = false;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// class SwipeDownSheet extends StatefulWidget {
+//   final Widget child;
+//   final double height;
+
+//   SwipeDownSheet({required this.child, required this.height});
+
+//   @override
+//   _SwipeDownSheetState createState() => _SwipeDownSheetState();
+// }
+
+// class _SwipeDownSheetState extends State<SwipeDownSheet> {
+//   bool _isOpen = false;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     Size size = MediaQuery.of(context).size;
+//     return Column(
+//       children: [
+//         GestureDetector(
+//           onVerticalDragUpdate: (details) {
+//             if (!_isOpen && details.primaryDelta! > 0) {
+//               setState(() {
+//                 _isOpen = true;
+//               });
+//             }
+//           },
+//           onVerticalDragEnd: (details) {
+//             if (_isOpen && details.primaryVelocity! < 0) {
+//               setState(() {
+//                 _isOpen = false;
+//               });
+//             }
+//           },
+//           child: Container(
+//             height: 5,
+//             width: _isOpen ? 0 : size.width / 2,
+//             color: Colors.black,
+//           ),
+//         ),
+//         AnimatedContainer(
+//           height: _isOpen ? widget.height : 0,
+//           width: size.width / 1.5,
+//           duration: const Duration(milliseconds: 300),
+//           child: Stack(
+//             children: [
+//               widget.child,
+//               Positioned(
+//                 bottom: 0,
+//                 left: 0,
+//                 right: 0,
+//                 child: IconButton(
+//                   icon: Icon(
+//                     Icons.arrow_drop_up_rounded,
+//                     color: kPrimaryColor,
+//                   ),
+//                   onPressed: () {
+//                     setState(() {
+//                       _isOpen = false;
+//                     });
+//                   },
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
