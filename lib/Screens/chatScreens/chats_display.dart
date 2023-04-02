@@ -7,6 +7,7 @@ import 'package:sessions/components/styles.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/screens/chatScreens/components/clips.dart';
+import 'package:sessions/screens/chatScreens/components/status.dart';
 import 'package:sessions/screens/chatScreens/components/tiles.dart';
 
 class ChatsDisplay extends StatefulWidget {
@@ -51,35 +52,6 @@ class _ChatsDisplayState extends State<ChatsDisplay> {
               )
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class StatusSlider extends StatelessWidget {
-  const StatusSlider({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-      width: size.width,
-      height: size.height * 0.2,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            StatusClip(),
-            StatusClip(),
-            StatusClip(),
-            StatusClip(),
-            StatusClip(),
-            StatusClip(),
-            StatusClip(),
-            StatusClip(),
-          ],
         ),
       ),
     );
