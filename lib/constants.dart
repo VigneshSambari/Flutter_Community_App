@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 const kPrimaryColor = Color(0xFF6F35A5);
 const kPrimaryLightColor = Color(0xFFF1E6FF);
 const kPrimaryDarkColor = Color(0xFF4D1B8A);
+const pinkishPurple = Color(0xFFE78DCA);
+const greyishPurple = Color(0xFF8E7E9D);
+const purpleRed = Color.fromARGB(137, 255, 127, 155);
+const purpleGreen = Color.fromARGB(206, 138, 238, 183);
+const orangePurple = Color.fromARGB(137, 255, 0, 157);
 
 const kPrimarySwatch = MaterialColor(
   0xFF6F35A5,
