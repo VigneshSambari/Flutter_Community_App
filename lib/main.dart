@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, unused_import
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/screens/blogScreens/blog_screen.dart';
 import 'package:sessions/screens/blogScreens/createblog_screen.dart';
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: kPrimaryColor,
+    ));
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Sessions',
