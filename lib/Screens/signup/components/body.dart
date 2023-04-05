@@ -13,6 +13,8 @@ import 'package:sessions/components/snackbar.dart';
 import 'package:sessions/components/styles.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
+import 'package:rive/rive.dart';
+
 import 'package:sessions/repositories/user_repository.dart';
 import 'package:sessions/screens/entryPoint/entry_point.dart';
 import 'package:sessions/screens/signup/components/background.dart';
@@ -65,7 +67,7 @@ class CenterBody extends StatelessWidget {
             showMySnackBar(context, state.error);
           }
           if (state is UserSignedUpState) {
-            navigatorPushReplacement(context, Loginscreen());
+            navigatorPushReplacement(context, EntryPoint());
             showMySnackBar(context, state.message);
           }
         },

@@ -5,6 +5,8 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rive/rive.dart';
+import 'package:sessions/assets.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/utils/navigations.dart';
 
@@ -269,7 +271,14 @@ class CircularProgressIndicatorOnStack extends StatelessWidget {
     return Container(
       color: kPrimaryColor.withOpacity(0.25),
       child: Center(
-        child: CircularProgressIndicator(),
+        child: Container(
+          height: MediaQuery.of(context).size.width * 0.135,
+          width: MediaQuery.of(context).size.width * 0.135,
+          child: RiveAnimation.asset(
+            Assets.assetsRiveAssetsLoadingcircular,
+            fit: BoxFit.contain,
+          ),
+        ),
       ),
     );
   }

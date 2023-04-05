@@ -53,10 +53,11 @@ class BlogScreen extends StatelessWidget {
                   child: BlocBuilder<BlogBloc, BlogState>(
                     builder: (context, state) {
                       if (state is BlogLoadingState) {
-                        // return LoadingIndicator();
-                        return Center(child: CircularProgressIndicator());
+                        return LoadingIndicator();
+                        //return Center(child: CircularProgressIndicator());
                       }
                       if (state is BlogLoadedState) {
+                        return LoadingIndicator();
                         return ListView.builder(
                           scrollDirection: Axis.vertical,
                           itemCount: widgets.length + 1,
@@ -108,14 +109,13 @@ class _LoadingIndicatorState extends State<LoadingIndicator> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: RiveAnimation.asset(
-        Assets.assetsRiveAssetsLoading,
-        onInit: (artboard) {
-          StateMachineController controller = RiveUtils.getRiveController(
-            artboard,
-            stateMachineName: "State Machine",
-          );
-        },
+      child: SizedBox(
+        height: MediaQuery.of(context).size.width * 0.275,
+        width: MediaQuery.of(context).size.width * 0.275,
+        child: RiveAnimation.asset(
+          Assets.assetsRiveAssetsLoading,
+          fit: BoxFit.contain,
+        ),
       ),
     );
   }

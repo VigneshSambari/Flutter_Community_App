@@ -181,6 +181,14 @@ class Assets {
   /// assets/riveAssets/loading.riv
   static const String assetsRiveAssetsLoading = "assets/riveAssets/loading.riv";
 
+  /// Assets for assetsRiveAssetsLoadingcircular
+  /// assets/riveAssets/loadingcircular.riv
+  static const String assetsRiveAssetsLoadingcircular = "assets/riveAssets/loadingcircular.riv";
+
+  /// Assets for assetsRiveAssetsLoadingcolor
+  /// assets/riveAssets/loadingcolor.riv
+  static const String assetsRiveAssetsLoadingcolor = "assets/riveAssets/loadingcolor.riv";
+
   /// Assets for assetsRiveAssetsMenuButton
   /// assets/riveAssets/menu_button.riv
   static const String assetsRiveAssetsMenuButton = "assets/riveAssets/menu_button.riv";
