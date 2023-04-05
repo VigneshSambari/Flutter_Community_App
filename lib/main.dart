@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/repositories/blog_repository.dart';
 import 'package:sessions/repositories/user_repository.dart';
@@ -13,20 +14,30 @@ import 'package:sessions/screens/chatScreens/chats_display.dart';
 import 'package:sessions/screens/entryPoint/entry_point.dart';
 import 'package:sessions/screens/home/home_screen.dart';
 import 'package:sessions/screens/login/login_screen.dart';
+import 'package:sessions/screens/profile/components/profile_details.dart';
 import 'package:sessions/screens/profile/create_profile.dart';
 import 'package:sessions/screens/profile/bottom_sheet.dart';
 import 'package:sessions/screens/profile/view_profile.dart';
 import 'package:sessions/screens/signup/signup_screen.dart';
 import 'package:sessions/screens/welcome/welcome_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:sessions/utils/classes.dart';
 
 void main() async {
   await dotenv.load();
-  // try {
-  //   final blogs = await BlogPostRepository().getAllBlogs();
 
-  //   print(blogs);
-  // } catch (err) {}
+  // try {
+  //   final user = await UserRepository().signUp(
+  //     httpData: UserSignUpSend(
+  //       email: "vignefdrrgfhsh@hmail",
+  //       password: "sdjkf",
+  //     ),
+  //   );
+  //   print(user.createdAt);
+  //   print(user.toJson());
+  // } catch (err) {
+  //   print(err.toString());
+  // }
   runApp(const MyApp());
 }
 
@@ -49,7 +60,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: kPrimarySwatch,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: EntryPoint(),
+      home: WelcomeScreen(),
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sessions/Screens/Login/components/background.dart';
 import 'package:sessions/components/buttons.dart';
 import 'package:sessions/components/dividers.dart';
+import 'package:sessions/components/snackbar.dart';
 import 'package:sessions/components/styles.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
@@ -25,7 +26,7 @@ class Body extends StatelessWidget {
 }
 
 class CenterBody extends StatelessWidget {
-  const CenterBody({
+  CenterBody({
     super.key,
     required this.size,
   });
@@ -66,7 +67,11 @@ class CenterBody extends StatelessWidget {
             ),
             password: true,
           ),
-          RoundedButton(title: "Login", onPress: () {}),
+          RoundedButton(
+              title: "Login",
+              onPress: () {
+                showMySnackBar(context, "Hello");
+              }),
           HaveAccountOrNot(
             linkName: "SignUp",
             linkWidget: SignUpScreen(),

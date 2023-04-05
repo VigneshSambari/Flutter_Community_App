@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, unused_local_variable
 
 import 'package:flutter/material.dart';
+import 'package:sessions/assets.dart';
 import 'package:sessions/bloc/blog/blog_bloc_imports.dart';
 import 'package:sessions/components/appbar.dart';
 import 'package:sessions/repositories/blog_repository.dart';
@@ -52,7 +53,8 @@ class BlogScreen extends StatelessWidget {
                   child: BlocBuilder<BlogBloc, BlogState>(
                     builder: (context, state) {
                       if (state is BlogLoadingState) {
-                        return LoadingIndicator();
+                        // return LoadingIndicator();
+                        return Center(child: CircularProgressIndicator());
                       }
                       if (state is BlogLoadedState) {
                         return ListView.builder(
@@ -107,7 +109,7 @@ class _LoadingIndicatorState extends State<LoadingIndicator> {
   Widget build(BuildContext context) {
     return Center(
       child: RiveAnimation.asset(
-        "assets/riveAssets/loading.riv",
+        Assets.assetsRiveAssetsLoading,
         onInit: (artboard) {
           StateMachineController controller = RiveUtils.getRiveController(
             artboard,

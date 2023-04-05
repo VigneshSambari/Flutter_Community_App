@@ -3,31 +3,35 @@ import 'dart:convert';
 
 class UserModel {
   String? _id;
-  String? name;
   String? email;
   String? password;
-  UserModel(this._id, {this.name, this.email, this.password});
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  String? token;
+  UserModel(this._id,
+      {this.email, this.password, this.createdAt, this.updatedAt, this.token});
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return <String, dynamic>{
       '_id': _id,
-      'name': name,
       'email': email,
       'password': password,
+      'createdAt': createdAt!.toIso8601String(),
+      'updatedAt': updatedAt!.toIso8601String(),
+      'token': token,
     };
   }
 
-  factory UserModel.fromMap(Map<String, dynamic> map) {
+  factory UserModel.fromJson(Map<String, dynamic> map) {
     return UserModel(
       map['_id'] != null ? map['_id'] as String : null,
-      name: map['name'] != null ? map['name'] as String : null,
       email: map['email'] != null ? map['email'] as String : null,
       password: map['password'] != null ? map['password'] as String : null,
+      createdAt:
+          map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null,
+      updatedAt:
+          map['updatedAt'] != null ? DateTime.parse(map['updatedAt']) : null,
+      token: map['token'] != null ? map['token'] as String : null,
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory UserModel.fromJson(String source) =>
-      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

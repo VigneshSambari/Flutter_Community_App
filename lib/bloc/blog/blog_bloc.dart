@@ -13,7 +13,6 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
   BlogBloc(this._blogRepository) : super(BlogLoadingState()) {
     on<LoadBlogEvent>((event, emit) async {
       emit(BlogLoadingState());
-
       try {
         final blogs = await _blogRepository.getAllBlogs();
         emit(BlogLoadedState(blogs: blogs));

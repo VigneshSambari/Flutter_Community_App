@@ -258,3 +258,19 @@ class ClipTitle extends StatelessWidget {
     );
   }
 }
+
+class CircularProgressIndicatorOnStack extends StatelessWidget {
+  const CircularProgressIndicatorOnStack({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: kPrimaryColor.withOpacity(0.25),
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+}

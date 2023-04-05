@@ -11,8 +11,10 @@ class OutlinedInputField extends StatefulWidget {
     required this.prefixIcon,
     this.password = false,
     this.enabled = true,
+    this.controller,
   });
 
+  TextEditingController? controller;
   final String labelText;
   final String hintText;
   final Icon prefixIcon;
@@ -32,6 +34,7 @@ class _OutlinedInputFieldState extends State<OutlinedInputField> {
       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
       width: size.width * 0.84,
       child: TextFormField(
+        controller: widget.controller,
         onTapOutside: (value) {
           setState(() {
             passwordVisible = false;
