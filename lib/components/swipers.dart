@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, library_private_types_in_public_api
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, library_private_types_in_public_api, prefer_const_constructors_in_immutables, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:sessions/components/carousal_slider.dart';
@@ -71,10 +71,8 @@ class _DragDownSheetState extends State<DragDownSheet> {
           child: Column(
             children: [
               Expanded(
-                child: Container(
-                  child: Center(
-                    child: Text(""),
-                  ),
+                child: Center(
+                  child: Text(""),
                 ),
               ),
             ],

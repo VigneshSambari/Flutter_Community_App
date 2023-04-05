@@ -1,14 +1,14 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last, sized_box_for_whitespace, avoid_unnecessary_containers, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, library_private_types_in_public_api, no_leading_underscores_for_local_identifiers, prefer_final_fields, unused_field
 
 import 'package:flutter/material.dart';
-import 'package:sessions/components/carousal_slider.dart';
+import 'package:flutter/services.dart';
+
 import 'package:sessions/components/circle_avatars.dart';
 import 'package:sessions/components/swipers.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
 
 import 'package:sessions/screens/chatScreens/components/clips.dart';
-import 'package:sessions/screens/chatScreens/components/status.dart';
 
 List<EventClip> events = [
   EventClip(),
@@ -92,9 +92,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                   "madssssssssssssssssssAWdawsssssssssssssssaaasdjanflkjhsfjhsjkldfhkjsahdfjkshafkjh...",
                               time: "22:22, 2/2/22",
                               repliesExist: true,
-                              position: false,
+                              position: index % 2 == 0,
                             );
-                            ;
                           },
                         ),
                       ),
@@ -199,7 +198,7 @@ class RoomMessageTile extends StatelessWidget {
         ),
         decoration: BoxDecoration(
             color:
-                position ? kPrimaryLightColor : kPrimaryColor.withOpacity(0.35),
+                position ? kPrimaryLightColor : kPrimaryColor.withOpacity(0.4),
             border: Border.all(
               width: 0.5,
               color: kPrimaryColor.withOpacity(0.3),
@@ -211,7 +210,7 @@ class RoomMessageTile extends StatelessWidget {
               bottomRight: position ? Radius.circular(15) : Radius.circular(15),
             )),
         padding: EdgeInsets.all(7.5),
-        margin: EdgeInsets.symmetric(vertical: 2.5, horizontal: 5),
+        margin: EdgeInsets.symmetric(vertical: 4, horizontal: 5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
