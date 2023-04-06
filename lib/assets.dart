@@ -177,6 +177,10 @@ class Assets {
   /// assets/riveAssets/icons.riv
   static const String assetsRiveAssetsIcons = "assets/riveAssets/icons.riv";
 
+  /// Assets for assetsRiveAssetsLoader
+  /// assets/riveAssets/loader.riv
+  static const String assetsRiveAssetsLoader = "assets/riveAssets/loader.riv";
+
   /// Assets for assetsRiveAssetsLoading
   /// assets/riveAssets/loading.riv
   static const String assetsRiveAssetsLoading = "assets/riveAssets/loading.riv";

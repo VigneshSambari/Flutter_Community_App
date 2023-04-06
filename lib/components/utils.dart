@@ -269,7 +269,7 @@ class CircularProgressIndicatorOnStack extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: kPrimaryColor.withOpacity(0.25),
+      color: kPrimaryColor.withOpacity(0.15),
       child: Center(
         child: Container(
           height: MediaQuery.of(context).size.width * 0.135,

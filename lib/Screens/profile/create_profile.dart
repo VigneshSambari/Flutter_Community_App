@@ -14,7 +14,6 @@ import 'package:sessions/constants.dart';
 import 'package:sessions/screens/profile/components/profile_image_utils.dart';
 import 'package:sessions/screens/profile/components/tiles.dart';
 import 'package:sessions/screens/profile/components/util_classes.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 List<LinkTile> linkTiles = [
   LinkTile(),
@@ -84,17 +83,17 @@ class _CreateProfileState extends State<CreateProfile> {
     });
   }
 
-  Future<void> saveProfileData(ProfileInputVariables data) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String dataString = jsonEncode(data.toJson());
-    prefs.setString("profileData", dataString);
-  }
+  // Future<void> saveProfileData(ProfileInputVariables data) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String dataString = jsonEncode(data.toJson());
+  //   prefs.setString("profileData", dataString);
+  // }
 
-  Future<void> loadData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final jsonData = prefs.getString("profileData");
-    if (jsonData != null) {}
-  }
+  // Future<void> loadData() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   final jsonData = prefs.getString("profileData");
+  //   if (jsonData != null) {}
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -256,7 +255,7 @@ class _CreateProfileState extends State<CreateProfile> {
                 title: "Save",
                 onPress: () async {
                   //await saveProfileData(inputVariables);
-                  await loadData();
+                  //await loadData();
                 },
               ),
             ],

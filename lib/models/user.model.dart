@@ -1,13 +1,15 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, prefer_const_constructors_in_immutables
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
+
 class UserModel {
-  String? _id;
-  String? email;
-  String? password;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  String? token;
+  final String? _id;
+  final String? email;
+  final String? password;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final String? token;
   UserModel(this._id,
       {this.email, this.password, this.createdAt, this.updatedAt, this.token});
 
@@ -34,4 +36,8 @@ class UserModel {
       token: map['token'] != null ? map['token'] as String : null,
     );
   }
+
+  @override
+  List<Object?> get props =>
+      [_id, email, password, createdAt, updatedAt, token];
 }

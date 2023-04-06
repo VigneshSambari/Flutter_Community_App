@@ -12,8 +12,10 @@ class OutlinedInputField extends StatefulWidget {
     this.password = false,
     this.enabled = true,
     this.controller,
+    this.error,
   });
 
+  String? error;
   TextEditingController? controller;
   final String labelText;
   final String hintText;
@@ -75,6 +77,7 @@ class _OutlinedInputFieldState extends State<OutlinedInputField> {
             borderSide: BorderSide(color: kPrimaryColor),
             borderRadius: BorderRadius.circular(25),
           ),
+          errorText: widget.error,
           labelText: widget.labelText,
           hintText: widget.hintText,
         ),

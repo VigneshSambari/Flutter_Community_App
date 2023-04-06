@@ -57,7 +57,7 @@ class BlogScreen extends StatelessWidget {
                         //return Center(child: CircularProgressIndicator());
                       }
                       if (state is BlogLoadedState) {
-                        return LoadingIndicator();
+                        //return LoadingIndicator();
                         return ListView.builder(
                           scrollDirection: Axis.vertical,
                           itemCount: widgets.length + 1,
@@ -110,8 +110,8 @@ class _LoadingIndicatorState extends State<LoadingIndicator> {
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        height: MediaQuery.of(context).size.width * 0.275,
-        width: MediaQuery.of(context).size.width * 0.275,
+        height: MediaQuery.of(context).size.width * 0.25,
+        width: MediaQuery.of(context).size.width * 0.25,
         child: RiveAnimation.asset(
           Assets.assetsRiveAssetsLoading,
           fit: BoxFit.contain,

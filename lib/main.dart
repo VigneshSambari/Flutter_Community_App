@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sessions/bloc/user/user_bloc_imports.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/repositories/blog_repository.dart';
 import 'package:sessions/repositories/user_repository.dart';
@@ -22,22 +23,20 @@ import 'package:sessions/screens/signup/signup_screen.dart';
 import 'package:sessions/screens/welcome/welcome_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sessions/utils/classes.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 void main() async {
   await dotenv.load();
+  WidgetsFlutterBinding.ensureInitialized();
 
-  // try {
-  //   final user = await UserRepository().signUp(
-  //     httpData: UserSignUpSend(
-  //       email: "vignefdrrgfhsh@hmail",
-  //       password: "sdjkf",
-  //     ),
-  //   );
-  //   print(user.createdAt);
-  //   print(user.toJson());
-  // } catch (err) {
-  //   print(err.toString());
-  // }
+  final storage = await HydratedStorage.build(
+      storageDirectory: await getApplicationDocumentsDirectory());
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  HydratedBloc.storage = storage;
   runApp(const MyApp());
 }
 
@@ -52,15 +51,30 @@ class MyApp extends StatelessWidget {
         statusBarColor: Colors.transparent,
       ),
     );
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'CommunityApp',
-      theme: ThemeData(
-        fontFamily: "Intel",
-        primarySwatch: kPrimarySwatch,
-        scaffoldBackgroundColor: Colors.white,
+    return RepositoryProvider(
+      create: (context) => UserRepository(),
+      child: BlocProvider(
+        create: (context) => UserBloc(
+          RepositoryProvider.of<UserRepository>(context),
+        ),
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'CommunityApp',
+          theme: ThemeData(
+            fontFamily: "Intel",
+            primarySwatch: kPrimarySwatch,
+            scaffoldBackgroundColor: Colors.white,
+          ),
+          home: BlocBuilder<UserBloc, UserState>(
+            builder: (context, state) {
+              if (state is UserInitialState) {
+                return WelcomeScreen();
+              }
+              return EntryPoint();
+            },
+          ),
+        ),
       ),
-      home: WelcomeScreen(),
     );
   }
 }
