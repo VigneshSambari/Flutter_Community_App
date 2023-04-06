@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+
 part of 'user_bloc.dart';
 
 abstract class UserState extends Equatable {}
@@ -35,8 +37,23 @@ class UserSignedUpState extends UserState {
 }
 
 class UserSignedInState extends UserState {
+  final UserModel user;
+  final String message = "Successfully logged in User!";
+  UserSignedInState({required this.user});
   @override
   List<Object?> get props => [];
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'user': user.toJson(),
+    };
+  }
+
+  factory UserSignedInState.fromJson(Map<String, dynamic> map) {
+    return UserSignedInState(
+      user: UserModel.fromJson(map['user'] as Map<String, dynamic>),
+    );
+  }
 }
 
 class UserErrorState extends UserState {

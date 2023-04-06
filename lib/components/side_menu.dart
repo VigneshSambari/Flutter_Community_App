@@ -2,6 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
+import 'package:sessions/bloc/blog/blog_bloc_imports.dart';
+import 'package:sessions/bloc/user/user_bloc.dart';
+import 'package:sessions/components/log_out.dart';
 import 'package:sessions/components/styles.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
@@ -15,6 +18,12 @@ class SideMenu extends StatefulWidget {
 }
 
 class _SideMenuState extends State<SideMenu> {
+  RiveAsset logOut = RiveAsset(
+    artboard: "TIMER",
+    stateMachineName: "TIMER_Interactivity",
+    title: "History",
+    src: "assets/riveAssets/icons.riv",
+  );
   RiveAsset selectedMenuItem = browseMenu.first;
   @override
   Widget build(BuildContext context) {
@@ -93,6 +102,10 @@ class _SideMenuState extends State<SideMenu> {
                       },
                     ),
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  LogOutButton(),
                 ],
               ),
             ),

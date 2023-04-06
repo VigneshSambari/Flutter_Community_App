@@ -19,6 +19,8 @@ class UserSignUpEvent extends UserEvent {
 }
 
 class UserSignInEvent extends UserEvent {
+  final UserSignInSend userData;
+  UserSignInEvent({required this.userData});
   @override
   List<Object?> get props => [];
 }

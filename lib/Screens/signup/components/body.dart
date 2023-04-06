@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors_in_immutables
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -12,11 +12,6 @@ import 'package:sessions/components/input_fields.dart';
 import 'package:sessions/components/snackbar.dart';
 import 'package:sessions/components/styles.dart';
 import 'package:sessions/components/utils.dart';
-import 'package:sessions/constants.dart';
-import 'package:rive/rive.dart';
-
-import 'package:sessions/repositories/user_repository.dart';
-import 'package:sessions/screens/entryPoint/entry_point.dart';
 import 'package:sessions/screens/signup/components/background.dart';
 import 'package:sessions/utils/classes.dart';
 import 'package:sessions/utils/navigations.dart';
@@ -70,7 +65,7 @@ class _CenterBodyState extends State<CenterBody> {
           showMySnackBar(context, state.error);
         }
         if (state is UserSignedUpState) {
-          navigatorPushReplacement(context, EntryPoint());
+          navigatorPushReplacement(context, Loginscreen());
           showMySnackBar(context, state.message);
         }
       },
@@ -117,9 +112,9 @@ class _CenterBodyState extends State<CenterBody> {
                     Builder(builder: (context) {
                       return GestureDetector(
                         onTap: () {
-                          //emailError = validateEmail(emailController.text);
-                          //passwordError =
-                          //   validatePassword(passwordController.text);
+                          emailError = validateEmail(emailController.text);
+                          passwordError =
+                              validatePassword(passwordController.text);
                           if (emailError != null) {
                             setState(() {
                               emailError;
@@ -131,7 +126,10 @@ class _CenterBodyState extends State<CenterBody> {
                             });
                           }
                           if (passwordError == null && emailError == null) {
-                            FocusScope.of(context).unfocus();
+                            final currentFocus = FocusScope.of(context);
+                            if (!currentFocus.hasPrimaryFocus) {
+                              currentFocus.unfocus();
+                            }
                             UserSignUpSend userData = UserSignUpSend(
                                 email: emailController.text,
                                 password: passwordController.text);

@@ -4,7 +4,7 @@ import 'package:http/http.dart';
 import 'package:sessions/utils/classes.dart';
 
 Future<Response> httpRequestMethod(
-    {required Pair urlInfo, dynamic? body, String? token}) async {
+    {required Pair urlInfo, dynamic body, String? token}) async {
   Response response;
   Uri uri = Uri.parse(urlInfo.url);
   try {

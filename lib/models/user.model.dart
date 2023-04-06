@@ -1,7 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, prefer_const_constructors_in_immutables
-import 'dart:convert';
-
-import 'package:equatable/equatable.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first, prefer_const_constructors_in_immutables, override_on_non_overriding_member
 
 class UserModel {
   final String? _id;

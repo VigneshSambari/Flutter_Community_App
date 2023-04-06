@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, non_constant_identifier_names
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, sized_box_for_whitespace
 
 import 'dart:math';
 
@@ -278,6 +278,31 @@ class CircularProgressIndicatorOnStack extends StatelessWidget {
             Assets.assetsRiveAssetsLoadingcircular,
             fit: BoxFit.contain,
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class LoadingIndicator extends StatefulWidget {
+  const LoadingIndicator({
+    super.key,
+  });
+
+  @override
+  State<LoadingIndicator> createState() => _LoadingIndicatorState();
+}
+
+class _LoadingIndicatorState extends State<LoadingIndicator> {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SizedBox(
+        height: MediaQuery.of(context).size.width * 0.225,
+        width: MediaQuery.of(context).size.width * 0.225,
+        child: RiveAnimation.asset(
+          Assets.assetsRiveAssetsLoading,
+          fit: BoxFit.contain,
         ),
       ),
     );

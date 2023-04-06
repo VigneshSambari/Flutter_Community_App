@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:sessions/assets.dart';
 import 'package:sessions/bloc/blog/blog_bloc_imports.dart';
 import 'package:sessions/components/appbar.dart';
+import 'package:sessions/components/utils.dart';
 import 'package:sessions/repositories/blog_repository.dart';
 import 'package:sessions/screens/blogScreens/components/blog_utils.dart';
 import 'package:rive/rive.dart';
-import 'package:sessions/utils/rive_utils.dart';
 
 List<Widget> widgets = [
   BlogTile(),
@@ -90,31 +90,6 @@ class BlogScreen extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class LoadingIndicator extends StatefulWidget {
-  const LoadingIndicator({
-    super.key,
-  });
-
-  @override
-  State<LoadingIndicator> createState() => _LoadingIndicatorState();
-}
-
-class _LoadingIndicatorState extends State<LoadingIndicator> {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        height: MediaQuery.of(context).size.width * 0.25,
-        width: MediaQuery.of(context).size.width * 0.25,
-        child: RiveAnimation.asset(
-          Assets.assetsRiveAssetsLoading,
-          fit: BoxFit.contain,
         ),
       ),
     );

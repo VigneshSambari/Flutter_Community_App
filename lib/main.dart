@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unused_import
+// ignore_for_file: prefer_const_constructors, unused_import, unnecessary_import
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,8 +25,18 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sessions/utils/classes.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:sessions/utils/navigations.dart';
 
 void main() async {
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.light,
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+    ),
+  );
+
   await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -36,6 +46,7 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+
   HydratedBloc.storage = storage;
   runApp(const MyApp());
 }

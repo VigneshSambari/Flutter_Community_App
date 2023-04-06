@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last, sized_box_for_whitespace, avoid_unnecessary_containers, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, library_private_types_in_public_api, no_leading_underscores_for_local_identifiers, prefer_final_fields, unused_field
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:sessions/components/circle_avatars.dart';
 import 'package:sessions/components/swipers.dart';
