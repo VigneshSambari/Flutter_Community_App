@@ -1,14 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 class BlogPostModel {
-  String? _id;
-  String? postedBy;
-  String? title;
-  String? body;
-  List<CoverMediaItem>? coverMedia = [];
-  int? likes = 0;
-  int? shares = 0;
-  List<Comment>? comments = [];
+  final String? _id;
+  final String? postedBy;
+  final String? title;
+  final String? body;
+  final List<CoverMediaItem>? coverMedia;
+  final int? likes;
+  final int? shares;
+  final List<Comment>? comments;
 
   BlogPostModel(
     this._id, {

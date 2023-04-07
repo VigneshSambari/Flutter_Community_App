@@ -191,9 +191,11 @@ class InterestsTile extends StatelessWidget {
   const InterestsTile({
     super.key,
     required this.size,
+    required this.controller,
   });
 
   final Size size;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -211,6 +213,7 @@ class InterestsTile extends StatelessWidget {
                     fieldName: "Interest",
                     iconData: Icons.abc,
                     height: 50,
+                    controller: controller,
                   ),
                 ),
               ],

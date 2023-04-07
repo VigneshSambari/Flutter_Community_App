@@ -2,7 +2,7 @@ import 'package:sessions/constants.dart';
 import 'package:sessions/utils/classes.dart';
 
 class UserUrls {
-  static String userEndPoint = ("$httpServerUrl/auth");
+  static String userEndPoint = "$httpServerUrl/auth";
   static Pair signIn = Pair(url: "$userEndPoint/login", requestType: true);
   static Pair signUp = Pair(url: "$userEndPoint/register", requestType: true);
   static Pair sendVerifivationEmail =
@@ -28,5 +28,43 @@ class BlogUrls {
   static Pair likeOrUnlike(String id, String choice, String commentorpost) {
     return Pair(
         url: "$blogEndPoint/:$commentorpost/:$id/:$choice", requestType: false);
+  }
+}
+
+class ProfileUrls {
+  static String profileEndPoint = "$httpServerUrl/profile";
+  static Pair create = Pair(url: "$profileEndPoint/create", requestType: true);
+  static Pair update = Pair(url: "$profileEndPoint/update", requestType: true);
+  static Pair checkIfFriend =
+      Pair(url: "$profileEndPoint/checkfriend", requestType: true);
+  static Pair otherProfile =
+      Pair(url: "$profileEndPoint/otherprofile", requestType: true);
+  static Pair sendRequest =
+      Pair(url: "$profileEndPoint/sendrequest", requestType: true);
+  static Pair acceptRequest =
+      Pair(url: "$profileEndPoint/acceptrequest", requestType: true);
+  static Pair disconnect =
+      Pair(url: "$profileEndPoint/disconnect", requestType: true);
+
+  static Pair fetchProfile(String userId) {
+    return Pair(url: "$profileEndPoint/:$userId", requestType: false);
+  }
+
+  static Pair deleteProfile(String userId) {
+    return Pair(url: "$profileEndPoint/delete/:$userId", requestType: false);
+  }
+
+  static Pair setOnline(String userId) {
+    return Pair(url: "$profileEndPoint/setonline/:$userId", requestType: false);
+  }
+
+  static Pair setOffline(String userId) {
+    return Pair(
+        url: "$profileEndPoint/setoffline/:$userId", requestType: false);
+  }
+
+  static Pair fetchPublicProfile(String userId) {
+    return Pair(
+        url: "$profileEndPoint/publicprofile/:$userId", requestType: false);
   }
 }

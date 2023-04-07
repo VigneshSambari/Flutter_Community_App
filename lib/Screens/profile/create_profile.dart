@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sized_box_for_whitespace, prefer_const_constructors_in_immutables
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:sessions/components/appbar.dart';
 import 'package:sessions/components/buttons.dart';
@@ -8,10 +10,13 @@ import 'package:sessions/components/drop_downs.dart';
 import 'package:sessions/components/input_fields.dart';
 
 import 'package:sessions/constants.dart';
+import 'package:sessions/models/profile.model.dart';
+import 'package:sessions/repositories/profile_repository.dart';
 
 import 'package:sessions/screens/profile/components/profile_image_utils.dart';
 import 'package:sessions/screens/profile/components/tiles.dart';
 import 'package:sessions/screens/profile/components/util_classes.dart';
+import 'package:sessions/utils/classes.dart';
 
 List<LinkTile> linkTiles = [
   LinkTile(),
@@ -96,6 +101,10 @@ class _CreateProfileState extends State<CreateProfile> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    TextEditingController firstNameCont = TextEditingController(),
+        lastNameCont = TextEditingController(),
+        userNameCont = TextEditingController(),
+        interestCont = TextEditingController();
 
     return Scaffold(
       appBar: CurvedAppBar(
@@ -214,17 +223,24 @@ class _CreateProfileState extends State<CreateProfile> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(
-                    child: SizedInputField(fieldName: "First Name"),
+                    child: SizedInputField(
+                        fieldName: "First Name", controller: firstNameCont),
                   ),
                   SizedBox(
                     width: 5,
                   ),
                   Expanded(
-                    child: SizedInputField(fieldName: "Last Name"),
+                    child: SizedInputField(
+                      fieldName: "Last Name",
+                      controller: lastNameCont,
+                    ),
                   ),
                 ],
               ),
-              SizedInputField(fieldName: "UserName"),
+              SizedInputField(
+                fieldName: "UserName",
+                controller: userNameCont,
+              ),
               CustomDropdownButton(
                 prefixIcon: Icons.school,
                 options: collegeDropDown,
@@ -240,7 +256,7 @@ class _CreateProfileState extends State<CreateProfile> {
                 options: designationDropDown,
                 fieldName: "Select your Designation",
               ),
-              InterestsTile(size: size),
+              InterestsTile(size: size, controller: interestCont),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
@@ -252,8 +268,34 @@ class _CreateProfileState extends State<CreateProfile> {
               RoundedButton(
                 title: "Save",
                 onPress: () async {
-                  //await saveProfileData(inputVariables);
-                  //await loadData();
+                  //json.encode({"name": "name2", "link": "link2"});
+                  try {
+                    ProfileModel profile = await ProfileRepository().create(
+                      httpData: CreateProfileSend(
+                          userName: "userName2",
+                          name: "name",
+                          userId: "642eb83a92d51acb2819f500",
+                          college: "college",
+                          specialization: "specialization",
+                          designation: "designation",
+                          profilePic: "profilePic",
+                          coverPic: "coverPic",
+                          interests: [
+                            "1",
+                            "2",
+                            "3",
+                            "4"
+                          ],
+                          links: [
+                            {
+                              "name": "link",
+                            },
+                          ]),
+                    );
+                    //print(profile.toJson());
+                  } catch (err) {
+                    print(err.toString());
+                  }
                 },
               ),
             ],

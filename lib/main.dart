@@ -28,15 +28,6 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:sessions/utils/navigations.dart';
 
 void main() async {
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarIconBrightness: Brightness.light,
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
-    ),
-  );
-
   await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -81,7 +72,7 @@ class MyApp extends StatelessWidget {
               if (state is UserInitialState) {
                 return WelcomeScreen();
               }
-              return EntryPoint();
+              return CreateProfile();
             },
           ),
         ),

@@ -95,8 +95,10 @@ class RoundedInputField extends StatelessWidget {
     this.extensible = false,
     this.height = 0,
     this.enabled = true,
+    this.controller,
   });
 
+  final TextEditingController? controller;
   final String fieldName;
   final Color iconColor;
   final double height;
@@ -108,6 +110,7 @@ class RoundedInputField extends StatelessWidget {
     return TextFieldContainer(
       widget: TextField(
         enabled: enabled,
+        controller: controller,
         maxLines: extensible ? 10 : 2,
         minLines: 1,
         decoration: InputDecoration(
@@ -156,13 +159,14 @@ class TextFieldContainer extends StatelessWidget {
 }
 
 class SizedInputField extends StatelessWidget {
-  const SizedInputField({
-    super.key,
-    this.enabled = true,
-    required this.fieldName,
-    this.height = 60,
-  });
+  const SizedInputField(
+      {super.key,
+      this.enabled = true,
+      required this.fieldName,
+      this.height = 60,
+      this.controller});
 
+  final TextEditingController? controller;
   final String fieldName;
   final bool enabled;
   final double height;
@@ -174,6 +178,7 @@ class SizedInputField extends StatelessWidget {
       height: height,
       extensible: false,
       enabled: enabled,
+      controller: controller,
     );
   }
 }
