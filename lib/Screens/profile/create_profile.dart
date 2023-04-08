@@ -23,6 +23,7 @@ import 'package:sessions/screens/profile/components/profile_image_utils.dart';
 import 'package:sessions/screens/profile/components/tiles.dart';
 import 'package:sessions/screens/profile/components/util_classes.dart';
 import 'package:sessions/utils/classes.dart';
+import 'package:sessions/utils/enums.dart';
 import 'package:sessions/utils/navigations.dart';
 
 List<LinkTile> linkTiles = [];
@@ -81,7 +82,7 @@ class _CreateProfileState extends State<CreateProfile> {
       specialization: "");
 
   ProfileInputControllers inputControllers = ProfileInputControllers();
-
+  String collegeValue = "", specializationValue = "", designationValue = "";
   String saveString = "";
 
   void addProfilePic(String path) {
@@ -108,10 +109,23 @@ class _CreateProfileState extends State<CreateProfile> {
   //   if (jsonData != null) {}
   // }
 
+  void setDropDownValue({required String value, required DropTypes dropType}) {
+    if (dropType == DropTypes.collegeDropDown) {
+      print(value);
+      collegeValue = value;
+    } else if (dropType == DropTypes.designationDropDown) {
+      print(value);
+      designationValue = value;
+    } else if (dropType == DropTypes.specializationDropDown) {
+      print(value);
+      specializationValue = value;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    String? collegeValue, specializationValue, designationValue;
+
     TextEditingController firstNameCont = TextEditingController(),
         lastNameCont = TextEditingController(),
         userNameCont = TextEditingController(),
@@ -259,22 +273,25 @@ class _CreateProfileState extends State<CreateProfile> {
                       controller: userNameCont,
                     ),
                     CustomDropdownButton(
+                      dropType: DropTypes.collegeDropDown,
                       prefixIcon: Icons.school,
                       options: collegeDropDown,
                       fieldName: "Select your College",
-                      dropDownValue: collegeValue,
+                      changeValue: setDropDownValue,
                     ),
                     CustomDropdownButton(
+                      dropType: DropTypes.specializationDropDown,
                       prefixIcon: Icons.science,
                       options: specializationDropDown,
                       fieldName: "Select your Specialization",
-                      dropDownValue: specializationValue,
+                      changeValue: setDropDownValue,
                     ),
                     CustomDropdownButton(
+                      dropType: DropTypes.designationDropDown,
                       prefixIcon: Icons.work,
                       options: designationDropDown,
                       fieldName: "Select your Designation",
-                      dropDownValue: designationValue,
+                      changeValue: setDropDownValue,
                     ),
                     InterestsTile(
                         size: size,
@@ -330,16 +347,17 @@ class _CreateProfileState extends State<CreateProfile> {
                             currLink[link.nameCont.text] = link.linkCont.text;
                             links.add(currLink);
                           }
-
+                          print(
+                              "$collegeValue, $designationValue, $specializationValue");
                           BlocProvider.of<ProfileBloc>(context).add(
                             CreateProfileEvent(
                               profileData: CreateProfileSend(
-                                  userName: "userNameCont.text",
-                                  name: "firstNameCont.text",
-                                  userId: "64311af926e4ea69bd38063f",
-                                  college: "collegeValue",
-                                  specialization: "specializationValue",
-                                  designation: "designationValue",
+                                  userName: userNameCont.text,
+                                  name: firstNameCont.text,
+                                  userId: userIdUser,
+                                  college: collegeValue,
+                                  specialization: specializationValue,
+                                  designation: designationValue,
                                   interests: interestList.toList(),
                                   links: links,
                                   coverPicFileUrl: inputVariables.coverPhoto,

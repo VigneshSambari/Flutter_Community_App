@@ -85,25 +85,25 @@ class MyApp extends StatelessWidget {
             primarySwatch: kPrimarySwatch,
             scaffoldBackgroundColor: Colors.white,
           ),
-          home: CreateProfile(),
-          // home: BlocBuilder<UserBloc, UserState>(
-          //   builder: (context, state) {
-          //     final ProfileBloc profileBloc = context.read<ProfileBloc>();
-          //     final ProfileState profileState = profileBloc.state;
-          //     if (profileState is ProfileCreatedState) {
-          //       return EntryPoint();
-          //     }
-          //     if (state is UserSignedInState &&
-          //         profileState is ProfileInitialState) {
-          //       return CreateProfile();
-          //     }
+          //home: CreateProfile(),
+          home: BlocBuilder<UserBloc, UserState>(
+            builder: (context, state) {
+              final ProfileBloc profileBloc = context.read<ProfileBloc>();
+              final ProfileState profileState = profileBloc.state;
+              if (profileState is ProfileCreatedState) {
+                return EntryPoint();
+              }
+              if (state is UserSignedInState &&
+                  profileState is ProfileInitialState) {
+                return CreateProfile();
+              }
 
-          //     if (state is UserSignedUpState) {
-          //       return Loginscreen();
-          //     }
-          //     return WelcomeScreen();
-          //   },
-          // ),
+              if (state is UserSignedUpState) {
+                return Loginscreen();
+              }
+              return WelcomeScreen();
+            },
+          ),
         ),
       ),
     );

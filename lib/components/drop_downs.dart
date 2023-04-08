@@ -2,17 +2,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:sessions/constants.dart';
+import 'package:sessions/utils/enums.dart';
 
 class CustomDropdownButton extends StatefulWidget {
   final List<String> options;
   final String fieldName;
   final IconData prefixIcon;
-  String? dropDownValue;
+  final Function changeValue;
+  final DropTypes dropType;
   CustomDropdownButton({
     required this.options,
     required this.fieldName,
     required this.prefixIcon,
-    required this.dropDownValue,
+    required this.changeValue,
+    required this.dropType,
   });
 
   @override
@@ -128,11 +131,10 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
         ),
       ],
     ).then((String? newValue) {
+      widget.changeValue(value: newValue, dropType: widget.dropType);
       if (newValue != null) {
         setState(() {
           selectedOption = newValue;
-          widget.dropDownValue = selectedOption;
-          print(widget.dropDownValue);
         });
       }
     });

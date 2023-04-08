@@ -12,29 +12,32 @@ class ProfileRepository {
   Future<ProfileModel> create({required CreateProfileSend httpData}) async {
     Pair urlInfo = ProfileUrls.create, mediaUrl = ProfileUrls.mediaUpload;
 
-    print("calledd");
+    //   final request = MultipartRequest('POST', Uri.parse(mediaUrl.url));
+    //   final files = [
+    //     await MultipartFile.fromPath('files', httpData.coverPicFileUrl!,
+    //         filename: 'coverPic'),
+    //     await MultipartFile.fromPath('files', httpData.profilePicFileUrl!,
+    //         filename: 'profilePic'),
+    //     // add more files as needed
+    //   ];
+    //   request.files.addAll(files);
+    //   request.headers['Content-Type'] = 'application/json';
+    //   final jsonPayload = jsonEncode(httpData);
+    //   Map<String, dynamic> jsonMap = jsonDecode(jsonPayload);
+    //   Map<String, String> stringMap = Map<String, String>.from(
+    //       jsonMap.map((key, value) => MapEntry(key, value.toString())));
 
-    final request = MultipartRequest('POST', Uri.parse(mediaUrl.url));
-    final files = [
-      await MultipartFile.fromPath('files', httpData.coverPicFileUrl!,
-          filename: 'coverPic'),
-      await MultipartFile.fromPath('files', httpData.profilePicFileUrl!,
-          filename: 'profilePic'),
-      // add more files as needed
-    ];
-    request.files.addAll(files);
-    request.headers['Content-Type'] = 'application/json';
-    final jsonPayload = jsonEncode(httpData);
-    Map<String, dynamic> jsonMap = jsonDecode(jsonPayload);
-    Map<String, String> stringMap = Map<String, String>.from(
-        jsonMap.map((key, value) => MapEntry(key, value.toString())));
-
-    request.fields.addAll(stringMap);
-    final response = await request.send();
-    if (response.statusCode != 200) {
-      throw Exception("Error uploading profile media");
-    }
-
+    //   request.fields.addAll(stringMap);
+    //   final response = await request.send();
+    //   var stream = response.stream;
+    //   var subscription = stream.listen((data) {
+    //     var decodedData = utf8.decode(data);
+    //     print(decodedData);
+    //   });
+    //   if (response.statusCode != 200) {
+    //     throw Exception("Error uploading profile media");
+    //   }
+    //   print(response.toString());
     //
     //
     //
@@ -50,6 +53,7 @@ class ProfileRepository {
     if (responseData.statusCode == 200) {
       print("Profile created");
       ProfileModel profile = ProfileModel.fromJson(body);
+      print(profile.toJson());
       return profile;
     } else {
       print("profile upload failed");
