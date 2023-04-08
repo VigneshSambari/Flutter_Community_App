@@ -60,31 +60,53 @@ class ProfileModel {
       'profilePic': profilePic,
       'coverPic': coverPic,
       'online': online,
-      'lastseen': lastseen?.millisecondsSinceEpoch,
+      'lastseen': lastseen!.toIso8601String(),
       'connections': connections!.map((x) => x.toJson()).toList(),
       'connectionRequests': connectionRequests!.map((x) => x.toJson()).toList(),
       'requestsSent': requestsSent!.map((x) => x.toJson()).toList(),
       'interests': interests,
       'blogs': blogs!.map((x) => x.toJson()).toList(),
       'links': links!.map((x) => x.toJson()).toList(),
-      'createdAt': createdAt?.millisecondsSinceEpoch,
-      'updatedAt': updatedAt?.millisecondsSinceEpoch,
+      'createdAt': createdAt!.toIso8601String(),
+      'updatedAt': updatedAt!.toIso8601String(),
     };
   }
 
   factory ProfileModel.fromJson(Map<String, dynamic> map) {
+    List<IdObject> newConnections = [],
+        newConnectionRequests = [],
+        newRequestsSent = [],
+        newBlogs = [];
+    List<LinkItem> newLinks = [];
+    List<RoomItem> newRooms = [];
+    List<String> newInterests = [];
+    for (var item in map['connections']) {
+      newConnections.add(IdObject.fromJson(item));
+    }
+    for (var item in map['connectionRequests']) {
+      newConnectionRequests.add(IdObject.fromJson(item));
+    }
+    for (var item in map['requestsSent']) {
+      newRequestsSent.add(IdObject.fromJson(item));
+    }
+    for (var item in map['blogs']) {
+      newBlogs.add(IdObject.fromJson(item));
+    }
+    for (var item in map['links']) {
+      newLinks.add(LinkItem.fromJson(item));
+    }
+    for (var item in map['rooms']) {
+      newRooms.add(RoomItem.fromJson(item));
+    }
+    for (var item in map['interests']) {
+      newInterests.add(item);
+    }
     return ProfileModel(
       map['_id'] != null ? map['_id'] as String : null,
       userId: map['userId'] != null ? map['userId'] as String : null,
       name: map['name'] != null ? map['name'] as String : null,
       userName: map['userName'] != null ? map['userName'] as String : null,
-      rooms: map['rooms'] != null
-          ? List<RoomItem>.from(
-              (map['rooms'] as List<int>).map<RoomItem?>(
-                (x) => RoomItem.fromJson(x as Map<String, dynamic>),
-              ),
-            )
-          : null,
+      rooms: newRooms,
       college: map['college'] != null ? map['college'] as String : null,
       specialization: map['specialization'] != null
           ? map['specialization'] as String
@@ -95,53 +117,18 @@ class ProfileModel {
           map['profilePic'] != null ? map['profilePic'] as String : null,
       coverPic: map['coverPic'] != null ? map['coverPic'] as String : null,
       online: map['online'] != null ? map['online'] as bool : null,
-      lastseen: map['lastseen'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['lastseen'] as int)
-          : null,
-      connections: map['connections'] != null
-          ? List<IdObject>.from(
-              (map['connections'] as List<int>).map<IdObject?>(
-                (x) => IdObject.fromJson(x as Map<String, dynamic>),
-              ),
-            )
-          : null,
-      connectionRequests: map['connectionRequests'] != null
-          ? List<IdObject>.from(
-              (map['connectionRequests'] as List<int>).map<IdObject?>(
-                (x) => IdObject.fromJson(x as Map<String, dynamic>),
-              ),
-            )
-          : null,
-      requestsSent: map['requestsSent'] != null
-          ? List<IdObject>.from(
-              (map['requestsSent'] as List<int>).map<IdObject?>(
-                (x) => IdObject.fromJson(x as Map<String, dynamic>),
-              ),
-            )
-          : null,
-      interests: map['interests'] != null
-          ? List<String>.from(map['interests'] as List<String>)
-          : null,
-      blogs: map['blogs'] != null
-          ? List<IdObject>.from(
-              (map['blogs'] as List<int>).map<IdObject?>(
-                (x) => IdObject.fromJson(x as Map<String, dynamic>),
-              ),
-            )
-          : null,
-      links: map['links'] != null
-          ? List<LinkItem>.from(
-              (map['links'] as List<int>).map<LinkItem?>(
-                (x) => LinkItem.fromJson(x as Map<String, dynamic>),
-              ),
-            )
-          : null,
-      createdAt: map['createdAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int)
-          : null,
-      updatedAt: map['updatedAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int)
-          : null,
+      lastseen:
+          map['lastseen'] != null ? DateTime.parse(map['lastseen']) : null,
+      connections: newConnections,
+      connectionRequests: newConnectionRequests,
+      requestsSent: newRequestsSent,
+      interests: newInterests,
+      blogs: newBlogs,
+      links: newLinks,
+      createdAt:
+          map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null,
+      updatedAt:
+          map['updatedAt'] != null ? DateTime.parse(map['createdAt']) : null,
     );
   }
 }

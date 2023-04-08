@@ -3,9 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sessions/bloc/profile/profile_bloc.dart';
 import 'package:sessions/bloc/user/user_bloc_imports.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/repositories/blog_repository.dart';
+import 'package:sessions/repositories/profile_repository.dart';
 import 'package:sessions/repositories/user_repository.dart';
 import 'package:sessions/screens/blogScreens/blog_screen.dart';
 import 'package:sessions/screens/blogScreens/createblog_screen.dart';
@@ -45,7 +47,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -53,12 +54,29 @@ class MyApp extends StatelessWidget {
         statusBarColor: Colors.transparent,
       ),
     );
-    return RepositoryProvider(
-      create: (context) => UserRepository(),
-      child: BlocProvider(
-        create: (context) => UserBloc(
-          RepositoryProvider.of<UserRepository>(context),
+
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider(
+          create: (context) => UserRepository(),
         ),
+        RepositoryProvider(
+          create: (context) => ProfileRepository(),
+        ),
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => UserBloc(
+              RepositoryProvider.of<UserRepository>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => ProfileBloc(
+              RepositoryProvider.of<ProfileRepository>(context),
+            ),
+          ),
+        ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'CommunityApp',
@@ -69,10 +87,20 @@ class MyApp extends StatelessWidget {
           ),
           home: BlocBuilder<UserBloc, UserState>(
             builder: (context, state) {
-              if (state is UserInitialState) {
-                return WelcomeScreen();
+              final ProfileBloc profileBloc = context.read<ProfileBloc>();
+              final ProfileState profileState = profileBloc.state;
+              if (profileState is ProfileCreatedState) {
+                return EntryPoint();
               }
-              return CreateProfile();
+              if (state is UserSignedInState &&
+                  profileState is ProfileInitialState) {
+                return CreateProfile();
+              }
+
+              if (state is UserSignedUpState) {
+                return Loginscreen();
+              }
+              return WelcomeScreen();
             },
           ),
         ),
@@ -80,3 +108,40 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+// class ScreenChanger extends StatefulWidget {
+//   const ScreenChanger({super.key});
+
+//   @override
+//   State<ScreenChanger> createState() => _ScreenChangerState();
+// }
+
+// class _ScreenChangerState extends State<ScreenChanger> {
+//   Widget currenScreen = EntryPoint();
+//   @override
+//   Widget build(BuildContext context) {
+//     return MultiBlocListener(
+//       listeners: [
+//         BlocListener<UserBloc, UserState>(
+//           listener: (context, state) {
+//             if (state is UserInitialState) {
+//               print("initial state");
+//               currenScreen = WelcomeScreen();
+//               setState(() {
+//                 currenScreen;
+//               });
+//             }
+//             if (state is UserSignedInState) {
+//               currenScreen = CreateProfile();
+//               setState(() {});
+//             }
+//           },
+//         ),
+//         BlocListener<ProfileBloc, ProfileState>(
+//           listener: (context, state) {},
+//         ),
+//       ],
+//       child: currenScreen,
+//     );
+//   }
+// }

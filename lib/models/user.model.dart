@@ -7,6 +7,9 @@ class UserModel {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final String? token;
+
+  String? get userId => _id;
+
   UserModel(this._id,
       {this.email, this.password, this.createdAt, this.updatedAt, this.token});
 

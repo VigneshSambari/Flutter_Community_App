@@ -4,10 +4,27 @@ import 'package:flutter/material.dart';
 import 'package:sessions/components/input_fields.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
+import 'package:sessions/screens/profile/create_profile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LinkTile extends StatelessWidget {
-  const LinkTile({super.key});
+  final TextEditingController nameCont, linkCont;
+  final List<LinkTile> linkList;
+  int? index;
+  final VoidCallback stateUpdate;
+  LinkTile({
+    super.key,
+    required this.linkList,
+    required this.stateUpdate,
+    required this.nameCont,
+    required this.linkCont,
+  });
+
+  void setIndex(int newIndex) {
+    print(newIndex);
+    print("built");
+    index = newIndex;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,21 +42,28 @@ class LinkTile extends StatelessWidget {
             width: size.width * 0.26,
             child: SizedInputField(
               fieldName: "Site...",
+              controller: nameCont,
             ),
           ),
           SizedBox(
             width: size.width * 0.5,
             child: SizedInputField(
+              controller: linkCont,
               fieldName: "Link...",
             ),
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              linkList.removeAt(index!);
+              print(index);
+              print("deleted");
+              stateUpdate();
+            },
             child: CircleAvatar(
-              backgroundColor: Colors.black,
+              backgroundColor: Colors.black.withOpacity(0.75),
               child: Icon(
-                Icons.check,
-                color: Colors.green,
+                Icons.delete,
+                color: Colors.red.withOpacity(0.9),
                 weight: 100,
               ),
             ),
@@ -117,13 +141,24 @@ class LinkClip extends StatelessWidget {
   }
 }
 
-class AddLinksBox extends StatelessWidget {
+class AddLinksBox extends StatefulWidget {
   const AddLinksBox({
     super.key,
     required this.linkTiles,
   });
 
   final List<LinkTile> linkTiles;
+
+  @override
+  State<AddLinksBox> createState() => _AddLinksBoxState();
+}
+
+class _AddLinksBoxState extends State<AddLinksBox> {
+  void stateUpdate() {
+    setState(() {
+      linkTiles;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +196,17 @@ class AddLinksBox extends StatelessWidget {
                   ],
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    TextEditingController nameCont = TextEditingController(),
+                        linkCont = TextEditingController();
+                    widget.linkTiles.add(LinkTile(
+                      linkCont: linkCont,
+                      nameCont: nameCont,
+                      linkList: linkTiles,
+                      stateUpdate: stateUpdate,
+                    ));
+                    stateUpdate();
+                  },
                   child: CircleAvatar(
                     child: Icon(Icons.add),
                   ),
@@ -175,9 +220,10 @@ class AddLinksBox extends StatelessWidget {
             ),
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: linkTiles.length,
+              itemCount: widget.linkTiles.length,
               itemBuilder: (context, index) {
-                return linkTiles[index];
+                widget.linkTiles[index].setIndex(index);
+                return widget.linkTiles[index];
               },
             ),
           )
@@ -187,44 +233,73 @@ class AddLinksBox extends StatelessWidget {
   }
 }
 
-class InterestsTile extends StatelessWidget {
+class InterestsTile extends StatefulWidget {
   const InterestsTile({
     super.key,
     required this.size,
     required this.controller,
+    required this.interestsList,
   });
-
+  final Set<String> interestsList;
   final Size size;
   final TextEditingController controller;
 
   @override
+  State<InterestsTile> createState() => _InterestsTileState();
+}
+
+class _InterestsTileState extends State<InterestsTile> {
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: size.width,
+      width: widget.size.width,
       child: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           SizedBox(
-            width: size.width * 0.5,
-            child: Row(
+            width: widget.size.width * 0.6,
+            child: Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                Expanded(
-                  child: RoundedInputField(
-                    fieldName: "Interest",
-                    iconData: Icons.abc,
-                    height: 50,
-                    controller: controller,
+                SizedBox(
+                  width: widget.size.width * 0.45,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: RoundedInputField(
+                          fieldName: "Interest",
+                          iconData: Icons.abc,
+                          height: 50,
+                          controller: widget.controller,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+                GestureDetector(
+                  onTap: () {
+                    widget.interestsList.add(widget.controller.text);
+                    widget.controller.clear();
+                    setState(() {
+                      interestList;
+                    });
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5),
+                    child: CircleAvatar(
+                      radius: widget.size.width * 0.04,
+                      backgroundColor: kPrimaryColor.withOpacity(0.85),
+                      child: Icon(
+                        Icons.arrow_circle_right_outlined,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ),
-          InterestClip(title: "Sports"),
-          InterestClip(title: "Coding"),
-          InterestClip(title: "Placement"),
-          InterestClip(title: "Sports"),
-          InterestClip(title: "Coding"),
-          InterestClip(title: "Placement"),
+          ...widget.interestsList.map((e) => InterestClip(title: e)).toList(),
         ],
       ),
     );

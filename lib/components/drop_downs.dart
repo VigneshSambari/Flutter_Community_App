@@ -7,11 +7,12 @@ class CustomDropdownButton extends StatefulWidget {
   final List<String> options;
   final String fieldName;
   final IconData prefixIcon;
-
+  String? dropDownValue;
   CustomDropdownButton({
     required this.options,
     required this.fieldName,
     required this.prefixIcon,
+    required this.dropDownValue,
   });
 
   @override
@@ -130,6 +131,7 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
       if (newValue != null) {
         setState(() {
           selectedOption = newValue;
+          widget.dropDownValue = selectedOption;
         });
       }
     });

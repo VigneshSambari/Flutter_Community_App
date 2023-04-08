@@ -2,11 +2,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:sessions/bloc/profile/profile_bloc.dart';
 import 'package:sessions/constants.dart';
+import 'package:sessions/screens/login/login_screen.dart';
+import 'package:sessions/utils/navigations.dart';
 import '../bloc/user/user_bloc_imports.dart';
 
 Future<void> clearBlocStates(BuildContext context) async {
   await HydratedBloc.storage.clear();
+  print("cleared");
 }
 
 class LogOutButton extends StatelessWidget {
@@ -20,6 +24,9 @@ class LogOutButton extends StatelessWidget {
       onTap: () async {
         await clearBlocStates(context);
         BlocProvider.of<UserBloc>(context).add(UserIdealEvent());
+        BlocProvider.of<ProfileBloc>(context).add(ProfileIdealEvent());
+
+        navigatorPushReplacement(context, Loginscreen());
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),

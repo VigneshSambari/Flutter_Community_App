@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sessions/Screens/Login/components/background.dart';
+import 'package:sessions/bloc/profile/profile_bloc_imports.dart';
 import 'package:sessions/bloc/user/user_bloc_imports.dart';
 import 'package:sessions/components/buttons.dart';
 import 'package:sessions/components/dividers.dart';
@@ -12,6 +13,7 @@ import 'package:sessions/components/styles.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/screens/entryPoint/entry_point.dart';
+import 'package:sessions/screens/profile/create_profile.dart';
 import 'package:sessions/screens/signup/signup_screen.dart';
 import 'package:sessions/utils/classes.dart';
 import 'package:sessions/utils/navigations.dart';
@@ -28,7 +30,15 @@ class Body extends StatelessWidget {
           showMySnackBar(context, state.error);
         }
         if (state is UserSignedInState) {
-          navigatorPushReplacement(context, EntryPoint());
+          final ProfileBloc profileBloc = context.read<ProfileBloc>();
+          final ProfileState profileState = profileBloc.state;
+
+          navigatorPopAllExceptFirst(context);
+          if (profileState is ProfileCreatedState) {
+            navigatorPushReplacement(context, EntryPoint());
+          } else {
+            navigatorPushReplacement(context, CreateProfile());
+          }
           showMySnackBar(context, state.message);
         }
       },

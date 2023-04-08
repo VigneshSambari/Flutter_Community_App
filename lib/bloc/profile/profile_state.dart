@@ -22,13 +22,13 @@ class ProfileCreatedState extends ProfileState {
   @override
   List<Object?> get props => [];
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'profile': profile.toJson(),
     };
   }
 
-  factory ProfileCreatedState.fromMap(Map<String, dynamic> map) {
+  factory ProfileCreatedState.fromJson(Map<String, dynamic> map) {
     return ProfileCreatedState(
       profile: ProfileModel.fromJson(map['profile'] as Map<String, dynamic>),
     );
