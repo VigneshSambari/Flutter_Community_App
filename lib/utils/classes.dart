@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 
 // ignore_for_file: public_member_api_docs, sort_constructors_first
@@ -44,13 +46,17 @@ class CreateProfileSend {
   final String college;
   final String specialization;
   final String designation;
-  final String? profilePic;
-  final String? coverPic;
+  MediaLink? profilePic;
+  MediaLink? coverPic;
   final List<String>? interests;
   final List<Map<String, dynamic>>? links;
+  final String? profilePicFileUrl;
+  final String? coverPicFileUrl;
 
   CreateProfileSend(
       {required this.userName,
+      this.profilePicFileUrl,
+      this.coverPicFileUrl,
       required this.name,
       required this.userId,
       required this.college,
@@ -159,6 +165,29 @@ class LinkItem {
       map['_id'] != null ? map['_id'] as String : null,
       map['name'] != null ? map['name'] as String : null,
       map['link'] != null ? map['link'] as String : null,
+    );
+  }
+}
+
+class MediaLink {
+  String secure_url;
+  String public_id;
+  MediaLink({
+    required this.secure_url,
+    required this.public_id,
+  });
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'secure_url': secure_url,
+      'public_id': public_id,
+    };
+  }
+
+  factory MediaLink.fromJson(Map<String, dynamic> map) {
+    return MediaLink(
+      secure_url: map['secure_url'] as String,
+      public_id: map['public_id'] as String,
     );
   }
 }

@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 
 import 'package:sessions/utils/classes.dart';
 
@@ -11,8 +11,8 @@ class ProfileModel {
   final String? college;
   final String? specialization;
   final String? designation;
-  final String? profilePic;
-  final String? coverPic;
+  final MediaLink? profilePic;
+  final MediaLink? coverPic;
   final bool? online;
   final DateTime? lastseen;
   final List<IdObject>? connections;
@@ -113,9 +113,11 @@ class ProfileModel {
           : null,
       designation:
           map['designation'] != null ? map['designation'] as String : null,
-      profilePic:
-          map['profilePic'] != null ? map['profilePic'] as String : null,
-      coverPic: map['coverPic'] != null ? map['coverPic'] as String : null,
+      profilePic: map['profilePic'] != null
+          ? MediaLink.fromJson(map['profilePic'])
+          : null,
+      coverPic:
+          map['coverPic'] != null ? MediaLink.fromJson(map['coverPic']) : null,
       online: map['online'] != null ? map['online'] as bool : null,
       lastseen:
           map['lastseen'] != null ? DateTime.parse(map['lastseen']) : null,

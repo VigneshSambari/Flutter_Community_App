@@ -22,7 +22,7 @@ class AddImageIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        File? selectedFile = await pickFile();
+        File? selectedFile = await pickFile(allowMultipleFiles: false);
         if (selectedFile != null) {
           String filePath = await saveFile(
             file: selectedFile,

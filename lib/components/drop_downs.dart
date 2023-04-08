@@ -132,6 +132,7 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
         setState(() {
           selectedOption = newValue;
           widget.dropDownValue = selectedOption;
+          print(widget.dropDownValue);
         });
       }
     });

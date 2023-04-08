@@ -298,6 +298,14 @@ class _CreateProfileState extends State<CreateProfile> {
                       child: RoundedButton(
                         title: "Save",
                         onPress: () async {
+                          String userIdUser;
+                          final userState =
+                              BlocProvider.of<UserBloc>(context).state;
+                          if (userState is UserSignedInState) {
+                            userIdUser = userState.user.userId!;
+                          } else {
+                            return;
+                          }
                           if (firstNameCont.text.isEmpty ||
                               lastNameCont.text.isEmpty) {
                             showMySnackBar(context,
@@ -309,8 +317,9 @@ class _CreateProfileState extends State<CreateProfile> {
                                 context, "Username cannot be empty!");
                             return;
                           }
-                          Map<String, String> links = {};
+                          List<Map<String, String>> links = [];
                           for (var link in linkTiles) {
+                            Map<String, String> currLink = {};
                             if (link.nameCont.text.isEmpty ||
                                 link.linkCont.text.isEmpty) {
                               showMySnackBar(context, "Fill all link fields!");
@@ -318,60 +327,25 @@ class _CreateProfileState extends State<CreateProfile> {
                                   link.nameCont.text + "" + link.linkCont.text);
                               return;
                             }
-                            links[link.nameCont.text] = link.linkCont.text;
+                            currLink[link.nameCont.text] = link.linkCont.text;
+                            links.add(currLink);
                           }
 
-                          try {
-                            final state = context.watch<UserBloc>().state;
-                            if (state is UserSignedInState) {}
-                            BlocProvider.of<ProfileBloc>(context).add(
-                              CreateProfileEvent(
-                                profileData: CreateProfileSend(
+                          BlocProvider.of<ProfileBloc>(context).add(
+                            CreateProfileEvent(
+                              profileData: CreateProfileSend(
                                   userName: "userNameCont.text",
                                   name: "firstNameCont.text",
-                                  userId: "642eb83a92d51acb2819f500",
-                                  college: "college",
-                                  specialization: "specialization",
-                                  designation: "designation",
-                                  profilePic: "profilePic",
-                                  coverPic: "coverPic",
-                                  interests: [],
-                                  links: [
-                                    {
-                                      "name": "link",
-                                    },
-                                  ],
-                                ),
-                              ),
-                            );
-                          } catch (err) {}
-                          // try {
-                          //   ProfileModel profile = await ProfileRepository().create(
-                          //     httpData: CreateProfileSend(
-                          //         userName: "userName2",
-                          //         name: "name",
-                          //         userId: "642eb83a92d51acb2819f500",
-                          //         college: "college",
-                          //         specialization: "specialization",
-                          //         designation: "designation",
-                          //         profilePic: "profilePic",
-                          //         coverPic: "coverPic",
-                          //         interests: [
-                          //           "1",
-                          //           "2",
-                          //           "3",
-                          //           "4"
-                          //         ],
-                          //         links: [
-                          //           {
-                          //             "name": "link",
-                          //           },
-                          //         ]),
-                          //   );
-                          //   print(profile.toJson());
-                          // } catch (err) {
-                          //   print(err.toString());
-                          // }
+                                  userId: "64311af926e4ea69bd38063f",
+                                  college: "collegeValue",
+                                  specialization: "specializationValue",
+                                  designation: "designationValue",
+                                  interests: interestList.toList(),
+                                  links: links,
+                                  coverPicFileUrl: inputVariables.coverPhoto,
+                                  profilePicFileUrl: inputVariables.profilePic),
+                            ),
+                          );
                         },
                       ),
                     ),

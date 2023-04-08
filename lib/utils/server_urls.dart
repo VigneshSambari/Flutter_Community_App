@@ -33,6 +33,8 @@ class BlogUrls {
 
 class ProfileUrls {
   static String profileEndPoint = "$httpServerUrl/profile";
+  static Pair mediaUpload =
+      Pair(url: "$profileEndPoint/uploadprofile", requestType: true);
   static Pair create = Pair(url: "$profileEndPoint/create", requestType: true);
   static Pair update = Pair(url: "$profileEndPoint/update", requestType: true);
   static Pair checkIfFriend =
