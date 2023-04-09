@@ -126,11 +126,6 @@ class _CreateProfileState extends State<CreateProfile> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    TextEditingController firstNameCont = TextEditingController(),
-        lastNameCont = TextEditingController(),
-        userNameCont = TextEditingController(),
-        interestCont = TextEditingController();
-
     return Scaffold(
       appBar: CurvedAppBar(
         title: "Create Profile",
@@ -255,7 +250,7 @@ class _CreateProfileState extends State<CreateProfile> {
                         Expanded(
                           child: SizedInputField(
                               fieldName: "First Name",
-                              controller: firstNameCont),
+                              controller: inputControllers.firstName),
                         ),
                         SizedBox(
                           width: 5,
@@ -263,14 +258,14 @@ class _CreateProfileState extends State<CreateProfile> {
                         Expanded(
                           child: SizedInputField(
                             fieldName: "Last Name",
-                            controller: lastNameCont,
+                            controller: inputControllers.lastName,
                           ),
                         ),
                       ],
                     ),
                     SizedInputField(
                       fieldName: "UserName",
-                      controller: userNameCont,
+                      controller: inputControllers.userName,
                     ),
                     CustomDropdownButton(
                       dropType: DropTypes.collegeDropDown,
@@ -295,7 +290,7 @@ class _CreateProfileState extends State<CreateProfile> {
                     ),
                     InterestsTile(
                         size: size,
-                        controller: interestCont,
+                        controller: inputControllers.interests,
                         interestsList: interestList),
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 10),
@@ -323,20 +318,19 @@ class _CreateProfileState extends State<CreateProfile> {
                           } else {
                             return;
                           }
-                          if (firstNameCont.text.isEmpty ||
-                              lastNameCont.text.isEmpty) {
+                          if (inputControllers.firstName.text.isEmpty ||
+                              inputControllers.lastName.text.isEmpty) {
                             showMySnackBar(context,
                                 "First name and last name cannot be empty!");
                             return;
                           }
-                          if (userNameCont.text.isEmpty) {
+                          if (inputControllers.userName.text.isEmpty) {
                             showMySnackBar(
                                 context, "Username cannot be empty!");
                             return;
                           }
-                          List<Map<String, String>> links = [];
+                          List<LinkSend> links = [];
                           for (var link in linkTiles) {
-                            Map<String, String> currLink = {};
                             if (link.nameCont.text.isEmpty ||
                                 link.linkCont.text.isEmpty) {
                               showMySnackBar(context, "Fill all link fields!");
@@ -344,7 +338,9 @@ class _CreateProfileState extends State<CreateProfile> {
                                   link.nameCont.text + "" + link.linkCont.text);
                               return;
                             }
-                            currLink[link.nameCont.text] = link.linkCont.text;
+                            LinkSend currLink = LinkSend(
+                                name: link.nameCont.text,
+                                link: link.linkCont.text);
                             links.add(currLink);
                           }
                           print(
@@ -352,8 +348,9 @@ class _CreateProfileState extends State<CreateProfile> {
                           BlocProvider.of<ProfileBloc>(context).add(
                             CreateProfileEvent(
                               profileData: CreateProfileSend(
-                                  userName: userNameCont.text,
-                                  name: firstNameCont.text,
+                                  userName: inputControllers.userName.text,
+                                  name:
+                                      "${inputControllers.firstName.text} ${inputControllers.lastName.text}",
                                   userId: userIdUser,
                                   college: collegeValue,
                                   specialization: specializationValue,

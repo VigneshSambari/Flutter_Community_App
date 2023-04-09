@@ -49,6 +49,8 @@ dependencies:
   http: ^0.13.5
   flutter_dotenv: ^5.0.2
   hydrated_bloc: ^9.1.0
+  cached_network_image: ^3.2.3
+
   
 
 dev_dependencies:

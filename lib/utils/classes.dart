@@ -49,7 +49,7 @@ class CreateProfileSend {
   MediaLink? profilePic;
   MediaLink? coverPic;
   final List<String>? interests;
-  final List<Map<String, dynamic>>? links;
+  final List<LinkSend>? links;
   final String? profilePicFileUrl;
   final String? coverPicFileUrl;
 
@@ -87,7 +87,7 @@ class LinkSend {
   final String? name;
   final String? link;
 
-  LinkSend(this.name, this.link);
+  LinkSend({required this.name, required this.link});
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -98,8 +98,8 @@ class LinkSend {
 
   factory LinkSend.fromJson(Map<String, dynamic> map) {
     return LinkSend(
-      map['name'] != null ? map['name'] as String : null,
-      map['link'] != null ? map['link'] as String : null,
+      name: map['name'] != null ? map['name'] as String : null,
+      link: map['link'] != null ? map['link'] as String : null,
     );
   }
 }
@@ -170,24 +170,24 @@ class LinkItem {
 }
 
 class MediaLink {
-  String secure_url;
-  String public_id;
+  String secureUrl;
+  String publicId;
   MediaLink({
-    required this.secure_url,
-    required this.public_id,
+    required this.secureUrl,
+    required this.publicId,
   });
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'secure_url': secure_url,
-      'public_id': public_id,
+      'secureUrl': secureUrl,
+      'publicId': publicId,
     };
   }
 
   factory MediaLink.fromJson(Map<String, dynamic> map) {
     return MediaLink(
-      secure_url: map['secure_url'] as String,
-      public_id: map['public_id'] as String,
+      secureUrl: map['secureUrl'] as String,
+      publicId: map['publicId'] as String,
     );
   }
 }

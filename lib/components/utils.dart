@@ -2,6 +2,7 @@
 
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -147,18 +148,32 @@ class InfoCard extends StatelessWidget {
     super.key,
     required this.title,
     required this.subtitle,
+    required this.url,
   });
 
-  final String title, subtitle;
+  final String title, subtitle, url;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Colors.white24,
-        child: Icon(
-          CupertinoIcons.person,
-          color: Colors.white,
+      leading: ClipRRect(
+        borderRadius: BorderRadius.circular(25),
+        child: CircleAvatar(
+          radius: 22.5,
+          backgroundColor: Colors.white24,
+          child: url != ""
+              ? CachedNetworkImage(
+                  imageUrl: url,
+                  fit: BoxFit.cover,
+                  width: 125,
+                  height: 125,
+                  errorWidget: (context, url, error) =>
+                      Center(child: Icon(Icons.error)),
+                )
+              : Icon(
+                  CupertinoIcons.person,
+                  color: Colors.white,
+                ),
         ),
       ),
       title: Text(

@@ -133,6 +133,10 @@ class Assets {
   /// assets/images/signup_top.png
   static const String assetsImagesSignupTop = "assets/images/signup_top.png";
 
+  /// Assets for assetsProfileiconsCollege
+  /// assets/profileicons/college.png
+  static const String assetsProfileiconsCollege = "assets/profileicons/college.png";
+
   /// Assets for assetsProfileiconsInterests
   /// assets/profileicons/interests.png
   static const String assetsProfileiconsInterests = "assets/profileicons/interests.png";

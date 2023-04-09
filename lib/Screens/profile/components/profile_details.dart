@@ -1,21 +1,15 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last
 
 import 'package:flutter/material.dart';
+import 'package:sessions/assets.dart';
+import 'package:sessions/bloc/blog/blog_bloc_imports.dart';
+import 'package:sessions/bloc/profile/profile_bloc.dart';
+import 'package:sessions/bloc/user/user_bloc_imports.dart';
 import 'package:sessions/components/styles.dart';
 import 'package:sessions/components/trays.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/screens/profile/components/tiles.dart';
 import 'package:sessions/screens/profile/components/utils.dart';
-
-List<InterestClip> interests = [
-  InterestClip(title: "Coding"),
-  InterestClip(title: "Sleeping"),
-  InterestClip(title: "VideoGames"),
-  InterestClip(title: "Coding"),
-  InterestClip(title: "Sleeping"),
-  InterestClip(title: "Games"),
-  InterestClip(title: "Playing"),
-];
 
 List<LinkClip> links = [
   LinkClip(title: "Github", url: "https://flutter.dev"),
@@ -28,87 +22,113 @@ List<LinkClip> links = [
 ];
 
 class ProfileDetails extends StatelessWidget {
-  const ProfileDetails({
-    super.key,
-  });
-
+  ProfileDetails({super.key, required this.interests, required this.links});
+  final List<LinkClip> links;
+  final List<InterestClip> interests;
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 3),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ProfileNameEditTray(
-              title: "Profile Info.",
-              icon: GestureDetector(
-                onTap: () {},
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2.5),
-                  child: Icon(
-                    Icons.edit,
-                    color: Colors.white,
+    String? email = "", userId = "";
+    final userState = BlocProvider.of<UserBloc>(context).state;
+    if (userState is UserSignedInState) {
+      email = userState.user.email;
+      userId = userState.user.userId;
+    }
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      builder: (context, state) {
+        if (state is ProfileCreatedState) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ProfileNameEditTray(
+                    title: "Profile Info.",
+                    icon: GestureDetector(
+                      onTap: () {},
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 5, vertical: 2.5),
+                        child: Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  ProfileInfoTile(
+                    iconUrl: Assets.assetsProfileiconsName,
+                    subTitle: Text(
+                      "${state.profile.name}",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    title: "Name",
+                  ),
+                  ProfileInfoTile(
+                    iconUrl: Assets.assetsProfileiconsMail,
+                    subTitle: Text(
+                      "$email",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    title: "Email",
+                  ),
+                  ProfileInfoTile(
+                    iconUrl: Assets.assetsProfileiconsCollege,
+                    subTitle: Text(
+                      "${state.profile.college}",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    title: "College",
+                  ),
+                  ProfileInfoTile(
+                    iconUrl: Assets.assetsProfileiconsSpecialization,
+                    subTitle: Text(
+                      "${state.profile.specialization}",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    title: "Specialization",
+                  ),
+                  ProfileInfoTile(
+                    iconUrl: Assets.assetsProfileiconsJob,
+                    subTitle: Text(
+                      "${state.profile.designation}",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    title: "Designation",
+                  ),
+                  ProfileInfoTile(
+                    iconUrl: Assets.assetsProfileiconsInterests,
+                    subTitle: Wrap(
+                      children: interests.map((interest) {
+                        return interest;
+                      }).toList(),
+                    ),
+                    title: "Interests",
+                  ),
+                  ProfileInfoTile(
+                    iconUrl: Assets.assetsProfileiconsLinks,
+                    subTitle: Wrap(
+                      children: links.map((link) {
+                        return link;
+                      }).toList(),
+                    ),
+                    title: "Links",
+                  ),
+                  SizedBox(
+                    height: 100,
+                  ),
+                ],
               ),
             ),
-            ProfileInfoTile(
-              iconUrl: "assets/profileicons/name.png",
-              subTitle: Text(
-                "Vicky",
-                style: TextStyle(fontSize: 16),
-              ),
-              title: "Name",
-            ),
-            ProfileInfoTile(
-              iconUrl: "assets/profileicons/mail.png",
-              subTitle: Text(
-                "vickysam@gmail.com",
-                style: TextStyle(fontSize: 16),
-              ),
-              title: "Email",
-            ),
-            ProfileInfoTile(
-              iconUrl: "assets/profileicons/specialization.png",
-              subTitle: Text(
-                "Electronics and Communication",
-                style: TextStyle(fontSize: 16),
-              ),
-              title: "Specialization",
-            ),
-            ProfileInfoTile(
-              iconUrl: "assets/profileicons/job.png",
-              subTitle: Text(
-                "Student",
-                style: TextStyle(fontSize: 16),
-              ),
-              title: "Designation",
-            ),
-            ProfileInfoTile(
-              iconUrl: "assets/profileicons/interests.png",
-              subTitle: Wrap(
-                children: interests.map((interest) {
-                  return interest;
-                }).toList(),
-              ),
-              title: "Interests",
-            ),
-            ProfileInfoTile(
-              iconUrl: "assets/profileicons/links.png",
-              subTitle: Wrap(
-                children: links.map((link) {
-                  return link;
-                }).toList(),
-              ),
-              title: "Links",
-            ),
-            SizedBox(
-              height: 100,
-            ),
-          ],
-        ),
-      ),
+          );
+        }
+        return Center(
+          child: Text(
+            "Error in fetching profile",
+            style: TextStyle(color: Colors.red),
+          ),
+        );
+      },
     );
   }
 }

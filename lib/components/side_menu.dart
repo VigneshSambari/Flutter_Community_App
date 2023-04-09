@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import 'package:sessions/bloc/blog/blog_bloc_imports.dart';
+import 'package:sessions/bloc/profile/profile_bloc.dart';
 import 'package:sessions/bloc/user/user_bloc.dart';
 import 'package:sessions/components/log_out.dart';
 import 'package:sessions/components/styles.dart';
@@ -40,9 +41,21 @@ class _SideMenuState extends State<SideMenu> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 //mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  InfoCard(
-                    title: "VickySam1901",
-                    subtitle: "Student",
+                  BlocBuilder<ProfileBloc, ProfileState>(
+                    builder: (context, state) {
+                      if (state is ProfileCreatedState) {
+                        return InfoCard(
+                          title: state.profile.userName!,
+                          subtitle: state.profile.designation!,
+                          url: state.profile.profilePic!.secureUrl,
+                        );
+                      }
+                      return InfoCard(
+                        title: "Username",
+                        subtitle: "Designation",
+                        url: "",
+                      );
+                    },
                   ),
                   SideMenuCategory(
                     title: "Browse",

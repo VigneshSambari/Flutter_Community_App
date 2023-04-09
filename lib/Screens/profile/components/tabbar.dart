@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, library_private_types_in_public_api, sort_child_properties_last
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, library_private_types_in_public_api, sort_child_properties_last, prefer_const_constructors_in_immutables
 
 import 'package:flutter/material.dart';
 import 'package:sessions/constants.dart';
@@ -95,8 +95,10 @@ List<ConnectionRoomTile> tiles = [
 ];
 
 class AnimatedTabBar extends StatefulWidget {
-  const AnimatedTabBar({Key? key}) : super(key: key);
-
+  AnimatedTabBar({Key? key, required this.interests, required this.links})
+      : super(key: key);
+  final List<InterestClip> interests;
+  final List<LinkClip> links;
   @override
   _AnimatedTabBarState createState() => _AnimatedTabBarState();
 }
@@ -157,7 +159,8 @@ class _AnimatedTabBarState extends State<AnimatedTabBar>
             child: TabBarView(
               controller: _tabController,
               children: [
-                ProfileDetails(),
+                ProfileDetails(
+                    interests: widget.interests, links: widget.links),
                 GridBlogs(),
                 ProfileConnections(),
               ],
