@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:sessions/constants.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -29,6 +31,26 @@ class SocketService {
 
   void test({required String message}) {
     _socket!.emit('test', message);
+  }
+
+  void setOnline() {
+    _socket!.emit('setOnline');
+  }
+
+  void disconnect() {
+    _socket!.emit('disconnect');
+  }
+
+  void sendRooMessage() {
+    const message = {
+      "sentBy": "63df5afd61cf376cb318c141",
+      "sentTo": "63e104f6e291f1dc9ef7a5d3",
+      "content": "Message!",
+      "type": "text"
+    };
+
+    const roomId = "63e104f6e291f1dc9ef7a5d3";
+    _socket!.emit('roomMessage', {'message': message, 'roomId': roomId});
   }
 
   Socket get socket => _socket!;

@@ -36,11 +36,22 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   SocketService socketService = SocketService();
+  bool sendIconShow = false;
 
   @override
   void initState() {
     // TODO: implement initState
-    socketService.test(message: "Hello");
+    messageController.addListener(() {
+      if (messageController.text.isNotEmpty) {
+        setState(() {
+          sendIconShow = true;
+        });
+      } else {
+        setState(() {
+          sendIconShow = false;
+        });
+      }
+    });
     super.initState();
   }
 
@@ -154,7 +165,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(right: 10),
+                              padding: EdgeInsets.only(right: 5),
                               child: Icon(
                                 Icons.attachment,
                                 color: kPrimaryColor.withOpacity(0.85),
@@ -170,7 +181,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     CircleAvatar(
                       backgroundColor: kPrimaryColor.withOpacity(0.5),
                       child: Icon(
-                        Icons.mic,
+                        sendIconShow ? Icons.send_rounded : Icons.mic,
                         color: Colors.white,
                       ),
                     )
