@@ -24,23 +24,44 @@ import 'package:sessions/screens/profile/view_profile.dart';
 import 'package:sessions/screens/signup/signup_screen.dart';
 import 'package:sessions/screens/welcome/welcome_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:sessions/socket/socket_client.dart';
 import 'package:sessions/utils/classes.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:sessions/utils/navigations.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 void main() async {
+  //Dotenv initialization asynchronous
   await dotenv.load();
+
+  //Native calling
   WidgetsFlutterBinding.ensureInitialized();
 
+  //Hydrated bloc storage initialization
   final storage = await HydratedStorage.build(
       storageDirectory: await getApplicationDocumentsDirectory());
+  HydratedBloc.storage = storage;
+
+  //Orientation setup
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 
-  HydratedBloc.storage = storage;
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.transparent,
+      statusBarColor: kPrimaryColor,
+    ),
+  );
+
+  //Initialize socket client
+  SocketService socketService = SocketService(query: {
+    'userName': 'Vicky',
+    'user_id': '64311af926e4ea69bd38063f',
+  });
+
   runApp(const MyApp());
 }
 
@@ -49,12 +70,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-      ),
-    );
-
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(
@@ -85,25 +100,25 @@ class MyApp extends StatelessWidget {
             primarySwatch: kPrimarySwatch,
             scaffoldBackgroundColor: Colors.white,
           ),
-          //home: CreateProfile(),
-          home: BlocBuilder<UserBloc, UserState>(
-            builder: (context, state) {
-              final ProfileBloc profileBloc = context.read<ProfileBloc>();
-              final ProfileState profileState = profileBloc.state;
-              if (profileState is ProfileCreatedState) {
-                return EntryPoint();
-              }
-              if (state is UserSignedInState &&
-                  profileState is ProfileInitialState) {
-                return CreateProfile();
-              }
+          home: ChatScreen(),
+          // home: BlocBuilder<UserBloc, UserState>(
+          //   builder: (context, state) {
+          //     final ProfileBloc profileBloc = context.read<ProfileBloc>();
+          //     final ProfileState profileState = profileBloc.state;
+          //     if (profileState is ProfileCreatedState) {
+          //       return EntryPoint();
+          //     }
+          //     if (state is UserSignedInState &&
+          //         profileState is ProfileInitialState) {
+          //       return CreateProfile();
+          //     }
 
-              if (state is UserSignedUpState) {
-                return Loginscreen();
-              }
-              return WelcomeScreen();
-            },
-          ),
+          //     if (state is UserSignedUpState) {
+          //       return Loginscreen();
+          //     }
+          //     return WelcomeScreen();
+          //   },
+          // ),
         ),
       ),
     );

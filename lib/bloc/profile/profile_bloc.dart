@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import 'package:sessions/models/profile.model.dart';
@@ -31,7 +30,6 @@ class ProfileBloc extends HydratedBloc<ProfileEvent, ProfileState> {
   @override
   Map<String, dynamic>? toJson(ProfileState state) {
     if (state is ProfileCreatedState) {
-      print(state.toJson());
       return state.toJson();
     }
     return null;
@@ -40,7 +38,6 @@ class ProfileBloc extends HydratedBloc<ProfileEvent, ProfileState> {
   @override
   ProfileState? fromJson(Map<String, dynamic> json) {
     if (json.isNotEmpty) {
-      print(json);
       return ProfileCreatedState.fromJson(json);
     }
     return null;

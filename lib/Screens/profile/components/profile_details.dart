@@ -1,8 +1,7 @@
-// ignore_for_file: prefer_const_constructors, sort_child_properties_last
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last, prefer_const_constructors_in_immutables, unused_local_variable
 
 import 'package:flutter/material.dart';
 import 'package:sessions/assets.dart';
-import 'package:sessions/bloc/blog/blog_bloc_imports.dart';
 import 'package:sessions/bloc/profile/profile_bloc.dart';
 import 'package:sessions/bloc/user/user_bloc_imports.dart';
 import 'package:sessions/components/styles.dart';

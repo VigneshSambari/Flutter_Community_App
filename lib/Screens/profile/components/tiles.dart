@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
 
 import 'package:flutter/material.dart';
 import 'package:sessions/components/input_fields.dart';
@@ -21,8 +21,6 @@ class LinkTile extends StatelessWidget {
   });
 
   void setIndex(int newIndex) {
-    print(newIndex);
-    print("built");
     index = newIndex;
   }
 
@@ -55,8 +53,7 @@ class LinkTile extends StatelessWidget {
           GestureDetector(
             onTap: () {
               linkList.removeAt(index!);
-              print(index);
-              print("deleted");
+
               stateUpdate();
             },
             child: CircleAvatar(

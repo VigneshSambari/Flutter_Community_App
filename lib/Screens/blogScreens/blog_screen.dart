@@ -1,13 +1,11 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, unused_local_variable
 
 import 'package:flutter/material.dart';
-import 'package:sessions/assets.dart';
 import 'package:sessions/bloc/blog/blog_bloc_imports.dart';
 import 'package:sessions/components/appbar.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/repositories/blog_repository.dart';
 import 'package:sessions/screens/blogScreens/components/blog_utils.dart';
-import 'package:rive/rive.dart';
 
 List<Widget> widgets = [
   BlogTile(),

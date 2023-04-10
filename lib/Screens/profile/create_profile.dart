@@ -1,9 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sized_box_for_whitespace, prefer_const_constructors_in_immutables, prefer_interpolation_to_compose_strings
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:sessions/bloc/blog/blog_bloc_imports.dart';
 import 'package:sessions/bloc/profile/profile_bloc_imports.dart';
 import 'package:sessions/bloc/user/user_bloc_imports.dart';
 import 'package:sessions/components/appbar.dart';
@@ -15,8 +12,6 @@ import 'package:sessions/components/snackbar.dart';
 import 'package:sessions/components/utils.dart';
 
 import 'package:sessions/constants.dart';
-import 'package:sessions/models/profile.model.dart';
-import 'package:sessions/repositories/profile_repository.dart';
 import 'package:sessions/screens/entryPoint/entry_point.dart';
 
 import 'package:sessions/screens/profile/components/profile_image_utils.dart';
@@ -111,13 +106,10 @@ class _CreateProfileState extends State<CreateProfile> {
 
   void setDropDownValue({required String value, required DropTypes dropType}) {
     if (dropType == DropTypes.collegeDropDown) {
-      print(value);
       collegeValue = value;
     } else if (dropType == DropTypes.designationDropDown) {
-      print(value);
       designationValue = value;
     } else if (dropType == DropTypes.specializationDropDown) {
-      print(value);
       specializationValue = value;
     }
   }
@@ -334,8 +326,7 @@ class _CreateProfileState extends State<CreateProfile> {
                             if (link.nameCont.text.isEmpty ||
                                 link.linkCont.text.isEmpty) {
                               showMySnackBar(context, "Fill all link fields!");
-                              print(
-                                  link.nameCont.text + "" + link.linkCont.text);
+
                               return;
                             }
                             LinkSend currLink = LinkSend(
@@ -343,8 +334,7 @@ class _CreateProfileState extends State<CreateProfile> {
                                 link: link.linkCont.text);
                             links.add(currLink);
                           }
-                          print(
-                              "$collegeValue, $designationValue, $specializationValue");
+
                           BlocProvider.of<ProfileBloc>(context).add(
                             CreateProfileEvent(
                               profileData: CreateProfileSend(

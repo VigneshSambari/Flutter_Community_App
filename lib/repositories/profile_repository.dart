@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:async';
 
 import 'package:http/http.dart';
@@ -53,17 +52,13 @@ class ProfileRepository {
     Response responseData =
         await httpRequestMethod(urlInfo: urlInfo, body: httpData);
     final body = jsonDecode(responseData.body);
-    print(body);
-    print(body.toString());
+
     if (responseData.statusCode == 200) {
-      print("Profile created");
       ProfileModel profile = ProfileModel.fromJson(body);
-      print(profile.toJson());
+
       return profile;
     } else {
-      print("profile upload failed");
       throw Exception(body['_message']);
     }
-    throw Exception("df");
   }
 }

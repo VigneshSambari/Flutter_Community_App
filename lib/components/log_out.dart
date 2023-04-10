@@ -10,7 +10,6 @@ import '../bloc/user/user_bloc_imports.dart';
 
 Future<void> clearBlocStates(BuildContext context) async {
   await HydratedBloc.storage.clear();
-  print("cleared");
 }
 
 class LogOutButton extends StatelessWidget {

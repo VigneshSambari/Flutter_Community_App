@@ -12,7 +12,6 @@ Future<Response> httpRequestMethod(
       response = await get(uri);
       return response;
     } else {
-      print("inside");
       final headers = token == null
           ? {'Content-Type': 'application/json'}
           : {
