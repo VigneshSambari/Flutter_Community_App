@@ -61,7 +61,7 @@ void main() async {
     'userid': '64311af926e4ea69bd38063f',
   });
 
-  socketService.sendRooMessage();
+  socketService.fetchRoomMessages();
 
   socketService.setOnline();
 

@@ -50,7 +50,19 @@ class SocketService {
     };
 
     const roomId = "63e104f6e291f1dc9ef7a5d3";
-    _socket!.emit('roomMessage', {'message': message, 'roomId': roomId});
+    _socket!.emit('sendRoomMessage', {'message': message, 'roomId': roomId});
+  }
+
+  void fetchRoomMessages() {
+    print("inside1");
+    const roomId = "63e104f6e291f1dc9ef7a5d3";
+    _socket!.emit('fetchRoomMessages', {'roomId': roomId});
+    _socket!.on(
+      'fetchedRoomMessages',
+      (messages) => {
+        print(messages),
+      },
+    );
   }
 
   Socket get socket => _socket!;
