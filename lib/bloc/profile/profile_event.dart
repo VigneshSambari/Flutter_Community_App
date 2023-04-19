@@ -17,3 +17,12 @@ class CreateProfileEvent extends ProfileEvent {
   @override
   List<Object?> get props => [];
 }
+
+class LoadProfileEvent extends ProfileEvent {
+  final String userId;
+
+  LoadProfileEvent({required this.userId});
+
+  @override
+  List<Object?> get props => [];
+}

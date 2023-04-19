@@ -25,6 +25,24 @@ class ProfileBloc extends HydratedBloc<ProfileEvent, ProfileState> {
         emit(ProfileErrorState(error: error.toString()));
       }
     });
+    on<LoadProfileEvent>((event, emit) async {
+      print("Inside load profile");
+      emit(ProfileLoadingState());
+      try {
+        final ProfileModel? profile =
+            await _profileRepository.loadProfile(userId: event.userId);
+        if (profile != null) {
+          print("Inside exist profile");
+          emit(ProfileCreatedState(profile: profile));
+        } else {
+          print("Inside not exist profile");
+          emit(ProfileNotExistState());
+        }
+      } catch (error) {
+        //emit(ProfileLoadingState());
+        emit(ProfileFetchFailedState());
+      }
+    });
   }
 
   @override

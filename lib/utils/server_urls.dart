@@ -48,24 +48,24 @@ class ProfileUrls {
   static Pair disconnect =
       Pair(url: "$profileEndPoint/disconnect", requestType: true);
 
-  static Pair fetchProfile(String userId) {
+  static Pair fetchProfile({required String userId}) {
     return Pair(url: "$profileEndPoint/:$userId", requestType: false);
   }
 
-  static Pair deleteProfile(String userId) {
+  static Pair deleteProfile({required String userId}) {
     return Pair(url: "$profileEndPoint/delete/:$userId", requestType: false);
   }
 
-  static Pair setOnline(String userId) {
+  static Pair setOnline({required String userId}) {
     return Pair(url: "$profileEndPoint/setonline/:$userId", requestType: false);
   }
 
-  static Pair setOffline(String userId) {
+  static Pair setOffline({required String userId}) {
     return Pair(
         url: "$profileEndPoint/setoffline/:$userId", requestType: false);
   }
 
-  static Pair fetchPublicProfile(String userId) {
+  static Pair fetchPublicProfile({required String userId}) {
     return Pair(
         url: "$profileEndPoint/publicprofile/:$userId", requestType: false);
   }

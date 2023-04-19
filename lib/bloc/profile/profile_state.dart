@@ -43,3 +43,13 @@ class ProfileErrorState extends ProfileState {
   @override
   List<Object?> get props => [];
 }
+
+class ProfileNotExistState extends ProfileState {
+  @override
+  List<Object?> get props => [];
+}
+
+class ProfileFetchFailedState extends ProfileState {
+  @override
+  List<Object?> get props => [];
+}

@@ -8,6 +8,24 @@ import 'package:sessions/utils/server_urls.dart';
 import 'package:sessions/utils/util_methods.dart';
 
 class ProfileRepository {
+  Future<ProfileModel?>? loadProfile({required String userId}) async {
+    Pair urlInfo = ProfileUrls.fetchProfile(userId: userId);
+
+    Response responseData =
+        await httpRequestMethod(urlInfo: urlInfo, params: {"userId": userId});
+    final body = jsonDecode(responseData.body);
+
+    if (responseData.statusCode == 200) {
+      if (body != null) {
+        ProfileModel profile = ProfileModel.fromJson(body);
+        return profile;
+      }
+      return null;
+    } else {
+      throw Exception(body['_message']);
+    }
+  }
+
   Future<ProfileModel> create({required CreateProfileSend httpData}) async {
     Pair urlInfo = ProfileUrls.create, mediaUrl = ProfileUrls.mediaUpload;
 

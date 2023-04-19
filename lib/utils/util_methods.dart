@@ -4,11 +4,17 @@ import 'package:http/http.dart';
 import 'package:sessions/utils/classes.dart';
 
 Future<Response> httpRequestMethod(
-    {required Pair urlInfo, dynamic body, String? token}) async {
+    {required Pair urlInfo,
+    dynamic body,
+    String? token,
+    dynamic params}) async {
   Response response;
+
   Uri uri = Uri.parse(urlInfo.url);
   try {
     if (urlInfo.requestType == false) {
+      uri.replace(queryParameters: params);
+
       response = await get(uri);
       return response;
     } else {

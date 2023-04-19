@@ -58,6 +58,12 @@ class _ChatScreenState extends State<ChatScreen> {
   TextEditingController messageController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.transparent,
+        statusBarColor: kPrimaryColor,
+      ),
+    );
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
