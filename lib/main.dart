@@ -8,6 +8,7 @@ import 'package:sessions/bloc/user/user_bloc_imports.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/repositories/blog_repository.dart';
 import 'package:sessions/repositories/profile_repository.dart';
+import 'package:sessions/repositories/room_repository.dart';
 import 'package:sessions/repositories/user_repository.dart';
 import 'package:sessions/screens/blogScreens/blog_screen.dart';
 import 'package:sessions/screens/blogScreens/createblog_screen.dart';
@@ -64,6 +65,13 @@ void main() async {
   socketService.fetchRoomMessages();
 
   socketService.setOnline();
+
+  try {
+    final rooms = await RoomRepository().getAllRooms();
+    print(rooms);
+  } catch (err) {
+    print(err);
+  }
 
   runApp(const MyApp());
 }

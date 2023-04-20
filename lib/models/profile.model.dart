@@ -130,7 +130,7 @@ class ProfileModel {
       createdAt:
           map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null,
       updatedAt:
-          map['updatedAt'] != null ? DateTime.parse(map['createdAt']) : null,
+          map['updatedAt'] != null ? DateTime.parse(map['updatedAt']) : null,
     );
   }
 }

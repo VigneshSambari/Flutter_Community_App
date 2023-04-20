@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_string_interpolations
+
 import 'package:sessions/constants.dart';
 import 'package:sessions/utils/classes.dart';
 
@@ -68,5 +70,25 @@ class ProfileUrls {
   static Pair fetchPublicProfile({required String userId}) {
     return Pair(
         url: "$profileEndPoint/publicprofile/:$userId", requestType: false);
+  }
+}
+
+class RoomUrls {
+  static String roomEndPoint = "$httpServerUrl/room";
+  static Pair getAllRooms = Pair(url: "$roomEndPoint", requestType: false);
+  static Pair create = Pair(url: "$roomEndPoint/create", requestType: true);
+  static Pair join = Pair(url: "$roomEndPoint/join", requestType: true);
+  static Pair leave = Pair(url: "$roomEndPoint/leave", requestType: true);
+  static Pair checkIfMember =
+      Pair(url: "$roomEndPoint/checkmember", requestType: false);
+  static Pair sendMessage =
+      Pair(url: "$roomEndPoint/sendmessage", requestType: true);
+
+  static Pair getRoomsOfType({required String type}) {
+    return Pair(url: "$roomEndPoint/getroomtype/:$type", requestType: false);
+  }
+
+  static Pair joinViaLink({required String roomId}) {
+    return Pair(url: "$roomEndPoint/joinvialink/:$roomId", requestType: false);
   }
 }
