@@ -40,13 +40,16 @@ class _ChatsDisplayState extends State<ChatsDisplay> {
     final roomState = BlocProvider.of<RoomBloc>(context).state;
     return Scaffold(
       appBar: CurvedAppBar(
-        title: "... Chats",
+        title: (roomState is RoomLoadedState)
+            ? getRoomTitles(type: widget.roomType)
+            : "... Chats",
         actions: [],
         leading: BackButtonNav(),
       ),
       body: BlocBuilder<RoomBloc, RoomState>(
         builder: (context, state) {
           if (state is RoomLoadedState) {
+            final rooms = state.rooms;
             return Container(
               height: size.height,
               width: size.width,
@@ -58,24 +61,10 @@ class _ChatsDisplayState extends State<ChatsDisplay> {
                     SearchBar(controller: searchController),
                     GestureDetector(
                       onTap: () {
-                        _isOpen1 = true;
                         setState(() {
-                          _isOpen1;
+                          _isOpen1 = true;
+                          _isOpenWidget = true;
                         });
-                      },
-                      onVerticalDragUpdate: (details) {
-                        if (!_isOpen1 && details.primaryDelta! > 0) {
-                          setState(() {
-                            _isOpen1 = true;
-                          });
-                        }
-                      },
-                      onVerticalDragEnd: (details) {
-                        if (_isOpen1 && details.primaryVelocity! < 0) {
-                          setState(() {
-                            _isOpen1 = false;
-                          });
-                        }
                       },
                       child: AnimatedContainer(
                         margin:
@@ -126,43 +115,34 @@ class _ChatsDisplayState extends State<ChatsDisplay> {
                                   ],
                                 ),
                               )
-                            : GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _isOpen1 = true;
-                                    _isOpenWidget = true;
-                                  });
-                                },
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 2.5),
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Status...",
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            color: kPrimaryDarkColor,
-                                            fontWeight: FontWeight.bold,
+                            : Padding(
+                                padding: EdgeInsets.symmetric(vertical: 2.5),
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Status...",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: kPrimaryDarkColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      CircleAvatar(
+                                        radius: 12,
+                                        backgroundColor: kPrimaryColor,
+                                        child: Center(
+                                          child: Icon(
+                                            Icons.arrow_drop_down_rounded,
+                                            color: Colors.white,
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        CircleAvatar(
-                                          radius: 12,
-                                          backgroundColor: kPrimaryColor,
-                                          child: Center(
-                                            child: Icon(
-                                              Icons.arrow_drop_down_rounded,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -173,19 +153,81 @@ class _ChatsDisplayState extends State<ChatsDisplay> {
                       height: size.height,
                       child: ListView.builder(
                         shrinkWrap: true,
-                        itemCount: state.rooms.length,
+                        itemCount: rooms.length,
                         itemBuilder: (BuildContext context, int index) {
                           return GestureDetector(
                             onTap: () {
                               navigatorPush(
                                   ChatScreen(
-                                    roomData: state.rooms[index],
+                                    roomData: rooms[index],
                                   ),
                                   context);
                             },
-                            child: ChatsTile(
-                              size: size,
-                              roomData: state.rooms[index],
+                            child: Dismissible(
+                              key: UniqueKey(),
+                              background: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 20),
+                                    child:
+                                        Icon(Icons.delete, color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                              secondaryBackground: Container(
+                                decoration: BoxDecoration(
+                                  color: kPrimaryColor,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 20),
+                                    child:
+                                        Icon(Icons.check, color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                              direction: DismissDirection.horizontal,
+                              confirmDismiss: (direction) async {
+                                final bool confirm = await showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text("Confirm"),
+                                      content: const Text(
+                                          "Are you sure you wish to leave this room?"),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(true),
+                                          child: const Text("LEAVE"),
+                                        ),
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(false),
+                                          child: const Text("CANCEL"),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                                return confirm;
+                              },
+                              onDismissed: (direction) {
+                                setState(() {
+                                  rooms.removeAt(index);
+                                });
+                              },
+                              child: ChatsTile(
+                                size: size,
+                                roomData: state.rooms[index],
+                              ),
                             ),
                           );
                         },
@@ -210,6 +252,46 @@ class _ChatsDisplayState extends State<ChatsDisplay> {
             circularBlue: true,
           );
         },
+      ),
+    );
+  }
+}
+
+class PopupMenuWidget extends StatefulWidget {
+  @override
+  _PopupMenuWidgetState createState() => _PopupMenuWidgetState();
+}
+
+class _PopupMenuWidgetState extends State<PopupMenuWidget> {
+  String _selectedOption = 'Option 1';
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<String>(
+      onSelected: (String result) {
+        setState(() {
+          _selectedOption = result;
+        });
+      },
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+        PopupMenuItem<String>(
+          value: 'Option 1',
+          child: Text('Option 1'),
+        ),
+        PopupMenuItem<String>(
+          value: 'Option 2',
+          child: Text('Option 2'),
+        ),
+        PopupMenuItem<String>(
+          value: 'Option 3',
+          child: Text('Option 3'),
+        ),
+      ],
+      child: Row(
+        children: [
+          Text('Selected option: $_selectedOption'),
+          Icon(Icons.arrow_drop_down),
+        ],
       ),
     );
   }
