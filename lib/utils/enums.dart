@@ -4,7 +4,7 @@ enum DropTypes {
   collegeDropDown,
 }
 
-enum RoomTypes {
+enum RoomTypesEnum {
   collegePublic,
   collegePrivate,
   collegeClub,

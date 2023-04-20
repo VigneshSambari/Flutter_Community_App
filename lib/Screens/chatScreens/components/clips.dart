@@ -10,38 +10,43 @@ class RoomClip extends StatelessWidget {
     super.key,
     required this.title,
     this.assetUrl = "assets/global/noimage.png",
+    this.onPressed,
   });
 
+  final VoidCallback? onPressed;
   final String title;
   final String assetUrl;
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Container(
-      decoration: BoxDecoration(
-        color: kPrimaryLightColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      padding: EdgeInsets.all(5),
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: size.width * 0.045,
-            backgroundColor: kPrimaryLightColor,
-            child: Image.asset(
-              assetUrl,
-              fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        decoration: BoxDecoration(
+          color: kPrimaryLightColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        padding: EdgeInsets.all(5),
+        child: Column(
+          children: [
+            CircleAvatar(
+              radius: size.width * 0.045,
+              backgroundColor: kPrimaryLightColor,
+              child: Image.asset(
+                assetUrl,
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          Text(
-            title,
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-            ),
-          )
-        ],
+            Text(
+              title,
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

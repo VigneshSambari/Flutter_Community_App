@@ -302,7 +302,10 @@ class CircularProgressIndicatorOnStack extends StatelessWidget {
 class LoadingIndicator extends StatefulWidget {
   const LoadingIndicator({
     super.key,
+    this.circularBlue = false,
   });
+
+  final bool circularBlue;
 
   @override
   State<LoadingIndicator> createState() => _LoadingIndicatorState();
@@ -313,10 +316,16 @@ class _LoadingIndicatorState extends State<LoadingIndicator> {
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        height: MediaQuery.of(context).size.width * 0.225,
-        width: MediaQuery.of(context).size.width * 0.225,
+        height: widget.circularBlue
+            ? MediaQuery.of(context).size.height * 0.135
+            : MediaQuery.of(context).size.width * 0.225,
+        width: widget.circularBlue
+            ? MediaQuery.of(context).size.width * 0.135
+            : MediaQuery.of(context).size.width * 0.225,
         child: RiveAnimation.asset(
-          Assets.assetsRiveAssetsLoading,
+          widget.circularBlue
+              ? Assets.assetsRiveAssetsLoadingcircular
+              : Assets.assetsRiveAssetsLoading,
           fit: BoxFit.contain,
         ),
       ),

@@ -1,55 +1,215 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:sessions/bloc/room/room_bloc_imports.dart';
 import 'package:sessions/components/appbar.dart';
+import 'package:sessions/components/carousal_slider.dart';
 import 'package:sessions/components/input_fields.dart';
 import 'package:sessions/components/utils.dart';
+import 'package:sessions/constants.dart';
+import 'package:sessions/screens/chatScreens/chat_screen.dart';
 import 'package:sessions/screens/chatScreens/components/status.dart';
 import 'package:sessions/screens/chatScreens/components/tiles.dart';
+import 'package:sessions/utils/enums.dart';
+import 'package:sessions/utils/navigations.dart';
+import 'package:sessions/utils/util_methods.dart';
 
 class ChatsDisplay extends StatefulWidget {
-  const ChatsDisplay({super.key});
+  final RoomTypesEnum roomType;
+  const ChatsDisplay({super.key, required this.roomType});
 
   @override
   State<ChatsDisplay> createState() => _ChatsDisplayState();
 }
 
 class _ChatsDisplayState extends State<ChatsDisplay> {
+  bool _isOpen1 = false;
+  bool _isOpenWidget = false;
+
+  @override
+  void initState() {
+    BlocProvider.of<RoomBloc>(context).add(LoadRoomsEvent(type: "public"));
+    super.initState();
+  }
+
   TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final roomState = BlocProvider.of<RoomBloc>(context).state;
     return Scaffold(
       appBar: CurvedAppBar(
         title: "... Chats",
         actions: [],
         leading: BackButtonNav(),
       ),
-      body: Container(
-        height: size.height,
-        width: size.width,
-        padding: EdgeInsets.all(5),
-        child: SingleChildScrollView(
-          physics: NeverScrollableScrollPhysics(),
-          child: Column(
-            children: [
-              SearchBar(controller: searchController),
-              StatusSlider(),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                height: size.height,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: 20,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ChatsTile(size: size);
-                  },
+      body: BlocBuilder<RoomBloc, RoomState>(
+        builder: (context, state) {
+          if (state is RoomLoadedState) {
+            return Container(
+              height: size.height,
+              width: size.width,
+              padding: EdgeInsets.all(5),
+              child: SingleChildScrollView(
+                physics: NeverScrollableScrollPhysics(),
+                child: Column(
+                  children: [
+                    SearchBar(controller: searchController),
+                    GestureDetector(
+                      onTap: () {
+                        _isOpen1 = true;
+                        setState(() {
+                          _isOpen1;
+                        });
+                      },
+                      onVerticalDragUpdate: (details) {
+                        if (!_isOpen1 && details.primaryDelta! > 0) {
+                          setState(() {
+                            _isOpen1 = true;
+                          });
+                        }
+                      },
+                      onVerticalDragEnd: (details) {
+                        if (_isOpen1 && details.primaryVelocity! < 0) {
+                          setState(() {
+                            _isOpen1 = false;
+                          });
+                        }
+                      },
+                      child: AnimatedContainer(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 2, vertical: 5),
+                        duration: Duration(milliseconds: 300),
+                        width: size.width,
+                        height: _isOpen1 ? size.height * 0.28 : 35,
+                        decoration: BoxDecoration(
+                          color: kPrimaryColor.withOpacity(0.4),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                        ),
+                        child: _isOpenWidget
+                            ? SizedBox(
+                                //height: _isOpen1 ? size.height * 0.28 : 0,
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(top: 10),
+                                      child: StatusSlider(),
+                                    ),
+                                    Positioned(
+                                      bottom: 0,
+                                      left: 0,
+                                      right: 0,
+                                      child: IconButton(
+                                        icon: CircleAvatar(
+                                          backgroundColor: kPrimaryColor,
+                                          child: Icon(
+                                            Icons.arrow_drop_up_rounded,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            _isOpen1 = false;
+                                          });
+                                          Future.delayed(
+                                              Duration(milliseconds: 200), () {
+                                            setState(() {
+                                              _isOpenWidget = false;
+                                            });
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _isOpen1 = true;
+                                    _isOpenWidget = true;
+                                  });
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 2.5),
+                                  child: Center(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Status...",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: kPrimaryDarkColor,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        CircleAvatar(
+                                          radius: 12,
+                                          backgroundColor: kPrimaryColor,
+                                          child: Center(
+                                            child: Icon(
+                                              Icons.arrow_drop_down_rounded,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                      height: size.height,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: state.rooms.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return GestureDetector(
+                            onTap: () {
+                              navigatorPush(
+                                  ChatScreen(
+                                    roomData: state.rooms[index],
+                                  ),
+                                  context);
+                            },
+                            child: ChatsTile(
+                              size: size,
+                              roomData: state.rooms[index],
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  ],
                 ),
-              )
-            ],
-          ),
-        ),
+              ),
+            );
+          }
+          if (state is RoomErrorState) {
+            return Center(
+              child: Text(
+                state.error,
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            );
+          }
+          return LoadingIndicator(
+            circularBlue: true,
+          );
+        },
       ),
     );
   }

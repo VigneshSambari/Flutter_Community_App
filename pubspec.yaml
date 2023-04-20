@@ -51,6 +51,7 @@ dependencies:
   hydrated_bloc: ^9.1.0
   cached_network_image: ^3.2.3
   socket_io_client: ^2.0.1
+  intl: ^0.18.1
 
 
   

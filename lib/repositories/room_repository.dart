@@ -29,4 +29,27 @@ class RoomRepository {
       throw Exception(body['_message']);
     }
   }
+
+  Future<List<RoomModel>> getRoomsOfType({required String roomType}) async {
+    Pair urlInfo = RoomUrls.getRoomsOfType(type: roomType);
+
+    Response response =
+        await httpRequestMethod(urlInfo: urlInfo, params: {"type": roomType});
+
+    final body = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      final List result = body;
+
+      final res = result.map((e) {
+        RoomModel room = RoomModel.fromJson(e);
+        print(room.toJson());
+        return room;
+      }).toList();
+
+      return res;
+    } else {
+      throw Exception(body['_message']);
+    }
+  }
 }

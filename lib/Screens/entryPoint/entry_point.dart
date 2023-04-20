@@ -4,9 +4,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
+import 'package:sessions/bloc/room/room_bloc_imports.dart';
 import 'package:sessions/components/navbar.dart';
 import 'package:sessions/components/side_menu.dart';
 import 'package:sessions/constants.dart';
+import 'package:sessions/repositories/room_repository.dart';
 import 'package:sessions/screens/blogScreens/blog_screen.dart';
 import 'package:sessions/screens/chatScreens/chat_entry.dart';
 import 'package:sessions/screens/profile/view_profile.dart';

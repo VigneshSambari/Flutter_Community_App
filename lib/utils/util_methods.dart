@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:sessions/utils/classes.dart';
+import 'package:sessions/utils/enums.dart';
 
 Future<Response> httpRequestMethod(
     {required Pair urlInfo,
@@ -13,7 +14,9 @@ Future<Response> httpRequestMethod(
   Uri uri = Uri.parse(urlInfo.url);
   try {
     if (urlInfo.requestType == false) {
-      uri.replace(queryParameters: params);
+      if (params != null) {
+        uri.replace(queryParameters: params);
+      }
 
       response = await get(uri);
       return response;
@@ -72,4 +75,33 @@ String? validatePassword(String password) {
   } else {
     return null;
   }
+}
+
+String getRoomType({required RoomTypesEnum type}) {
+  if (type == RoomTypesEnum.collegeClub) {
+    return "collegeClub";
+  } else if (type == RoomTypesEnum.collegeBranch) {
+    return "collegeBranch";
+  } else if (type == RoomTypesEnum.collegeNotifications) {
+    return "collegeNotifications";
+  } else if (type == RoomTypesEnum.collegePlacement) {
+    return "collegePlacement";
+  } else if (type == RoomTypesEnum.collegePrivate) {
+    return "collegePrivate";
+  } else if (type == RoomTypesEnum.collegePublic) {
+    return "collegePublic";
+  } else if (type == RoomTypesEnum.collegeQA) {
+    return "collegeQA";
+  } else if (type == RoomTypesEnum.userChats) {
+    return "userChats";
+  } else if (type == RoomTypesEnum.userPlacement) {
+    return "userPlacement";
+  } else if (type == RoomTypesEnum.userPrivate) {
+    return "userPrivate";
+  } else if (type == RoomTypesEnum.userProject) {
+    return "userProject";
+  } else if (type == RoomTypesEnum.userPublic) {
+    return "userPublic";
+  }
+  return "userPublic";
 }

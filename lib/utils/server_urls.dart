@@ -85,7 +85,7 @@ class RoomUrls {
       Pair(url: "$roomEndPoint/sendmessage", requestType: true);
 
   static Pair getRoomsOfType({required String type}) {
-    return Pair(url: "$roomEndPoint/getroomtype/:$type", requestType: false);
+    return Pair(url: "$roomEndPoint/getroomstype/$type", requestType: false);
   }
 
   static Pair joinViaLink({required String roomId}) {

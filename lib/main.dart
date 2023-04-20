@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sessions/bloc/profile/profile_bloc.dart';
+import 'package:sessions/bloc/room/room_bloc_imports.dart';
 import 'package:sessions/bloc/user/user_bloc_imports.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/repositories/blog_repository.dart';
@@ -50,13 +51,6 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.transparent,
-      statusBarColor: Colors.transparent,
-    ),
-  );
-
   //Initialize socket client
   SocketService socketService = SocketService(query: {
     'userid': '64311af926e4ea69bd38063f',
@@ -66,12 +60,12 @@ void main() async {
 
   socketService.setOnline();
 
-  try {
-    final rooms = await RoomRepository().getAllRooms();
-    print(rooms);
-  } catch (err) {
-    print(err);
-  }
+  // try {
+  //   final rooms = await RoomRepository().getRoomsOfType(roomType: "private");
+  //   print(rooms);
+  // } catch (err) {
+  //   print(err);
+  // }
 
   runApp(const MyApp());
 }
@@ -87,13 +81,21 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   SocketService socketService = SocketService();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.transparent,
+        statusBarColor: Colors.transparent,
+      ),
+    );
     WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: kPrimaryColor,
+    ));
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -118,6 +120,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         RepositoryProvider(
           create: (context) => ProfileRepository(),
         ),
+        RepositoryProvider(
+          create: (context) => RoomRepository(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -129,6 +134,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           BlocProvider(
             create: (context) => ProfileBloc(
               RepositoryProvider.of<ProfileRepository>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => RoomBloc(
+              RepositoryProvider.of<RoomRepository>(context),
             ),
           ),
         ],

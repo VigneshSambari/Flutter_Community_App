@@ -1,17 +1,24 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors_in_immutables
 
 import 'package:flutter/material.dart';
+import 'package:sessions/assets.dart';
 import 'package:sessions/constants.dart';
+import 'package:sessions/models/room.model.dart';
+import 'package:sessions/screens/chatScreens/chats_display.dart';
 import 'package:sessions/screens/chatScreens/components/clips.dart';
+import 'package:sessions/utils/enums.dart';
+import 'package:sessions/utils/navigations.dart';
 
 class RoomHolder extends StatefulWidget {
-  const RoomHolder({super.key});
+  RoomHolder({super.key});
 
   @override
   State<RoomHolder> createState() => _RoomHolderState();
 }
 
 class _RoomHolderState extends State<RoomHolder> {
+  late final List<RoomModel> rooms;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -29,39 +36,44 @@ class _RoomHolderState extends State<RoomHolder> {
         children: [
           ExpandableWidget(
             children: [
-              RoomClip(title: "Clubs", assetUrl: "assets/chatEntry/clubs.png"),
+              RoomClip(
+                  title: "Clubs",
+                  assetUrl: Assets.assetsChatEntryClubs,
+                  onPressed: () {
+                    navigatorPush(
+                        ChatsDisplay(roomType: RoomTypesEnum.collegeClub),
+                        context);
+                  }),
               RoomClip(
                   title: "Placements",
-                  assetUrl: "assets/chatEntry/placement.png"),
-              RoomClip(title: "Q&A", assetUrl: "assets/chatEntry/quesans.png"),
-              RoomClip(title: "Sales", assetUrl: "assets/chatEntry/sales.png"),
+                  assetUrl: Assets.assetsChatEntryPlacement),
+              RoomClip(title: "Q&A", assetUrl: Assets.assetsChatEntryQuesans),
+              RoomClip(title: "Sales", assetUrl: Assets.assetsChatEntrySales),
               RoomClip(
                   title: "Notifications",
-                  assetUrl: "assets/chatEntry/notification.png"),
+                  assetUrl: Assets.assetsChatEntryNotification),
+              RoomClip(title: "Public", assetUrl: Assets.assetsChatEntryPublic),
               RoomClip(
-                  title: "Public", assetUrl: "assets/chatEntry/public.png"),
-              RoomClip(
-                  title: "Private", assetUrl: "assets/chatEntry/private.png"),
+                  title: "Private", assetUrl: Assets.assetsChatEntryPrivate),
               RoomClip(
                   title: "Attendance",
-                  assetUrl: "assets/chatEntry/attendance.png"),
+                  assetUrl: Assets.assetsChatEntryAttendance),
             ],
           ),
           Wrap(
             alignment: WrapAlignment.center,
             children: [
+              RoomClip(title: "Public", assetUrl: Assets.assetsChatEntryPublic),
               RoomClip(
-                  title: "Public", assetUrl: "assets/chatEntry/public.png"),
-              RoomClip(
-                  title: "Private", assetUrl: "assets/chatEntry/private.png"),
+                  title: "Private", assetUrl: Assets.assetsChatEntryPrivate),
               RoomClip(
                   title: "Placements",
-                  assetUrl: "assets/chatEntry/placement.png"),
+                  assetUrl: Assets.assetsChatEntryPlacement),
               RoomClip(
-                  title: "Projects", assetUrl: "assets/chatEntry/projects.png"),
-              RoomClip(title: "Chats", assetUrl: "assets/chatEntry/chat.png"),
+                  title: "Projects", assetUrl: Assets.assetsChatEntryProjects),
+              RoomClip(title: "Chats", assetUrl: Assets.assetsChatEntryChat),
               RoomClip(
-                  title: "Sessions", assetUrl: "assets/chatEntry/sessions.png"),
+                  title: "Sessions", assetUrl: Assets.assetsChatEntrySessions),
             ],
           )
         ],

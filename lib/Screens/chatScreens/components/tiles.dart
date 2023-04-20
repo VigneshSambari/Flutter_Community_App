@@ -1,7 +1,10 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:sessions/assets.dart';
 import 'package:sessions/constants.dart';
+import 'package:sessions/models/room.model.dart';
+import 'package:intl/intl.dart';
 
 class EventOverlayTile extends StatelessWidget {
   const EventOverlayTile({
@@ -130,15 +133,26 @@ class EventPostedByTile extends StatelessWidget {
 }
 
 class ChatsTile extends StatelessWidget {
-  const ChatsTile({
+  ChatsTile({
     super.key,
     required this.size,
+    required this.roomData,
   });
 
+  final RoomModel roomData;
   final Size size;
+  bool differenceOne = false;
 
   @override
   Widget build(BuildContext context) {
+    DateTime currentDate = DateTime.now();
+
+    Duration difference = currentDate.difference(roomData.updatedAt!);
+
+    if (difference.inDays > 1) {
+      differenceOne = true;
+    }
+
     return Container(
       width: size.width,
       margin: EdgeInsets.symmetric(vertical: 1.5),
@@ -157,17 +171,17 @@ class ChatsTile extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(25),
             child: Image.asset(
-              "assets/global/group.png",
+              Assets.assetsGlobalGroup,
               fit: BoxFit.cover,
             ),
           ),
         ),
         title: Text(
-          "Room Name",
+          roomData.name!,
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         ),
         subtitle: Text(
-          "Room Description...",
+          roomData.description!,
           overflow: TextOverflow.fade,
           maxLines: 1,
           softWrap: true,
@@ -175,13 +189,20 @@ class ChatsTile extends StatelessWidget {
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              "02/2/22",
-              style: TextStyle(color: Colors.white),
-            ),
+            differenceOne == true
+                ? DateTimeText(
+                    dateTime:
+                        DateFormat('dd/MM/yyyy').format(roomData.updatedAt!),
+                  )
+                : SizedBox(),
+            differenceOne == false
+                ? DateTimeText(
+                    dateTime: DateFormat('HH:mm a').format(roomData.updatedAt!),
+                  )
+                : SizedBox(),
             Container(
               margin: EdgeInsets.only(top: 5),
-              padding: EdgeInsets.all(4),
+              padding: EdgeInsets.all(3),
               decoration: BoxDecoration(
                 color: kPrimaryColor,
                 borderRadius: BorderRadius.circular(10),
@@ -196,6 +217,25 @@ class ChatsTile extends StatelessWidget {
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class DateTimeText extends StatelessWidget {
+  const DateTimeText({
+    super.key,
+    required this.dateTime,
+  });
+
+  final String dateTime;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      dateTime,
+      style: TextStyle(
+        color: Colors.white,
       ),
     );
   }
