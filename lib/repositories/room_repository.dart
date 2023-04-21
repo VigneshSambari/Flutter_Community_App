@@ -19,13 +19,12 @@ class RoomRepository {
       //print(body);
       final res = result.map((e) {
         RoomModel room = RoomModel.fromJson(e);
-        print(room.toJson());
+
         return room;
       }).toList();
-      print(res);
+
       return res;
     } else {
-      print(jsonDecode(response.body)['_message']);
       throw Exception(body['_message']);
     }
   }
@@ -43,7 +42,7 @@ class RoomRepository {
 
       final res = result.map((e) {
         RoomModel room = RoomModel.fromJson(e);
-        print(room.toJson());
+
         return room;
       }).toList();
 
