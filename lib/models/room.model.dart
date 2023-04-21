@@ -12,7 +12,7 @@ class RoomModel {
   final List<IdObject>? admins;
   final List<IdObject>? users;
   final List<IdObject>? requests;
-  final List<IdObject>? messages;
+  final String? messageListId;
   final List<String>? tags;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -27,7 +27,7 @@ class RoomModel {
     this.admins,
     this.users,
     this.requests,
-    this.messages,
+    this.messageListId,
     this.tags,
     this.createdAt,
     this.updatedAt,
@@ -44,7 +44,7 @@ class RoomModel {
       'admins': admins!.map((x) => x.toJson()).toList(),
       'users': users!.map((x) => x.toJson()).toList(),
       'requests': requests!.map((x) => x.toJson()).toList(),
-      'messages': messages!.map((x) => x.toJson()).toList(),
+      'messages': messageListId,
       'tags': tags,
       'createdAt': createdAt!.toIso8601String(),
       'updatedAt': updatedAt!.toIso8601String(),
@@ -52,10 +52,7 @@ class RoomModel {
   }
 
   factory RoomModel.fromJson(Map<String, dynamic> map) {
-    List<IdObject> newAdmins = [],
-        newUsers = [],
-        newRequests = [],
-        newMessages = [];
+    List<IdObject> newAdmins = [], newUsers = [], newRequests = [];
     List<String> newTags = [];
     for (var item in map['tags']) {
       newTags.add(item);
@@ -69,9 +66,7 @@ class RoomModel {
     for (var item in map['requests']) {
       newRequests.add(IdObject.fromJson(item));
     }
-    for (var item in map['messages']) {
-      newMessages.add(IdObject.fromJson(item));
-    }
+
     return RoomModel(
       map['_id'] != null ? map['_id'] as String : null,
       name: map['name'] != null ? map['name'] as String : null,
@@ -83,7 +78,8 @@ class RoomModel {
       admins: newAdmins,
       users: newUsers,
       requests: newRequests,
-      messages: newMessages,
+      messageListId:
+          map['messageListId'] != null ? map['messageListId'] as String : null,
       tags: newTags,
       createdAt:
           map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null,

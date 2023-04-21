@@ -6,6 +6,7 @@ import 'package:sessions/components/circle_avatars.dart';
 import 'package:sessions/components/swipers.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
+import 'package:sessions/models/message.model.dart';
 import 'package:sessions/models/room.model.dart';
 
 import 'package:sessions/screens/chatScreens/components/clips.dart';
@@ -39,9 +40,155 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   SocketService socketService = SocketService();
   bool sendIconShow = false;
+  bool isLoading = false;
+  late ScrollController _scrollController;
+  TextEditingController messageController = TextEditingController();
+  double _scrollPosition = 0.0;
+  int pageCounter = 0;
+  List<int> messageList = [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ];
 
   @override
   void initState() {
+    _scrollController = ScrollController();
     messageController.addListener(() {
       if (messageController.text.isNotEmpty) {
         setState(() {
@@ -60,10 +207,31 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void dispose() {
     messageController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
-  TextEditingController messageController = TextEditingController();
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.jumpTo(_scrollPosition);
+    });
+  }
+
+  Future<void> fetchData() async {
+    if (!isLoading) {
+      setState(() {
+        isLoading = true;
+      });
+      await Future.delayed(Duration(seconds: 5));
+      setState(() {
+        isLoading = false;
+        pageCounter++;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -117,19 +285,49 @@ class _ChatScreenState extends State<ChatScreen> {
                       children: [
                         Container(
                           height: size.height,
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: 100,
-                            itemBuilder: (context, index) {
-                              return RoomMessageTile(
-                                userName: "Username",
-                                message:
-                                    "madssssssssssssssssssAWdawsssssssssssssssaaasdjanflkjhsfjhsjkldfhkjsahdfjkshafkjh...",
-                                time: "22:22, 2/2/22",
-                                repliesExist: true,
-                                position: index % 2 == 0,
-                              );
+                          child: NotificationListener<ScrollNotification>(
+                            onNotification: (ScrollNotification scrollInfo) {
+                              if (!isLoading &&
+                                  scrollInfo.metrics.pixels ==
+                                      scrollInfo.metrics.maxScrollExtent) {
+                                fetchData();
+                              }
+                              return true;
                             },
+                            child: ListView.builder(
+                              controller: _scrollController,
+                              shrinkWrap: true,
+                              itemCount: messageList.length,
+                              itemBuilder: (context, index) {
+                                if (index == messageList.length - 1) {
+                                  return Column(
+                                    children: [
+                                      isLoading
+                                          ? Padding(
+                                              padding: EdgeInsets.only(top: 10),
+                                              child: Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              ),
+                                            )
+                                          : SizedBox(),
+                                      SizedBox(
+                                        height: 175,
+                                      )
+                                    ],
+                                  );
+                                } else {
+                                  return RoomMessageTile(
+                                    userName: "Username",
+                                    message:
+                                        "madssssssssssssssssssAWdawsssssssssssssssaaasdjanflkjhsfjhsjkldfhkjsahdfjkshafkjh...",
+                                    time: "22:22, 2/2/22",
+                                    repliesExist: true,
+                                    position: index % 2 == 0,
+                                  );
+                                }
+                              },
+                            ),
                           ),
                         ),
                         SwipeDownRow(events: events),
