@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 
 part of 'room_bloc.dart';
 
@@ -43,20 +43,6 @@ class RoomErrorState extends RoomState {
   final String error;
 
   RoomErrorState({required this.error});
-
-  @override
-  List<Object?> get props => [];
-}
-
-class RoomMessageLoadingState extends RoomState {
-  RoomMessageLoadingState();
-
-  @override
-  List<Object?> get props => [];
-}
-
-class RoomMessageLoadedState extends RoomState {
-  RoomMessageLoadedState();
 
   @override
   List<Object?> get props => [];

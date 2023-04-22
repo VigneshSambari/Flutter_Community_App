@@ -80,7 +80,8 @@ class FetchMessagesRoom {
   final int? limit;
   final int? page;
 
-  FetchMessagesRoom({required this.roomId, this.limit = 10, this.page = 1});
+  FetchMessagesRoom(
+      {required this.roomId, required this.limit, required this.page});
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{

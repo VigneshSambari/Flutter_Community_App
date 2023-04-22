@@ -19,10 +19,10 @@ class MessageRepository {
     final body = jsonDecode(response.body);
     if (response.statusCode == 200) {
       final List result = body;
-      print(body);
+      //print(body);
       final messages = result.map((e) {
         MessageModel message = MessageModel.fromJson(e);
-        print(message.toJson());
+        // print(message.toJson());
         return message;
       }).toList();
 

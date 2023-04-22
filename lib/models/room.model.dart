@@ -17,23 +17,23 @@ class RoomModel {
   final List<String>? tags;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final MediaLink? coverPic;
 
   String? get roomId => _id;
 
-  RoomModel(
-    this._id, {
-    this.name,
-    this.groupIcon,
-    this.type,
-    this.description,
-    this.createdBy,
-    this.users,
-    this.requests,
-    this.messageListId,
-    this.tags,
-    this.createdAt,
-    this.updatedAt,
-  });
+  RoomModel(this._id,
+      {this.name,
+      this.groupIcon,
+      this.type,
+      this.description,
+      this.createdBy,
+      this.users,
+      this.requests,
+      this.messageListId,
+      this.tags,
+      this.createdAt,
+      this.updatedAt,
+      this.coverPic});
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -41,6 +41,7 @@ class RoomModel {
       'name': name,
       'groupIcon': groupIcon,
       'type': type,
+      'coverPic': coverPic,
       'description': description,
       'createdBy': createdBy,
       'users': users!.map((x) => x.toJson()).toList(),
@@ -76,6 +77,8 @@ class RoomModel {
       createdBy: map['createdBy'] != null ? map['createdBy'] as String : null,
       users: newUsers,
       requests: newRequests,
+      coverPic:
+          map['coverPic'] != null ? MediaLink.fromJson(map['coverPic']) : null,
       messageListId:
           map['messageListId'] != null ? map['messageListId'] as String : null,
       tags: newTags,

@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last, sized_box_for_whitespace, avoid_unnecessary_containers, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, library_private_types_in_public_api, no_leading_underscores_for_local_identifiers, prefer_final_fields, unused_field
 
 import 'package:flutter/material.dart';
+import 'package:sessions/bloc/blog/blog_bloc_imports.dart';
+import 'package:sessions/bloc/room/room_bloc.dart';
+import 'package:sessions/bloc/user/user_bloc.dart';
 
 import 'package:sessions/components/circle_avatars.dart';
 import 'package:sessions/components/swipers.dart';
@@ -34,13 +37,14 @@ List<EventClip> events = [
 class ChatScreen extends StatefulWidget {
   final RoomModel roomData;
 
-  const ChatScreen({super.key, required this.roomData});
+  ChatScreen({super.key, required this.roomData});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  bool _isDisposed = false;
   SocketService socketService = SocketService();
   bool sendIconShow = false;
   bool isLoading = false;
@@ -48,14 +52,18 @@ class _ChatScreenState extends State<ChatScreen> {
   TextEditingController messageController = TextEditingController();
   double _scrollPosition = 0.0;
   int pageCounter = 1;
-  //List<IdObject> messageIds = [];
+  List<IdObject> messageIds = [];
   List<MessageModel> messageList = [];
+  int limit = 10;
 
   @override
   void initState() {
     fetchData();
     _scrollController = ScrollController();
     messageController.addListener(() {
+      if (_isDisposed || !mounted) {
+        return;
+      }
       if (messageController.text.isNotEmpty) {
         setState(() {
           sendIconShow = true;
@@ -70,10 +78,9 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
   }
 
-  void fetchMessageIds() async {}
-
   @override
   void dispose() {
+    _isDisposed = true;
     messageController.dispose();
     _scrollController.dispose();
     super.dispose();
@@ -88,29 +95,41 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<void> fetchData() async {
-    if (!isLoading) {
-      setState(() {
-        isLoading = true;
-      });
-      //await Future.delayed(Duration(seconds: 5));
-      final List<IdObject> messageIds = await RoomRepository().getRoomMessages(
-          fetchQuery: FetchMessagesRoom(
-              roomId: widget.roomData.roomId, page: pageCounter));
+    if (_isDisposed || !mounted) {
+      return;
+    }
+    setState(() {
+      isLoading = true;
+    });
+    await Future.delayed(Duration(seconds: 5));
+    final List<IdObject> currMessageIds = await RoomRepository()
+        .getRoomMessages(
+            fetchQuery: FetchMessagesRoom(
+                roomId: widget.roomData.roomId,
+                page: pageCounter,
+                limit: limit - messageIds.length));
+    for (IdObject id in currMessageIds) {
+      messageIds.add(id);
+    }
+    if (currMessageIds.isNotEmpty) {
       final List<MessageModel> messagesNew = await MessageRepository()
-          .getListedMessages(messageIds: MessageIdList(ids: messageIds));
+          .getListedMessages(messageIds: MessageIdList(ids: currMessageIds));
       for (MessageModel message in messagesNew) {
         messageList.add(message);
       }
-      print(pageCounter);
-      if (messagesNew.length >= 10) {
-        pageCounter++;
-      }
-      setState(() {
-        isLoading = false;
-        messageList;
-        pageCounter;
-      });
     }
+
+    if (messageIds.length == 10) {
+      pageCounter++;
+      messageIds = [];
+    }
+    if (_isDisposed || !mounted) {
+      return;
+    }
+    setState(() {
+      isLoading = false;
+      messageList;
+    });
   }
 
   @override
@@ -175,39 +194,43 @@ class _ChatScreenState extends State<ChatScreen> {
                               }
                               return true;
                             },
-                            child: ListView.builder(
-                              controller: _scrollController,
-                              shrinkWrap: true,
-                              itemCount: messageList.length,
-                              itemBuilder: (context, index) {
-                                if (index == messageList.length - 1) {
-                                  return Column(
-                                    children: [
-                                      isLoading
-                                          ? Padding(
-                                              padding: EdgeInsets.only(top: 10),
-                                              child: Center(
-                                                child:
-                                                    CircularProgressIndicator(),
-                                              ),
-                                            )
-                                          : SizedBox(),
-                                      SizedBox(
-                                        height: 175,
-                                      )
-                                    ],
-                                  );
-                                } else {
-                                  return RoomMessageTile(
-                                    userName: "Username",
-                                    message: messageList[index].content!,
-                                    time: "22:22, 2/2/22",
-                                    repliesExist: true,
-                                    position: index % 2 == 0,
-                                  );
-                                }
-                              },
-                            ),
+                            child: BlocBuilder<RoomBloc, RoomState>(
+                                builder: (context, state) {
+                              return ListView.builder(
+                                controller: _scrollController,
+                                shrinkWrap: true,
+                                itemCount: messageList.length + 1,
+                                itemBuilder: (context, index) {
+                                  if (index == messageList.length) {
+                                    return Column(
+                                      children: [
+                                        isLoading
+                                            ? Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 10),
+                                                child: Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                ),
+                                              )
+                                            : SizedBox(),
+                                        SizedBox(
+                                          height: 175,
+                                        )
+                                      ],
+                                    );
+                                  } else {
+                                    return RoomMessageTile(
+                                      userName: "Username",
+                                      message: messageList[index].content!,
+                                      time: "22:22, 2/2/22",
+                                      repliesExist: true,
+                                      position: index % 2 == 0,
+                                    );
+                                  }
+                                },
+                              );
+                            }),
                           ),
                         ),
                         SwipeDownRow(events: events),

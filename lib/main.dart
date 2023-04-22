@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sessions/bloc/profile/profile_bloc.dart';
-import 'package:sessions/bloc/room/room_bloc_imports.dart';
-import 'package:sessions/bloc/user/user_bloc_imports.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/repositories/blog_repository.dart';
+import 'package:sessions/repositories/message_repository.dart';
 import 'package:sessions/repositories/profile_repository.dart';
 import 'package:sessions/repositories/room_repository.dart';
 import 'package:sessions/repositories/user_repository.dart';
@@ -32,6 +31,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:sessions/utils/navigations.dart';
 import 'package:socket_io_client/socket_io_client.dart';
+
+import 'bloc/message/message_bloc.dart';
+import 'bloc/room/room_bloc.dart';
+import 'bloc/user/user_bloc.dart';
 
 void main() async {
   //Dotenv initialization asynchronous
