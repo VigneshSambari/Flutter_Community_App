@@ -83,6 +83,10 @@ class RoomUrls {
       Pair(url: "$roomEndPoint/checkmember", requestType: false);
   static Pair sendMessage =
       Pair(url: "$roomEndPoint/sendmessage", requestType: true);
+  static Pair deleteMessage =
+      Pair(url: "$roomEndPoint/deletemessage", requestType: true);
+  static Pair fetchMessages =
+      Pair(url: "$roomEndPoint/fetchmessages", requestType: true);
 
   static Pair getRoomsOfType({required String type}) {
     return Pair(url: "$roomEndPoint/getroomstype/$type", requestType: false);
@@ -91,4 +95,14 @@ class RoomUrls {
   static Pair joinViaLink({required String roomId}) {
     return Pair(url: "$roomEndPoint/joinvialink/:$roomId", requestType: false);
   }
+}
+
+class MessageUrls {
+  static String messageEndPoint = "$httpServerUrl/message";
+  static Pair fetchListedMessages =
+      Pair(url: "$messageEndPoint/fetchlistedmessages", requestType: true);
+  static Pair replyMessage =
+      Pair(url: "$messageEndPoint/reply", requestType: true);
+  static Pair deleteReply =
+      Pair(url: "$messageEndPoint/deletereply", requestType: true);
 }

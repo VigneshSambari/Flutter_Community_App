@@ -8,9 +8,12 @@ import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/models/message.model.dart';
 import 'package:sessions/models/room.model.dart';
+import 'package:sessions/repositories/message_repository.dart';
+import 'package:sessions/repositories/room_repository.dart';
 
 import 'package:sessions/screens/chatScreens/components/clips.dart';
 import 'package:sessions/socket/socket_client.dart';
+import 'package:sessions/utils/classes.dart';
 
 List<EventClip> events = [
   EventClip(),
@@ -44,150 +47,13 @@ class _ChatScreenState extends State<ChatScreen> {
   late ScrollController _scrollController;
   TextEditingController messageController = TextEditingController();
   double _scrollPosition = 0.0;
-  int pageCounter = 0;
-  List<int> messageList = [
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0
-  ];
+  int pageCounter = 1;
+  //List<IdObject> messageIds = [];
+  List<MessageModel> messageList = [];
 
   @override
   void initState() {
+    fetchData();
     _scrollController = ScrollController();
     messageController.addListener(() {
       if (messageController.text.isNotEmpty) {
@@ -203,6 +69,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
     super.initState();
   }
+
+  void fetchMessageIds() async {}
 
   @override
   void dispose() {
@@ -224,10 +92,23 @@ class _ChatScreenState extends State<ChatScreen> {
       setState(() {
         isLoading = true;
       });
-      await Future.delayed(Duration(seconds: 5));
+      //await Future.delayed(Duration(seconds: 5));
+      final List<IdObject> messageIds = await RoomRepository().getRoomMessages(
+          fetchQuery: FetchMessagesRoom(
+              roomId: widget.roomData.roomId, page: pageCounter));
+      final List<MessageModel> messagesNew = await MessageRepository()
+          .getListedMessages(messageIds: MessageIdList(ids: messageIds));
+      for (MessageModel message in messagesNew) {
+        messageList.add(message);
+      }
+      print(pageCounter);
+      if (messagesNew.length >= 10) {
+        pageCounter++;
+      }
       setState(() {
         isLoading = false;
-        pageCounter++;
+        messageList;
+        pageCounter;
       });
     }
   }
@@ -319,8 +200,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 } else {
                                   return RoomMessageTile(
                                     userName: "Username",
-                                    message:
-                                        "madssssssssssssssssssAWdawsssssssssssssssaaasdjanflkjhsfjhsjkldfhkjsahdfjkshafkjh...",
+                                    message: messageList[index].content!,
                                     time: "22:22, 2/2/22",
                                     repliesExist: true,
                                     position: index % 2 == 0,

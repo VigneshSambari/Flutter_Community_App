@@ -47,3 +47,17 @@ class RoomErrorState extends RoomState {
   @override
   List<Object?> get props => [];
 }
+
+class RoomMessageLoadingState extends RoomState {
+  RoomMessageLoadingState();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class RoomMessageLoadedState extends RoomState {
+  RoomMessageLoadedState();
+
+  @override
+  List<Object?> get props => [];
+}

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 // ignore_for_file: non_constant_identifier_names
 
 // ignore_for_file: public_member_api_docs, sort_constructors_first
@@ -104,23 +106,21 @@ class LinkSend {
 
 class RoomItem {
   final String? _id;
-  final DateTime? fetchAfter;
+  final int page;
 
-  RoomItem(this._id, this.fetchAfter);
+  RoomItem(this._id, {required this.page});
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       '_id': _id,
-      'fetchAfter': fetchAfter?.millisecondsSinceEpoch,
+      'page': page,
     };
   }
 
   factory RoomItem.fromJson(Map<String, dynamic> map) {
     return RoomItem(
       map['_id'] != null ? map['_id'] as String : null,
-      map['fetchAfter'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['fetchAfter'] as int)
-          : null,
+      page: map['page'] as int,
     );
   }
 }

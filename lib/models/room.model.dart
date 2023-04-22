@@ -11,12 +11,14 @@ class RoomModel {
   final String? type;
   final String? description;
   final String? createdBy;
-  final List<UserAndAdmin>? users;
+  final List<IdObject>? users;
   final List<IdObject>? requests;
   final String? messageListId;
   final List<String>? tags;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+
+  String? get roomId => _id;
 
   RoomModel(
     this._id, {
@@ -52,13 +54,13 @@ class RoomModel {
 
   factory RoomModel.fromJson(Map<String, dynamic> map) {
     List<IdObject> newRequests = [];
-    List<UserAndAdmin> newUsers = [];
+    List<IdObject> newUsers = [];
     List<String> newTags = [];
     for (var item in map['tags']) {
       newTags.add(item);
     }
     for (var item in map['users']) {
-      newUsers.add(UserAndAdmin.fromJson(item));
+      newUsers.add(IdObject.fromJson(item));
     }
     for (var item in map['requests']) {
       newRequests.add(IdObject.fromJson(item));
