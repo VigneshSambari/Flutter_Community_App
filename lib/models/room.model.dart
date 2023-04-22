@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first;
 
+import 'dart:convert';
+
 import 'package:sessions/utils/classes.dart';
 
 class RoomModel {
@@ -9,8 +11,7 @@ class RoomModel {
   final String? type;
   final String? description;
   final String? createdBy;
-  final List<IdObject>? admins;
-  final List<IdObject>? users;
+  final List<UserAndAdmin>? users;
   final List<IdObject>? requests;
   final String? messageListId;
   final List<String>? tags;
@@ -24,7 +25,6 @@ class RoomModel {
     this.type,
     this.description,
     this.createdBy,
-    this.admins,
     this.users,
     this.requests,
     this.messageListId,
@@ -41,7 +41,6 @@ class RoomModel {
       'type': type,
       'description': description,
       'createdBy': createdBy,
-      'admins': admins!.map((x) => x.toJson()).toList(),
       'users': users!.map((x) => x.toJson()).toList(),
       'requests': requests!.map((x) => x.toJson()).toList(),
       'messages': messageListId,
@@ -52,16 +51,14 @@ class RoomModel {
   }
 
   factory RoomModel.fromJson(Map<String, dynamic> map) {
-    List<IdObject> newAdmins = [], newUsers = [], newRequests = [];
+    List<IdObject> newRequests = [];
+    List<UserAndAdmin> newUsers = [];
     List<String> newTags = [];
     for (var item in map['tags']) {
       newTags.add(item);
     }
-    for (var item in map['admins']) {
-      newAdmins.add(IdObject.fromJson(item));
-    }
     for (var item in map['users']) {
-      newUsers.add(IdObject.fromJson(item));
+      newUsers.add(UserAndAdmin.fromJson(item));
     }
     for (var item in map['requests']) {
       newRequests.add(IdObject.fromJson(item));
@@ -75,7 +72,6 @@ class RoomModel {
       description:
           map['description'] != null ? map['description'] as String : null,
       createdBy: map['createdBy'] != null ? map['createdBy'] as String : null,
-      admins: newAdmins,
       users: newUsers,
       requests: newRequests,
       messageListId:

@@ -28,7 +28,8 @@ class _ChatsDisplayState extends State<ChatsDisplay> {
 
   @override
   void initState() {
-    BlocProvider.of<RoomBloc>(context).add(LoadRoomsEvent(type: "public"));
+    BlocProvider.of<RoomBloc>(context)
+        .add(LoadRoomsEvent(type: getRoomType(type: widget.roomType)));
     super.initState();
   }
 

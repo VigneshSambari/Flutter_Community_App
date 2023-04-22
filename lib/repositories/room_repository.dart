@@ -42,7 +42,6 @@ class RoomRepository {
 
       final res = result.map((e) {
         RoomModel room = RoomModel.fromJson(e);
-
         return room;
       }).toList();
 

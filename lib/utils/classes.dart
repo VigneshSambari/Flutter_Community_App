@@ -189,3 +189,24 @@ class MediaLink {
     );
   }
 }
+
+class UserAndAdmin {
+  final String _id;
+  final int page;
+
+  UserAndAdmin(this._id, {required this.page});
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      '_id': _id,
+      'page': page,
+    };
+  }
+
+  factory UserAndAdmin.fromJson(Map<String, dynamic> map) {
+    return UserAndAdmin(
+      map['_id'] as String,
+      page: map['page'] as int,
+    );
+  }
+}
