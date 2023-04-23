@@ -49,6 +49,8 @@ class ProfileUrls {
       Pair(url: "$profileEndPoint/acceptrequest", requestType: true);
   static Pair disconnect =
       Pair(url: "$profileEndPoint/disconnect", requestType: true);
+  static Pair fetchPublicProfiles =
+      Pair(url: "$profileEndPoint/publicprofiles", requestType: true);
 
   static Pair fetchProfile({required String userId}) {
     return Pair(url: "$profileEndPoint/:$userId", requestType: false);
@@ -65,11 +67,6 @@ class ProfileUrls {
   static Pair setOffline({required String userId}) {
     return Pair(
         url: "$profileEndPoint/setoffline/:$userId", requestType: false);
-  }
-
-  static Pair fetchPublicProfile({required String userId}) {
-    return Pair(
-        url: "$profileEndPoint/publicprofile/:$userId", requestType: false);
   }
 }
 

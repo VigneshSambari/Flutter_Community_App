@@ -60,15 +60,15 @@ class ProfileModel {
       'profilePic': profilePic,
       'coverPic': coverPic,
       'online': online,
-      'lastseen': lastseen!.toIso8601String(),
+      'lastseen': lastseen!.toUtc().toIso8601String(),
       'connections': connections!.map((x) => x.toJson()).toList(),
       'connectionRequests': connectionRequests!.map((x) => x.toJson()).toList(),
       'requestsSent': requestsSent!.map((x) => x.toJson()).toList(),
       'interests': interests,
       'blogs': blogs!.map((x) => x.toJson()).toList(),
       'links': links!.map((x) => x.toJson()).toList(),
-      'createdAt': createdAt!.toIso8601String(),
-      'updatedAt': updatedAt!.toIso8601String(),
+      'createdAt': createdAt!.toUtc().toIso8601String(),
+      'updatedAt': updatedAt!.toUtc().toIso8601String(),
     };
   }
 
@@ -119,18 +119,21 @@ class ProfileModel {
       coverPic:
           map['coverPic'] != null ? MediaLink.fromJson(map['coverPic']) : null,
       online: map['online'] != null ? map['online'] as bool : null,
-      lastseen:
-          map['lastseen'] != null ? DateTime.parse(map['lastseen']) : null,
+      lastseen: map['lastseen'] != null
+          ? DateTime.parse(map['lastseen']).toLocal()
+          : null,
       connections: newConnections,
       connectionRequests: newConnectionRequests,
       requestsSent: newRequestsSent,
       interests: newInterests,
       blogs: newBlogs,
       links: newLinks,
-      createdAt:
-          map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null,
-      updatedAt:
-          map['updatedAt'] != null ? DateTime.parse(map['updatedAt']) : null,
+      createdAt: map['createdAt'] != null
+          ? DateTime.parse(map['createdAt']).toLocal()
+          : null,
+      updatedAt: map['updatedAt'] != null
+          ? DateTime.parse(map['updatedAt']).toLocal()
+          : null,
     );
   }
 }

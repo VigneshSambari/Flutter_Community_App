@@ -259,6 +259,8 @@ class _ChatsDisplayState extends State<ChatsDisplay> {
 }
 
 class PopupMenuWidget extends StatefulWidget {
+  const PopupMenuWidget({super.key});
+
   @override
   _PopupMenuWidgetState createState() => _PopupMenuWidgetState();
 }

@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:sessions/assets.dart';
+import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/models/room.model.dart';
 import 'package:intl/intl.dart';
+import 'package:sessions/utils/util_methods.dart';
 
 class EventOverlayTile extends StatelessWidget {
   const EventOverlayTile({
@@ -191,13 +193,12 @@ class ChatsTile extends StatelessWidget {
           children: [
             differenceOne == true
                 ? DateTimeText(
-                    dateTime:
-                        DateFormat('dd/MM/yyyy').format(roomData.updatedAt!),
+                    dateTime: formatDate(date: roomData.updatedAt!),
                   )
                 : SizedBox(),
             differenceOne == false
                 ? DateTimeText(
-                    dateTime: DateFormat('HH:mm a').format(roomData.updatedAt!),
+                    dateTime: formatTime(time: roomData.updatedAt!),
                   )
                 : SizedBox(),
             Container(
@@ -217,25 +218,6 @@ class ChatsTile extends StatelessWidget {
             )
           ],
         ),
-      ),
-    );
-  }
-}
-
-class DateTimeText extends StatelessWidget {
-  const DateTimeText({
-    super.key,
-    required this.dateTime,
-  });
-
-  final String dateTime;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      dateTime,
-      style: TextStyle(
-        color: Colors.white,
       ),
     );
   }

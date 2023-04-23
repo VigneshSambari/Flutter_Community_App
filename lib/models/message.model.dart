@@ -30,8 +30,8 @@ class MessageModel {
       'replies': replies!.map((x) => x.toJson()).toList(),
       'sentBy': sentBy,
       'sentTo': sentTo,
-      'createdAt': createdAt!.toIso8601String(),
-      'updatedAt': updatedAt!.toIso8601String(),
+      'createdAt': createdAt!.toUtc().toIso8601String(),
+      'updatedAt': updatedAt!.toUtc().toIso8601String(),
     };
   }
 
@@ -47,10 +47,12 @@ class MessageModel {
       replies: newReplies,
       sentBy: map['sentBy'] != null ? map['sentBy'] as String : null,
       sentTo: map['sentTo'] != null ? map['sentTo'] as String : null,
-      createdAt:
-          map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null,
-      updatedAt:
-          map['updatedAt'] != null ? DateTime.parse(map['updatedAt']) : null,
+      createdAt: map['createdAt'] != null
+          ? DateTime.parse(map['createdAt']).toLocal()
+          : null,
+      updatedAt: map['updatedAt'] != null
+          ? DateTime.parse(map['updatedAt']).toLocal()
+          : null,
     );
   }
 }
@@ -73,7 +75,7 @@ class Reply {
       '_id': _id,
       'reply': reply,
       'repliedBy': repliedBy,
-      'time': time!.toIso8601String(),
+      'time': time!.toUtc().toIso8601String(),
     };
   }
 
@@ -82,7 +84,7 @@ class Reply {
       map['_id'] != null ? map['_id'] as String : null,
       reply: map['reply'] != null ? map['reply'] as String : null,
       repliedBy: map['repliedBy'] != null ? map['repliedBy'] as String : null,
-      time: map['time'] != null ? DateTime.parse(map['time']) : null,
+      time: map['time'] != null ? DateTime.parse(map['time']).toLocal() : null,
     );
   }
 }

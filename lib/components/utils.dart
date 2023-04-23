@@ -332,3 +332,22 @@ class _LoadingIndicatorState extends State<LoadingIndicator> {
     );
   }
 }
+
+class DateTimeText extends StatelessWidget {
+  const DateTimeText({
+    super.key,
+    required this.dateTime,
+  });
+
+  final String dateTime;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      dateTime,
+      style: TextStyle(
+        color: Colors.white,
+      ),
+    );
+  }
+}

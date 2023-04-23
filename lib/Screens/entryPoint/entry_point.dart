@@ -1,10 +1,11 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, override_on_non_overriding_member
 
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import 'package:sessions/bloc/room/room_bloc_imports.dart';
+import 'package:sessions/bloc/user/user_bloc.dart';
 import 'package:sessions/components/navbar.dart';
 import 'package:sessions/components/side_menu.dart';
 import 'package:sessions/constants.dart';
@@ -12,6 +13,7 @@ import 'package:sessions/repositories/room_repository.dart';
 import 'package:sessions/screens/blogScreens/blog_screen.dart';
 import 'package:sessions/screens/chatScreens/chat_entry.dart';
 import 'package:sessions/screens/profile/view_profile.dart';
+import 'package:sessions/socket/socket_client.dart';
 import 'package:sessions/utils/rive_utils.dart';
 
 class EntryPoint extends StatefulWidget {
@@ -26,6 +28,7 @@ class _EntryPointState extends State<EntryPoint>
   late SMIBool sideBarClosed;
   bool isMenuClosed = true;
   Widget currentScreen = BlogScreen();
+  late SocketService? socketService;
 
   late AnimationController _animationController;
   late Animation<double> animation;
@@ -66,8 +69,22 @@ class _EntryPointState extends State<EntryPoint>
     });
   }
 
+  void setSocketServer() {
+    final UserState userState = BlocProvider.of<UserBloc>(context).state;
+    if (userState is UserSignedInState) {
+      print(userState.user.toJson());
+      //Initialize socket client
+      socketService = SocketService(query: {
+        'userid': userState.user.userId,
+      });
+
+      socketService!.setOnline();
+    }
+  }
+
   @override
   void initState() {
+    setSocketServer();
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 200),
@@ -88,6 +105,16 @@ class _EntryPointState extends State<EntryPoint>
   void dispose() {
     _animationController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      socketService!.disconnect();
+    }
+    if (state == AppLifecycleState.resumed) {
+      socketService!.setOnline();
+    }
   }
 
   @override

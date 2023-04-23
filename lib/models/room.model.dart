@@ -48,8 +48,8 @@ class RoomModel {
       'requests': requests!.map((x) => x.toJson()).toList(),
       'messages': messageListId,
       'tags': tags,
-      'createdAt': createdAt!.toIso8601String(),
-      'updatedAt': updatedAt!.toIso8601String(),
+      'createdAt': createdAt!.toUtc().toIso8601String(),
+      'updatedAt': updatedAt!.toUtc().toIso8601String(),
     };
   }
 
@@ -82,10 +82,12 @@ class RoomModel {
       messageListId:
           map['messageListId'] != null ? map['messageListId'] as String : null,
       tags: newTags,
-      createdAt:
-          map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null,
-      updatedAt:
-          map['updatedAt'] != null ? DateTime.parse(map['updatedAt']) : null,
+      createdAt: map['createdAt'] != null
+          ? DateTime.parse(map['createdAt']).toLocal()
+          : null,
+      updatedAt: map['updatedAt'] != null
+          ? DateTime.parse(map['updatedAt']).toLocal()
+          : null,
     );
   }
 }

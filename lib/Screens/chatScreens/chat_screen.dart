@@ -9,13 +9,16 @@ import 'package:sessions/components/swipers.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/models/message.model.dart';
+import 'package:sessions/models/profile.model.dart';
 import 'package:sessions/models/room.model.dart';
 import 'package:sessions/repositories/message_repository.dart';
+import 'package:sessions/repositories/profile_repository.dart';
 import 'package:sessions/repositories/room_repository.dart';
 
 import 'package:sessions/screens/chatScreens/components/clips.dart';
 import 'package:sessions/socket/socket_client.dart';
 import 'package:sessions/utils/classes.dart';
+import 'package:sessions/utils/util_methods.dart';
 
 List<EventClip> events = [
   EventClip(),
@@ -53,12 +56,16 @@ class _ChatScreenState extends State<ChatScreen> {
   int pageCounter = 1;
   List<IdObject> messageIds = [];
   List<MessageModel> messageList = [];
+  List<String> msgUserIds = [];
+  List<ProfileModel> msgUserProfiles = [];
   int limit = 20;
   String? errorString;
   bool endReached = false;
   RoomRepository _roomRepository = RoomRepository();
   MessageRepository _messageRepository = MessageRepository();
+  ProfileRepository _profileRepository = ProfileRepository();
   String? userId;
+  Map<String, ProfileModel> mapIdProfile = {};
 
   @override
   void initState() {
@@ -67,7 +74,9 @@ class _ChatScreenState extends State<ChatScreen> {
       userId = userState.user.userId!;
     }
     fetchData();
-    socketService = SocketService(fetchMessages: fetchData);
+    socketService = SocketService(query: {
+      'userid': userId,
+    }, fetchMessages: fetchData);
     _scrollController = ScrollController();
     messageController.addListener(() {
       if (_isDisposed || !mounted) {
@@ -129,12 +138,22 @@ class _ChatScreenState extends State<ChatScreen> {
             .getListedMessages(messageIds: MessageIdList(ids: currMessageIds));
         for (MessageModel message in messagesNew) {
           messageList.add(message);
+          msgUserIds.add(message.sentBy!);
+          String id = message.sentBy!;
+          if (!mapIdProfile.containsKey(id)) {
+            final ProfileModel? profile =
+                await _profileRepository.fetchPublicProfiles(userId: id);
+            print(profile!.toJson());
+            mapIdProfile.putIfAbsent(id, () => profile);
+          }
         }
       }
     } catch (error) {}
+    //print(msgUserProfiles.length);
     if (messageIds.length == limit) {
       pageCounter++;
       messageIds = [];
+      msgUserIds = [];
     }
     if (_isDisposed || !mounted) {
       return;
@@ -150,6 +169,7 @@ class _ChatScreenState extends State<ChatScreen> {
       isLoading = false;
       messageList;
       errorString;
+      msgUserIds;
     });
   }
 
@@ -157,7 +177,8 @@ class _ChatScreenState extends State<ChatScreen> {
     try {
       await _roomRepository.createRoomMessage(messageBody: messageBody);
       await fetchData();
-      socketService.fetchRoomMessages(roomId: widget.roomData.roomId!);
+      socketService.fetchRoomMessages(
+          roomId: widget.roomData.roomId!, fetchMessages: fetchData);
       scrollToPositionFun(
         scrollPosition: _scrollController.position.maxScrollExtent + 150,
       );
@@ -287,12 +308,19 @@ class _ChatScreenState extends State<ChatScreen> {
                                     ],
                                   );
                                 } else {
+                                  //print(msgUserProfiles[index].userName);
                                   return RoomMessageTile(
-                                    userName: "Username",
+                                    userName: mapIdProfile.containsKey(
+                                            messageList[index].sentBy!)
+                                        ? mapIdProfile[
+                                                messageList[index].sentBy!]!
+                                            .userName!
+                                        : "UserName",
                                     message: messageList[index].content!,
-                                    time: "22:22, 2/2/22",
+                                    dateTime: messageList[index].createdAt!,
                                     repliesExist: true,
-                                    position: index % 2 == 0,
+                                    position:
+                                        userId == messageList[index].sentBy,
                                   );
                                 }
                               },
@@ -339,7 +367,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                       kPrimaryDarkColor.withOpacity(0.7),
                                   radius: 10,
                                   child: Text(
-                                    "22",
+                                    "?",
                                     style: TextStyle(
                                       fontSize: 9,
                                       color: Colors.white,
@@ -485,19 +513,31 @@ class TypeMessageTile extends StatelessWidget {
 }
 
 class RoomMessageTile extends StatelessWidget {
-  const RoomMessageTile({
+  RoomMessageTile({
     super.key,
     this.position = false,
     required this.userName,
     required this.message,
-    required this.time,
+    required this.dateTime,
     this.repliesExist = false,
   });
   final bool position, repliesExist;
-  final String userName, message, time;
+  final String userName, message;
+  final DateTime dateTime;
+
+  bool differenceOne = true;
 
   @override
   Widget build(BuildContext context) {
+    DateTime currentDate = DateTime.now();
+
+    Duration difference = currentDate.difference(dateTime);
+
+    if (difference.inDays >= 1) {
+      differenceOne = true;
+    } else {
+      differenceOne = false;
+    }
     Size size = MediaQuery.of(context).size;
     return Align(
       alignment: position ? Alignment.centerRight : Alignment.centerLeft,
@@ -545,11 +585,26 @@ class RoomMessageTile extends StatelessWidget {
                         fontSize: 15,
                       ),
                     ),
-                    Text(
-                      time,
-                      style: TextStyle(
-                        fontSize: 10.5,
-                        color: Color.fromARGB(255, 72, 40, 100),
+                    Padding(
+                      padding: EdgeInsets.all(2),
+                      child: Column(
+                        children: [
+                          differenceOne == true
+                              ? Text(
+                                  formatDate(date: dateTime),
+                                  style: TextStyle(
+                                    fontSize: 10.5,
+                                    color: Color.fromARGB(255, 72, 40, 100),
+                                  ),
+                                )
+                              : Text(
+                                  formatTime(time: currentDate),
+                                  style: TextStyle(
+                                    fontSize: 10.5,
+                                    color: Color.fromARGB(255, 72, 40, 100),
+                                  ),
+                                ),
+                        ],
                       ),
                     ),
                   ],

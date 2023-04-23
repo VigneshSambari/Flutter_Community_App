@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 import 'package:sessions/utils/classes.dart';
 import 'package:sessions/utils/enums.dart';
 
@@ -133,4 +134,12 @@ String getRoomTitles({required RoomTypesEnum type}) {
     return "Public Channels";
   }
   return "userPublic";
+}
+
+String formatDate({required DateTime date}) {
+  return DateFormat('dd/MM/yyyy').format(date);
+}
+
+String formatTime({required DateTime time}) {
+  return DateFormat('h:mm a').format(time);
 }

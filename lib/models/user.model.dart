@@ -18,8 +18,8 @@ class UserModel {
       '_id': _id,
       'email': email,
       'password': password,
-      'createdAt': createdAt!.toIso8601String(),
-      'updatedAt': updatedAt!.toIso8601String(),
+      'createdAt': createdAt!.toUtc().toIso8601String(),
+      'updatedAt': updatedAt!.toUtc().toIso8601String(),
       'token': token,
     };
   }
@@ -29,10 +29,12 @@ class UserModel {
       map['_id'] != null ? map['_id'] as String : null,
       email: map['email'] != null ? map['email'] as String : null,
       password: map['password'] != null ? map['password'] as String : null,
-      createdAt:
-          map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null,
-      updatedAt:
-          map['updatedAt'] != null ? DateTime.parse(map['updatedAt']) : null,
+      createdAt: map['createdAt'] != null
+          ? DateTime.parse(map['createdAt']).toLocal()
+          : null,
+      updatedAt: map['updatedAt'] != null
+          ? DateTime.parse(map['updatedAt']).toLocal()
+          : null,
       token: map['token'] != null ? map['token'] as String : null,
     );
   }

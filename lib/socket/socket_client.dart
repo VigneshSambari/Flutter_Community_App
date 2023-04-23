@@ -6,7 +6,7 @@ class SocketService {
   Socket? _socket;
 
   factory SocketService(
-      {Map<String, dynamic>? query, Function? fetchMessages}) {
+      {required Map<String, dynamic>? query, Function? fetchMessages}) {
     if (_singleton._socket == null) {
       // Define the connection options and parameters
       final options = OptionBuilder()
@@ -26,12 +26,9 @@ class SocketService {
 
       _singleton._socket!.on(
         'fetchedRoomMessages',
-        (messages) => {
-          if (fetchMessages != null)
-            {
-              print("called back"),
-              fetchMessages(),
-            }
+        (data) => {
+          print("called back"),
+          fetchMessages!(),
         },
       );
     }
@@ -70,8 +67,16 @@ class SocketService {
   //   });
   // }
 
-  void fetchRoomMessages({required String roomId}) {
+  void fetchRoomMessages(
+      {required String roomId, required Function fetchMessages}) {
     _socket!.emit('fetchRoomMessages', {'roomId': roomId});
+    _socket!.on(
+      'fetchedRoomMessages',
+      (data) => {
+        print("called back"),
+        fetchMessages(),
+      },
+    );
   }
 
   Socket get socket => _socket!;

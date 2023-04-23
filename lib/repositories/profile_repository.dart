@@ -1,7 +1,9 @@
-import 'dart:convert';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:http/http.dart';
+
 import 'package:sessions/models/profile.model.dart';
 import 'package:sessions/utils/classes.dart';
 import 'package:sessions/utils/server_urls.dart';
@@ -78,5 +80,45 @@ class ProfileRepository {
     } else {
       throw Exception(body['_message']);
     }
+  }
+
+  Future<ProfileModel?> fetchPublicProfiles({required String userId}) async {
+    Pair urlInfo = ProfileUrls.fetchPublicProfiles;
+
+    Response responseData =
+        await httpRequestMethod(urlInfo: urlInfo, body: {'userId': userId});
+    final body = jsonDecode(responseData.body);
+
+    if (responseData.statusCode == 200) {
+      if (body != null) {
+        ProfileModel profile = ProfileModel.fromJson(body);
+        return profile;
+      }
+      return null;
+    } else {
+      throw Exception(body['_message']);
+    }
+  }
+}
+
+class IdsSend {
+  final List<String> ids;
+
+  IdsSend({required this.ids});
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'ids': ids,
+    };
+  }
+
+  factory IdsSend.fromJson(Map<String, dynamic> map) {
+    List<String> newIds = [];
+    for (String id in map['ids']) {
+      newIds.add(id);
+    }
+    return IdsSend(
+      ids: newIds,
+    );
   }
 }
