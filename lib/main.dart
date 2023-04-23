@@ -54,15 +54,6 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  //Initialize socket client
-  SocketService socketService = SocketService(query: {
-    'userid': '64311af926e4ea69bd38063f',
-  });
-
-  socketService.fetchRoomMessages();
-
-  socketService.setOnline();
-
   // try {
   //   final rooms = await RoomRepository().getRoomsOfType(roomType: "private");
   //   print(rooms);
@@ -70,7 +61,15 @@ void main() async {
   //   print(err);
   // }
 
-  runApp(const MyApp());
+  runApp(RepositoryProvider(
+    create: (context) => UserRepository(),
+    child: BlocProvider(
+      create: (context) => UserBloc(
+        RepositoryProvider.of<UserRepository>(context),
+      ),
+      child: MyApp(),
+    ),
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -81,9 +80,20 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  SocketService socketService = SocketService();
+  late SocketService socketService;
   @override
   void initState() {
+    final UserState userState = BlocProvider.of<UserBloc>(context).state;
+    if (userState is UserSignedInState) {
+      //print(userState.user.toJson());
+      //Initialize socket client
+      SocketService socketService = SocketService(query: {
+        'userid': userState.user.userId,
+      });
+
+      socketService.setOnline();
+    }
+    socketService = SocketService();
     super.initState();
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(

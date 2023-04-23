@@ -5,7 +5,8 @@ class SocketService {
   static final SocketService _singleton = SocketService._internal();
   Socket? _socket;
 
-  factory SocketService({Map<String, dynamic>? query}) {
+  factory SocketService(
+      {Map<String, dynamic>? query, Function? fetchMessages}) {
     if (_singleton._socket == null) {
       // Define the connection options and parameters
       final options = OptionBuilder()
@@ -22,9 +23,24 @@ class SocketService {
       _singleton._socket!.onConnect((_) {
         print('Connected to socket server!');
       });
+
+      _singleton._socket!.on(
+        'fetchedRoomMessages',
+        (messages) => {
+          if (fetchMessages != null)
+            {
+              print("called back"),
+              fetchMessages(),
+            }
+        },
+      );
     }
 
     return _singleton;
+  }
+
+  void enterRoom({required String roomId}) {
+    _socket!.emit('enterRoom', {'roomId': roomId});
   }
 
   void test({required String message}) {
@@ -39,28 +55,23 @@ class SocketService {
     _socket!.emit('disconnect');
   }
 
-  void sendRooMessage() {
-    const message = {
-      "sentBy": "63df5afd61cf376cb318c141",
-      "sentTo": "63e104f6e291f1dc9ef7a5d3",
-      "content": "Message!",
-      "type": "text"
-    };
+  // void sendRooMessage() {
+  //   const message = {
+  //     "sentBy": "63df5afd61cf376cb318c141",
+  //     "sentTo": "63e104f6e291f1dc9ef7a5d3",
+  //     "content": "Message!",
+  //     "type": "text"
+  //   };
 
-    const roomId = "63e104f6e291f1dc9ef7a5d3";
-    _socket!.emit('sendRoomMessage', {'message': message, 'roomId': roomId});
-  }
+  //   const roomId = "63e104f6e291f1dc9ef7a5d3";
+  //   _socket!.emit('sendRoomMessage', {
+  //     'message': message,
+  //     'roomId': roomId,
+  //   });
+  // }
 
-  void fetchRoomMessages() {
-    print("inside1");
-    const roomId = "63e104f6e291f1dc9ef7a5d3";
+  void fetchRoomMessages({required String roomId}) {
     _socket!.emit('fetchRoomMessages', {'roomId': roomId});
-    _socket!.on(
-      'fetchedRoomMessages',
-      (messages) => {
-        print(messages),
-      },
-    );
   }
 
   Socket get socket => _socket!;

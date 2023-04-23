@@ -210,3 +210,28 @@ class UserAndAdmin {
     );
   }
 }
+
+class FetchMessagesRoom {
+  final String? roomId;
+  final int? limit;
+  final int? page;
+
+  FetchMessagesRoom(
+      {required this.roomId, required this.limit, required this.page});
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'roomId': roomId,
+      'limit': limit,
+      'page': page,
+    };
+  }
+
+  factory FetchMessagesRoom.fromJson(Map<String, dynamic> map) {
+    return FetchMessagesRoom(
+      roomId: map['roomId'] != null ? map['roomId'] as String : null,
+      limit: map['limit'] != null ? map['limit'] as int : null,
+      page: map['page'] != null ? map['page'] as int : null,
+    );
+  }
+}

@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:sessions/bloc/blog/blog_bloc_imports.dart';
-import 'package:sessions/bloc/room/room_bloc.dart';
 import 'package:sessions/bloc/user/user_bloc.dart';
 
 import 'package:sessions/components/circle_avatars.dart';
@@ -45,20 +44,30 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   bool _isDisposed = false;
-  SocketService socketService = SocketService();
+  late SocketService socketService;
   bool sendIconShow = false;
-  bool isLoading = false;
+  bool isLoading = false, sendLoading = false;
   late ScrollController _scrollController;
   TextEditingController messageController = TextEditingController();
   double _scrollPosition = 0.0;
   int pageCounter = 1;
   List<IdObject> messageIds = [];
   List<MessageModel> messageList = [];
-  int limit = 10;
+  int limit = 20;
+  String? errorString;
+  bool endReached = false;
+  RoomRepository _roomRepository = RoomRepository();
+  MessageRepository _messageRepository = MessageRepository();
+  String? userId;
 
   @override
   void initState() {
+    final UserState userState = BlocProvider.of<UserBloc>(context).state;
+    if (userState is UserSignedInState) {
+      userId = userState.user.userId!;
+    }
     fetchData();
+    socketService = SocketService(fetchMessages: fetchData);
     _scrollController = ScrollController();
     messageController.addListener(() {
       if (_isDisposed || !mounted) {
@@ -75,6 +84,7 @@ class _ChatScreenState extends State<ChatScreen> {
       }
     });
 
+    socketService.enterRoom(roomId: widget.roomData.roomId!);
     super.initState();
   }
 
@@ -100,36 +110,96 @@ class _ChatScreenState extends State<ChatScreen> {
     }
     setState(() {
       isLoading = true;
+      endReached = true;
     });
-    await Future.delayed(Duration(seconds: 5));
-    final List<IdObject> currMessageIds = await RoomRepository()
-        .getRoomMessages(
-            fetchQuery: FetchMessagesRoom(
-                roomId: widget.roomData.roomId,
-                page: pageCounter,
-                limit: limit - messageIds.length));
-    for (IdObject id in currMessageIds) {
-      messageIds.add(id);
-    }
-    if (currMessageIds.isNotEmpty) {
-      final List<MessageModel> messagesNew = await MessageRepository()
-          .getListedMessages(messageIds: MessageIdList(ids: currMessageIds));
-      for (MessageModel message in messagesNew) {
-        messageList.add(message);
+    int newMsgsLength = 0;
+    try {
+      final List<IdObject> currMessageIds =
+          await _roomRepository.getRoomMessages(
+              fetchQuery: FetchMessagesRoom(
+                  roomId: widget.roomData.roomId,
+                  page: pageCounter,
+                  limit: limit - messageIds.length));
+      for (IdObject id in currMessageIds) {
+        messageIds.add(id);
       }
-    }
-
-    if (messageIds.length == 10) {
+      newMsgsLength = currMessageIds.length;
+      if (currMessageIds.isNotEmpty) {
+        final List<MessageModel> messagesNew = await _messageRepository
+            .getListedMessages(messageIds: MessageIdList(ids: currMessageIds));
+        for (MessageModel message in messagesNew) {
+          messageList.add(message);
+        }
+      }
+    } catch (error) {}
+    if (messageIds.length == limit) {
       pageCounter++;
       messageIds = [];
     }
     if (_isDisposed || !mounted) {
       return;
     }
+
+    if (newMsgsLength != 0) {
+      endReached = false;
+    } else {
+      endReached = true;
+    }
+
     setState(() {
       isLoading = false;
       messageList;
+      errorString;
     });
+  }
+
+  Future<void> sendMessage({required CreateMessageSend messageBody}) async {
+    try {
+      await _roomRepository.createRoomMessage(messageBody: messageBody);
+      await fetchData();
+      socketService.fetchRoomMessages(roomId: widget.roomData.roomId!);
+      scrollToPositionFun(
+        scrollPosition: _scrollController.position.maxScrollExtent + 150,
+      );
+    } catch (error) {}
+  }
+
+  Future<void> sendMsgButtonFunction({
+    required String? content,
+    required String? type,
+    String? sentBy,
+    String? sentTo,
+  }) async {
+    final String? roomId = widget.roomData.roomId;
+    setState(() {
+      sendLoading = true;
+    });
+    try {
+      await sendMessage(
+        messageBody: CreateMessageSend(
+          content: content!,
+          messageId: "",
+          roomId: roomId!,
+          sentBy: userId!,
+          sentTo: roomId,
+          type: type!,
+        ),
+      );
+    } catch (error) {}
+    if (_isDisposed || !mounted) {
+      return;
+    }
+    setState(() {
+      sendLoading = false;
+    });
+  }
+
+  void scrollToPositionFun({required double scrollPosition}) {
+    scrollToPosition.animateTo(
+      scrollPosition,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
@@ -194,43 +264,39 @@ class _ChatScreenState extends State<ChatScreen> {
                               }
                               return true;
                             },
-                            child: BlocBuilder<RoomBloc, RoomState>(
-                                builder: (context, state) {
-                              return ListView.builder(
-                                controller: _scrollController,
-                                shrinkWrap: true,
-                                itemCount: messageList.length + 1,
-                                itemBuilder: (context, index) {
-                                  if (index == messageList.length) {
-                                    return Column(
-                                      children: [
-                                        isLoading
-                                            ? Padding(
-                                                padding:
-                                                    EdgeInsets.only(top: 10),
-                                                child: Center(
-                                                  child:
-                                                      CircularProgressIndicator(),
-                                                ),
-                                              )
-                                            : SizedBox(),
-                                        SizedBox(
-                                          height: 175,
-                                        )
-                                      ],
-                                    );
-                                  } else {
-                                    return RoomMessageTile(
-                                      userName: "Username",
-                                      message: messageList[index].content!,
-                                      time: "22:22, 2/2/22",
-                                      repliesExist: true,
-                                      position: index % 2 == 0,
-                                    );
-                                  }
-                                },
-                              );
-                            }),
+                            child: ListView.builder(
+                              controller: _scrollController,
+                              shrinkWrap: true,
+                              itemCount: messageList.length + 1,
+                              itemBuilder: (context, index) {
+                                if (index == messageList.length) {
+                                  return Column(
+                                    children: [
+                                      isLoading
+                                          ? Padding(
+                                              padding: EdgeInsets.only(top: 10),
+                                              child: Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              ),
+                                            )
+                                          : SizedBox(),
+                                      SizedBox(
+                                        height: 175,
+                                      )
+                                    ],
+                                  );
+                                } else {
+                                  return RoomMessageTile(
+                                    userName: "Username",
+                                    message: messageList[index].content!,
+                                    time: "22:22, 2/2/22",
+                                    repliesExist: true,
+                                    position: index % 2 == 0,
+                                  );
+                                }
+                              },
+                            ),
                           ),
                         ),
                         SwipeDownRow(events: events),
@@ -244,69 +310,175 @@ class _ChatScreenState extends State<ChatScreen> {
               bottom: 0,
               left: 0,
               right: 0,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                width: size.width,
-                decoration: BoxDecoration(
-                  color: kPrimaryColor.withOpacity(0.85),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: kPrimaryLightColor,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 10),
-                              child: Icon(
-                                Icons.emoji_emotions_rounded,
-                                color: kPrimaryColor.withOpacity(0.85),
-                              ),
-                            ),
-                            Expanded(
-                              child: TextField(
-                                controller: messageController,
-                                maxLines: null,
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 10,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  !endReached
+                      ? GestureDetector(
+                          onTap: () {
+                            scrollToPositionFun(
+                              scrollPosition:
+                                  _scrollController.position.maxScrollExtent +
+                                      150,
+                            );
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Stack(
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor:
+                                      kPrimaryColor.withOpacity(0.9),
+                                  child: Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    color: Colors.white,
                                   ),
-                                  border: InputBorder.none,
-                                  hintText: "Type here...",
                                 ),
-                              ),
+                                CircleAvatar(
+                                  backgroundColor:
+                                      kPrimaryDarkColor.withOpacity(0.7),
+                                  radius: 10,
+                                  child: Text(
+                                    "22",
+                                    style: TextStyle(
+                                      fontSize: 9,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(right: 5),
-                              child: Icon(
-                                Icons.attachment,
-                                color: kPrimaryColor.withOpacity(0.85),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    CircleAvatar(
-                      backgroundColor: kPrimaryColor.withOpacity(0.5),
-                      child: Icon(
-                        sendIconShow ? Icons.send_rounded : Icons.mic,
-                        color: Colors.white,
-                      ),
-                    )
-                  ],
-                ),
+                          ),
+                        )
+                      : SizedBox(),
+                  TypeMessageTile(
+                    size: size,
+                    messageController: messageController,
+                    sendIconShow: sendIconShow,
+                    sendLoading: sendLoading,
+                    sendMessageFun: sendMsgButtonFunction,
+                  ),
+                ],
               ),
-            )
+            ),
           ],
         ),
+      ),
+    );
+  }
+
+  ScrollController get scrollToPosition => _scrollController;
+}
+
+class TypeMessageTile extends StatelessWidget {
+  const TypeMessageTile({
+    super.key,
+    required this.size,
+    required this.messageController,
+    required this.sendIconShow,
+    required this.sendLoading,
+    required this.sendMessageFun,
+  });
+
+  final Size size;
+  final TextEditingController messageController;
+  final bool sendIconShow, sendLoading;
+  final Function({
+    required String? content,
+    String? sentBy,
+    String? sentTo,
+    required String? type,
+  }) sendMessageFun;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      width: size.width,
+      decoration: BoxDecoration(
+        color: kPrimaryColor.withOpacity(0.85),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: kPrimaryLightColor,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Icon(
+                      Icons.emoji_emotions_rounded,
+                      color: kPrimaryColor.withOpacity(0.85),
+                    ),
+                  ),
+                  Expanded(
+                    child: TextField(
+                      controller: messageController,
+                      maxLines: null,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 10,
+                        ),
+                        border: InputBorder.none,
+                        hintText: "Type here...",
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 5),
+                    child: Icon(
+                      Icons.attachment,
+                      color: kPrimaryColor.withOpacity(0.85),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          sendLoading
+              ? CircleAvatar(
+                  backgroundColor: kPrimaryColor.withOpacity(0.5),
+                  child: Center(
+                      child: CircularProgressIndicator(
+                    color: Colors.white,
+                  )),
+                )
+              : sendIconShow
+                  ? GestureDetector(
+                      onTap: () async {
+                        try {
+                          await sendMessageFun(
+                              content: messageController.text, type: "text");
+                          messageController.clear();
+                        } catch (error) {}
+                      },
+                      child: CircleAvatar(
+                        backgroundColor: kPrimaryColor.withOpacity(0.5),
+                        child: Center(
+                          child: Icon(
+                            Icons.send_rounded,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    )
+                  : CircleAvatar(
+                      backgroundColor: kPrimaryColor.withOpacity(0.5),
+                      child: Center(
+                        child: Icon(
+                          Icons.mic,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+        ],
       ),
     );
   }

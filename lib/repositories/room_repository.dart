@@ -73,29 +73,57 @@ class RoomRepository {
       throw Exception(body['_message']);
     }
   }
+
+  Future<void> createRoomMessage(
+      {required CreateMessageSend messageBody}) async {
+    Pair urlInfo = RoomUrls.sendMessage;
+    Response response =
+        await httpRequestMethod(urlInfo: urlInfo, body: messageBody);
+
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+    } else {
+      throw Exception(body['_message']);
+    }
+  }
 }
 
-class FetchMessagesRoom {
-  final String? roomId;
-  final int? limit;
-  final int? page;
+class CreateMessageSend {
+  final String sentBy;
+  final String sentTo;
+  final String type;
+  final String content;
+  final String roomId;
+  final String messageId;
 
-  FetchMessagesRoom(
-      {required this.roomId, required this.limit, required this.page});
+  CreateMessageSend({
+    required this.sentBy,
+    required this.sentTo,
+    required this.type,
+    required this.content,
+    required this.roomId,
+    required this.messageId,
+  });
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
+      'sentBy': sentBy,
+      'sentTo': sentTo,
+      'type': type,
+      'content': content,
       'roomId': roomId,
-      'limit': limit,
-      'page': page,
+      'messageId': messageId,
     };
   }
 
-  factory FetchMessagesRoom.fromJson(Map<String, dynamic> map) {
-    return FetchMessagesRoom(
-      roomId: map['roomId'] != null ? map['roomId'] as String : null,
-      limit: map['limit'] != null ? map['limit'] as int : null,
-      page: map['page'] != null ? map['page'] as int : null,
+  factory CreateMessageSend.fromJson(Map<String, dynamic> map) {
+    return CreateMessageSend(
+      sentBy: map['sentBy'] as String,
+      sentTo: map['sentTo'] as String,
+      type: map['type'] as String,
+      content: map['content'] as String,
+      roomId: map['roomId'] as String,
+      messageId: map['messageId'] as String,
     );
   }
 }
