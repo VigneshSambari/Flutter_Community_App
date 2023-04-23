@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:sessions/bloc/room/room_bloc_imports.dart';
 import 'package:sessions/components/appbar.dart';
-import 'package:sessions/components/carousal_slider.dart';
 import 'package:sessions/components/input_fields.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
@@ -253,48 +252,6 @@ class _ChatsDisplayState extends State<ChatsDisplay> {
             circularBlue: true,
           );
         },
-      ),
-    );
-  }
-}
-
-class PopupMenuWidget extends StatefulWidget {
-  const PopupMenuWidget({super.key});
-
-  @override
-  _PopupMenuWidgetState createState() => _PopupMenuWidgetState();
-}
-
-class _PopupMenuWidgetState extends State<PopupMenuWidget> {
-  String _selectedOption = 'Option 1';
-
-  @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton<String>(
-      onSelected: (String result) {
-        setState(() {
-          _selectedOption = result;
-        });
-      },
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-        PopupMenuItem<String>(
-          value: 'Option 1',
-          child: Text('Option 1'),
-        ),
-        PopupMenuItem<String>(
-          value: 'Option 2',
-          child: Text('Option 2'),
-        ),
-        PopupMenuItem<String>(
-          value: 'Option 3',
-          child: Text('Option 3'),
-        ),
-      ],
-      child: Row(
-        children: [
-          Text('Selected option: $_selectedOption'),
-          Icon(Icons.arrow_drop_down),
-        ],
       ),
     );
   }

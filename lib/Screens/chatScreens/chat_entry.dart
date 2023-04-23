@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 
 import 'package:sessions/components/appbar.dart';
 import 'package:sessions/components/carousal_slider.dart';
+import 'package:sessions/components/popup_menus.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/screens/chatScreens/components/clips.dart';
 import 'package:sessions/screens/chatScreens/components/rooms_holder.dart';
+import 'package:sessions/utils/classes.dart';
 
 List<EventClip> events = [
   EventClip(),
@@ -25,6 +27,12 @@ List<EventClip> events = [
   EventClip(),
 ];
 
+List<PairPopMenu> popUpOptions = [
+  PairPopMenu(value: 0, option: "Create Room"),
+  PairPopMenu(value: 1, option: "View Events"),
+  PairPopMenu(value: 2, option: "View Status"),
+];
+
 class ChatEntry extends StatelessWidget {
   const ChatEntry({super.key});
 
@@ -34,14 +42,11 @@ class ChatEntry extends StatelessWidget {
       appBar: CurvedAppBar(
         title: "Chat",
         actions: [
-          GestureDetector(
-            onTap: () {},
-            child: Padding(
-              padding: EdgeInsets.only(right: 12.5),
-              child: Icon(
-                Icons.more_vert_rounded,
-                color: Colors.white,
-              ),
+          Padding(
+            padding: EdgeInsets.only(right: 15),
+            child: PopUpMenuWidget(
+              options: popUpOptions,
+              onSelect: ({required int value}) {},
             ),
           ),
         ],

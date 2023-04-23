@@ -5,7 +5,6 @@ import 'package:sessions/assets.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/models/room.model.dart';
-import 'package:intl/intl.dart';
 import 'package:sessions/utils/util_methods.dart';
 
 class EventOverlayTile extends StatelessWidget {

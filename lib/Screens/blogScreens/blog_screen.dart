@@ -3,9 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:sessions/bloc/blog/blog_bloc_imports.dart';
 import 'package:sessions/components/appbar.dart';
+import 'package:sessions/components/popup_menus.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/repositories/blog_repository.dart';
 import 'package:sessions/screens/blogScreens/components/blog_utils.dart';
+import 'package:sessions/screens/blogScreens/createblog_screen.dart';
+import 'package:sessions/utils/classes.dart';
+import 'package:sessions/utils/navigations.dart';
 
 List<Widget> widgets = [
   BlogTile(),
@@ -19,8 +23,27 @@ List<Widget> widgets = [
   BlogTile()
 ];
 
-class BlogScreen extends StatelessWidget {
+List<PairPopMenu> popUpOptions = [
+  PairPopMenu(value: 0, option: "Create Blog"),
+  PairPopMenu(value: 1, option: "College Blogs"),
+  PairPopMenu(value: 2, option: "Public Blogs"),
+  PairPopMenu(value: 3, option: "Your Blogs"),
+  PairPopMenu(value: 4, option: "Friends Blogs"),
+];
+
+class BlogScreen extends StatefulWidget {
   const BlogScreen({super.key});
+
+  @override
+  State<BlogScreen> createState() => _BlogScreenState();
+}
+
+class _BlogScreenState extends State<BlogScreen> {
+  void popUpMenuFun({required int value}) {
+    if (value == 0) {
+      navigatorPush(CreateBlog(), context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +57,15 @@ class BlogScreen extends StatelessWidget {
         child: Scaffold(
           appBar: CurvedAppBar(
             title: "Blogs",
-            actions: [],
+            actions: [
+              Padding(
+                padding: EdgeInsets.only(right: 15),
+                child: PopUpMenuWidget(
+                  options: popUpOptions,
+                  onSelect: popUpMenuFun,
+                ),
+              ),
+            ],
             leading: SizedBox(),
           ),
           body: Column(

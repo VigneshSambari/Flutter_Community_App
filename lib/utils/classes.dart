@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 // ignore_for_file: non_constant_identifier_names
 
 // ignore_for_file: public_member_api_docs, sort_constructors_first
@@ -234,4 +232,11 @@ class FetchMessagesRoom {
       page: map['page'] != null ? map['page'] as int : null,
     );
   }
+}
+
+class PairPopMenu {
+  final int value;
+  final String option;
+
+  PairPopMenu({required this.value, required this.option});
 }

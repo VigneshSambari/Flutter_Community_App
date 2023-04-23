@@ -3,8 +3,6 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 
-import 'package:sessions/models/blogpost.model.dart';
-import 'package:sessions/models/message.model.dart';
 import 'package:sessions/models/room.model.dart';
 import 'package:sessions/utils/classes.dart';
 import 'package:sessions/utils/server_urls.dart';

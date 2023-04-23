@@ -1,14 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:sessions/models/message.model.dart';
 
 import 'package:sessions/models/room.model.dart';
-import 'package:sessions/repositories/message_repository.dart';
 import 'package:sessions/repositories/room_repository.dart';
-import 'package:sessions/utils/classes.dart';
 
 part 'room_event.dart';
 part 'room_state.dart';

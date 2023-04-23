@@ -1,14 +1,50 @@
-// ignore_for_file: avoid_unnecessary_containers, prefer_const_constructors
+// ignore_for_file: avoid_unnecessary_containers, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:sessions/components/carousal_slider.dart';
 import 'package:sessions/components/styles.dart';
 import 'package:sessions/constants.dart';
+import 'package:sessions/models/blogpost.model.dart';
+import 'package:sessions/screens/chatScreens/components/clips.dart';
 
-class BlogTile extends StatelessWidget {
+List<EventClip> events = [
+  EventClip(),
+  EventClip(),
+  EventClip(),
+  EventClip(),
+  EventClip(),
+  EventClip(),
+  EventClip(),
+  EventClip(),
+  EventClip(),
+  EventClip(),
+  EventClip(),
+  EventClip(),
+  EventClip(),
+];
+
+class BlogTile extends StatefulWidget {
+  final BlogPostModel? blog;
   const BlogTile({
     super.key,
+    this.blog,
   });
+
+  @override
+  State<BlogTile> createState() => _BlogTileState();
+}
+
+int mediaIndex = 0;
+
+class _BlogTileState extends State<BlogTile> {
+  void pageChange({required int value}) {
+    mediaIndex = value;
+
+    setState(() {
+      mediaIndex;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +72,41 @@ class BlogTile extends StatelessWidget {
                         color: Colors.pink,
                         borderRadius: BorderRadius.circular(15),
                       ),
+                      child: Stack(
+                        children: [
+                          CarouselSlider(
+                            height: size.height * 0.25,
+                            items: events,
+                            margin: 0,
+                            scroll: false,
+                            pageChange: pageChange,
+                          ),
+                          Positioned(
+                            bottom: 3,
+                            right: 0,
+                            left: 0,
+                            child: Center(
+                              child: Wrap(
+                                children: List.generate(
+                                  events.length,
+                                  (index) => Container(
+                                    width: 7,
+                                    height: 7,
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 2.0),
+                                    decoration: BoxDecoration(
+                                      color: mediaIndex == index
+                                          ? Colors.white
+                                          : Colors.white70,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Positioned(
@@ -43,14 +114,24 @@ class BlogTile extends StatelessWidget {
                     right: 10,
                     child: GestureDetector(
                       onTap: () {},
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-                          child: Container(
-                            child: const CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              child: Text("+5"),
+                      child: SizedBox(
+                        height: 35,
+                        width: 35,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+                            child: Container(
+                              child: CircleAvatar(
+                                backgroundColor: Colors.transparent,
+                                child: Text(
+                                  "+${(events.length - 1)}",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),

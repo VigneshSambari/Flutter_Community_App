@@ -3,11 +3,17 @@
 import 'package:flutter/material.dart';
 import 'package:sessions/bloc/profile/profile_bloc_imports.dart';
 import 'package:sessions/components/appbar.dart';
+import 'package:sessions/components/popup_menus.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/screens/profile/bottom_sheet.dart';
 import 'package:sessions/screens/profile/components/profile_image_utils.dart';
 import 'package:sessions/screens/profile/components/tiles.dart';
 import 'package:sessions/utils/classes.dart';
+
+List<PairPopMenu> popUpOptions = [
+  PairPopMenu(value: 0, option: "Edit Profile"),
+  PairPopMenu(value: 1, option: "Edit Blogs"),
+];
 
 class ViewProfile extends StatelessWidget {
   const ViewProfile({super.key});
@@ -18,10 +24,11 @@ class ViewProfile extends StatelessWidget {
       appBar: CurvedAppBar(
         title: "Profile",
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.edit,
+          Padding(
+            padding: EdgeInsets.only(right: 15),
+            child: PopUpMenuWidget(
+              options: popUpOptions,
+              onSelect: ({required int value}) {},
             ),
           ),
         ],
