@@ -10,11 +10,12 @@ class MyBottomSheet extends StatefulWidget {
   final double minHeight;
   final List<InterestClip> interests;
   final List<LinkClip> links;
-  const MyBottomSheet(
-      {super.key,
-      required this.minHeight,
-      required this.interests,
-      required this.links});
+  const MyBottomSheet({
+    super.key,
+    required this.minHeight,
+    required this.interests,
+    required this.links,
+  });
   @override
   _MyBottomSheetState createState() => _MyBottomSheetState();
 }

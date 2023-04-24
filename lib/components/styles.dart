@@ -8,6 +8,14 @@ const TextStyle titleTextStyle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
+TextStyle titleBlueFontStyle() {
+  return TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: kPrimaryDarkColor,
+  );
+}
+
 const TextStyle sideMenuTileStyle = TextStyle(
   fontWeight: FontWeight.bold,
   color: Colors.white,

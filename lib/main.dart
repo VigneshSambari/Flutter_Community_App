@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_const_constructors, unused_import, unnecessary_import
+// ignore_for_file: prefer_const_constructors, unused_import, unnecessary_import, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 import 'package:sessions/bloc/profile/profile_bloc.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/repositories/blog_repository.dart';
@@ -31,7 +32,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:sessions/utils/navigations.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'bloc/message/message_bloc.dart';
 import 'bloc/room/room_bloc.dart';
 import 'bloc/user/user_bloc.dart';
@@ -134,6 +135,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             primarySwatch: kPrimarySwatch,
             scaffoldBackgroundColor: Colors.white,
           ),
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            MonthYearPickerLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('en', 'US'),
+          ],
           //home: ChatScreen(),
           home: BlocBuilder<UserBloc, UserState>(
             builder: (context, state) {

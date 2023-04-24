@@ -88,7 +88,7 @@ class _CenterBodyState extends State<CenterBody> {
                 children: [
                   Text(
                     "Login ",
-                    style: titleTextStyle,
+                    style: titleBlueFontStyle(),
                   ),
                   SizedBox(
                     height: widget.size.height * 0.02,

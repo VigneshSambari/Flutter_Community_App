@@ -12,6 +12,7 @@ import 'package:sessions/constants.dart';
 import 'package:sessions/screens/blogScreens/blog_screen.dart';
 import 'package:sessions/screens/chatScreens/chat_entry.dart';
 import 'package:sessions/screens/profile/view_profile.dart';
+import 'package:sessions/screens/sessions/session_screen.dart';
 import 'package:sessions/socket/socket_client.dart';
 import 'package:sessions/utils/rive_utils.dart';
 
@@ -50,7 +51,7 @@ class _EntryPointState extends State<EntryPoint>
         width: MediaQuery.of(context).size.width,
         color: Colors.white,
         alignment: Alignment.center,
-        child: Text("Screen 3"),
+        child: SessionsScreen(),
       );
     } else if (val == 3) {
       currentScreen = ViewProfile();

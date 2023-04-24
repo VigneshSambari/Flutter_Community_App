@@ -143,3 +143,7 @@ String formatDate({required DateTime date}) {
 String formatTime({required DateTime time}) {
   return DateFormat('h:mm a').format(time);
 }
+
+String formatDay({required DateTime day}) {
+  return DateFormat('EEEE').format(day);
+}

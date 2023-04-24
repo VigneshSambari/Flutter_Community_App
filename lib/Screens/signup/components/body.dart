@@ -82,7 +82,7 @@ class _CenterBodyState extends State<CenterBody> {
                   children: [
                     Text(
                       "Signup",
-                      style: titleTextStyle,
+                      style: titleBlueFontStyle(),
                     ),
                     SizedBox(
                       height: size.height * 0.01,
