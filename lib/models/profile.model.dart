@@ -15,6 +15,7 @@ class ProfileModel {
   final MediaLink? coverPic;
   final bool? online;
   final DateTime? lastseen;
+  final List<IdObject>? sessions;
   final List<IdObject>? connections;
   final List<IdObject>? connectionRequests;
   final List<IdObject>? requestsSent;
@@ -24,28 +25,27 @@ class ProfileModel {
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
-  ProfileModel(
-    this._id, {
-    this.userId,
-    this.name,
-    this.userName,
-    this.rooms,
-    this.college,
-    this.specialization,
-    this.designation,
-    this.profilePic,
-    this.coverPic,
-    this.online,
-    this.lastseen,
-    this.connections,
-    this.connectionRequests,
-    this.requestsSent,
-    this.interests,
-    this.blogs,
-    this.links,
-    this.createdAt,
-    this.updatedAt,
-  });
+  ProfileModel(this._id,
+      {this.userId,
+      this.name,
+      this.userName,
+      this.rooms,
+      this.college,
+      this.specialization,
+      this.designation,
+      this.profilePic,
+      this.coverPic,
+      this.online,
+      this.lastseen,
+      this.connections,
+      this.connectionRequests,
+      this.requestsSent,
+      this.interests,
+      this.blogs,
+      this.links,
+      this.createdAt,
+      this.updatedAt,
+      this.sessions});
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -62,6 +62,7 @@ class ProfileModel {
       'online': online,
       'lastseen': lastseen!.toUtc().toIso8601String(),
       'connections': connections!.map((x) => x.toJson()).toList(),
+      'sessions': sessions!.map((x) => x.toJson()).toList(),
       'connectionRequests': connectionRequests!.map((x) => x.toJson()).toList(),
       'requestsSent': requestsSent!.map((x) => x.toJson()).toList(),
       'interests': interests,
@@ -76,7 +77,8 @@ class ProfileModel {
     List<IdObject> newConnections = [],
         newConnectionRequests = [],
         newRequestsSent = [],
-        newBlogs = [];
+        newBlogs = [],
+        newSessions = [];
     List<LinkItem> newLinks = [];
     List<RoomItem> newRooms = [];
     List<String> newInterests = [];
@@ -88,6 +90,9 @@ class ProfileModel {
     }
     for (var item in map['requestsSent']) {
       newRequestsSent.add(IdObject.fromJson(item));
+    }
+    for (var item in map['sessions']) {
+      newSessions.add(IdObject.fromJson(item));
     }
     for (var item in map['blogs']) {
       newBlogs.add(IdObject.fromJson(item));
@@ -123,6 +128,7 @@ class ProfileModel {
           ? DateTime.parse(map['lastseen']).toLocal()
           : null,
       connections: newConnections,
+      sessions: newSessions,
       connectionRequests: newConnectionRequests,
       requestsSent: newRequestsSent,
       interests: newInterests,

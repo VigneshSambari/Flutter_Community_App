@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:sessions/components/appbar.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/utils/navigations.dart';
-import 'package:video_player/video_player.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class PreviewBlog extends StatefulWidget {
@@ -38,7 +37,7 @@ class _PreviewBlogState extends State<PreviewBlog> {
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
         width: size.width,
         height: size.height,
-        child: VideoPlayerCustom(),
+        child: Container(),
         //child: CarousalSlider(),
         // child: Column(
         //   crossAxisAlignment: CrossAxisAlignment.center,
@@ -55,26 +54,26 @@ class _PreviewBlogState extends State<PreviewBlog> {
   }
 }
 
-class VideoPlayerCustom extends StatelessWidget {
-  VideoPlayerCustom({super.key});
+// class VideoPlayerCustom extends StatelessWidget {
+//   VideoPlayerCustom({super.key});
 
-  final videoPlayerController = VideoPlayerController.file(File(
-      '/data/user/0/com.example.sessions/cache/file_picker/Blood.Diamond.2006.720p.BrRip.x264.YIFY.mp4'));
+//   final videoPlayerController = VideoPlayerController.file(File(
+//       '/data/user/0/com.example.sessions/cache/file_picker/Blood.Diamond.2006.720p.BrRip.x264.YIFY.mp4'));
 
-  @override
-  void initState() {
-    videoPlayerController.initialize();
-    videoPlayerController.play();
-  }
+//   @override
+//   void initState() {
+//     videoPlayerController.initialize();
+//     videoPlayerController.play();
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: videoPlayerController.value.aspectRatio,
-      child: VideoPlayer(videoPlayerController),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return AspectRatio(
+//       aspectRatio: videoPlayerController.value.aspectRatio,
+//       child: VideoPlayer(videoPlayerController),
+//     );
+//   }
+// }
 
 final List<Widget> imageSliders = imgList
     .map((item) => Container(
