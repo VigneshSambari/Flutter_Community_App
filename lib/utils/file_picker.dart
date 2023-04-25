@@ -11,6 +11,7 @@ Future<List<File>> pickFilesBlog() async {
   );
   if (result != null) {
     List<File> files = result.paths.map((path) => File(path!)).toList();
+    print(files);
     return files;
   } else {
     return [];

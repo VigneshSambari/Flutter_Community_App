@@ -3,7 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:month_year_picker/month_year_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:socket_io_client/socket_io_client.dart';
+
 import 'package:sessions/bloc/profile/profile_bloc.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/repositories/blog_repository.dart';
@@ -19,20 +25,16 @@ import 'package:sessions/screens/chatScreens/chats_display.dart';
 import 'package:sessions/screens/entryPoint/entry_point.dart';
 import 'package:sessions/screens/home/home_screen.dart';
 import 'package:sessions/screens/login/login_screen.dart';
+import 'package:sessions/screens/profile/bottom_sheet.dart';
 import 'package:sessions/screens/profile/components/profile_details.dart';
 import 'package:sessions/screens/profile/create_profile.dart';
-import 'package:sessions/screens/profile/bottom_sheet.dart';
 import 'package:sessions/screens/profile/view_profile.dart';
 import 'package:sessions/screens/signup/signup_screen.dart';
 import 'package:sessions/screens/welcome/welcome_screen.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sessions/socket/socket_client.dart';
 import 'package:sessions/utils/classes.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:sessions/utils/navigations.dart';
-import 'package:socket_io_client/socket_io_client.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+
 import 'bloc/message/message_bloc.dart';
 import 'bloc/room/room_bloc.dart';
 import 'bloc/user/user_bloc.dart';
@@ -142,27 +144,37 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           supportedLocales: [
             const Locale('en', 'US'),
           ],
-          //home: ChatScreen(),
-          home: BlocBuilder<UserBloc, UserState>(
-            builder: (context, state) {
-              final ProfileBloc profileBloc = context.read<ProfileBloc>();
-              final ProfileState profileState = profileBloc.state;
-              if (profileState is ProfileCreatedState) {
-                return EntryPoint();
-              }
-              if (state is UserSignedInState &&
-                  profileState is ProfileInitialState) {
-                return CreateProfile();
-              }
-
-              if (state is UserSignedUpState) {
-                return Loginscreen();
-              }
-              return WelcomeScreen();
-            },
-          ),
+          //home: CreateBlog(),
+          home: AppEntryScreenSort(),
         ),
       ),
+    );
+  }
+}
+
+class AppEntryScreenSort extends StatelessWidget {
+  const AppEntryScreenSort({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<UserBloc, UserState>(
+      builder: (context, state) {
+        final ProfileBloc profileBloc = context.read<ProfileBloc>();
+        final ProfileState profileState = profileBloc.state;
+        if (profileState is ProfileCreatedState) {
+          return EntryPoint();
+        }
+        if (state is UserSignedInState && profileState is ProfileInitialState) {
+          return CreateProfile();
+        }
+
+        if (state is UserSignedUpState) {
+          return Loginscreen();
+        }
+        return WelcomeScreen();
+      },
     );
   }
 }

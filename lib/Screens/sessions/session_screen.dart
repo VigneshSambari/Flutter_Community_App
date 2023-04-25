@@ -1,21 +1,17 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
 import 'package:sessions/components/appbar.dart';
 import 'package:sessions/components/popup_menus.dart';
 import 'package:sessions/constants.dart';
-import 'package:sessions/screens/profile/bottom_sheet.dart';
+
 import 'package:sessions/screens/profile/components/utils.dart';
 import 'package:sessions/screens/sessions/components/date_pickers.dart';
 import 'package:sessions/screens/sessions/create_session.dart';
 import 'package:sessions/screens/sessions/search_sessions.dart';
 import 'package:sessions/utils/classes.dart';
 import 'package:sessions/utils/navigations.dart';
-import 'package:sessions/utils/util_methods.dart';
-import 'package:table_calendar/table_calendar.dart';
-import 'package:month_year_picker/month_year_picker.dart';
 
 List<PairPopMenu> popUpOptions = [
   PairPopMenu(value: 0, option: "Create Session"),
@@ -126,6 +122,7 @@ class _CustomDraggableSheetState extends State<CustomDraggableSheet> {
       initialChildSize: 0.6,
       builder: (BuildContext context, ScrollController scrollController) {
         //print(_currentHeight);
+
         return Container(
           decoration: BoxDecoration(
             color: Colors.white,

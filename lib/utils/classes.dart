@@ -240,3 +240,47 @@ class PairPopMenu {
 
   PairPopMenu({required this.value, required this.option});
 }
+
+class CreateBlogSend {
+  final String title;
+  final String body;
+  final String postedBy;
+  final List<String>? media;
+  final List<MediaLink>? coverMedia;
+
+  CreateBlogSend({
+    required this.title,
+    required this.body,
+    required this.postedBy,
+    this.media,
+    this.coverMedia,
+  });
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'title': title,
+      'body': body,
+      'postedBy': postedBy,
+      'media': media,
+      'coverMedia': coverMedia,
+    };
+  }
+
+  factory CreateBlogSend.fromMap(Map<String, dynamic> map) {
+    List<String> newMedia = [];
+    List<MediaLink> newCoverMedia = [];
+    for (var item in map['media']) {
+      newMedia.add(item);
+    }
+    for (var item in map['coverMedia']) {
+      newCoverMedia.add(MediaLink.fromJson(item));
+    }
+    return CreateBlogSend(
+      title: map['title'] as String,
+      body: map['body'] as String,
+      postedBy: map['postedBy'] as String,
+      media: newMedia,
+      coverMedia: newCoverMedia,
+    );
+  }
+}

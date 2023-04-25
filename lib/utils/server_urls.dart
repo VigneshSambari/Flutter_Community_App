@@ -23,6 +23,8 @@ class BlogUrls {
   static Pair delete = Pair(url: "$blogEndPoint/delete", requestType: true);
   static Pair update = Pair(url: "$blogEndPoint/update", requestType: true);
   static Pair comment = Pair(url: "$blogEndPoint/comment", requestType: true);
+  static Pair mediaUpload =
+      Pair(url: "$blogEndPoint/uploadmedia", requestType: true);
   static Pair deletecommentorreply =
       Pair(url: "$blogEndPoint/deletecommentorreply", requestType: true);
   static Pair addreply = Pair(url: "$blogEndPoint/addreply", requestType: true);

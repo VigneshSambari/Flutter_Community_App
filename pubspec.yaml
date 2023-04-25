@@ -55,6 +55,7 @@ dependencies:
   objectbox: ^2.0.0
   table_calendar: ^3.0.0
   month_year_picker: ^0.2.0+3
+  flutter_localization: ^0.1.10
 
 
 
