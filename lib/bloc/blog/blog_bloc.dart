@@ -16,10 +16,8 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
       emit(BlogLoadingState());
       try {
         final blogs = await _blogRepository.getAllBlogs();
-        print("loaded");
         emit(BlogLoadedState(blogs: blogs));
       } catch (error) {
-        print(error);
         emit(BlogErrorState(error: error.toString()));
       }
     });

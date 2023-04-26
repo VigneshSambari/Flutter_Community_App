@@ -284,3 +284,85 @@ class CreateBlogSend {
     );
   }
 }
+
+class CreateMessageSend {
+  final String sentBy;
+  final String sentTo;
+  final String type;
+  final String content;
+  final String roomId;
+  final String messageId;
+
+  CreateMessageSend({
+    required this.sentBy,
+    required this.sentTo,
+    required this.type,
+    required this.content,
+    required this.roomId,
+    required this.messageId,
+  });
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'sentBy': sentBy,
+      'sentTo': sentTo,
+      'type': type,
+      'content': content,
+      'roomId': roomId,
+      'messageId': messageId,
+    };
+  }
+
+  factory CreateMessageSend.fromJson(Map<String, dynamic> map) {
+    return CreateMessageSend(
+      sentBy: map['sentBy'] as String,
+      sentTo: map['sentTo'] as String,
+      type: map['type'] as String,
+      content: map['content'] as String,
+      roomId: map['roomId'] as String,
+      messageId: map['messageId'] as String,
+    );
+  }
+}
+
+class CreateRoomSend {
+  final String name;
+  final String type;
+  final String description;
+  final String createdBy;
+  final String? media;
+  MediaLink? coverPic;
+
+  CreateRoomSend({
+    required this.name,
+    required this.description,
+    required this.createdBy,
+    required this.type,
+    this.media,
+    this.coverPic,
+  });
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'name': name,
+      'type': type,
+      'description': description,
+      'createdBy': createdBy,
+      'media': media,
+      'coverPic': coverPic?.toJson(),
+    };
+  }
+
+  factory CreateRoomSend.fromJson(Map<String, dynamic> map) {
+    return CreateRoomSend(
+      name: map['name'] as String,
+      type: map['type'] as String,
+      description: map['description'] as String,
+      createdBy: map['createdBy'] as String,
+      media: map['media'] != null ? map['media'] as String : null,
+      coverPic: map['coverPic'] != null
+          ? MediaLink.fromJson(map['coverPic'] as Map<String, dynamic>)
+          : null,
+    );
+  }
+}

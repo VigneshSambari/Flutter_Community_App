@@ -34,45 +34,46 @@ class BlogPostRepository {
   Future<void> creatBlog({required CreateBlogSend httpData}) async {
     Pair urlInfo = BlogUrls.create, mediaUrl = BlogUrls.mediaUpload;
     print("before mesia upload");
+    if (httpData.media!.isNotEmpty) {
+      final request = MultipartRequest('POST', Uri.parse(mediaUrl.url));
+      final List<MultipartFile> files = [];
+      for (String localFile in httpData.media!) {
+        // print(localFile);
+        files.add(await MultipartFile.fromPath(
+          'files',
+          localFile,
+        ));
+      }
+      request.files.addAll(files);
+      request.headers['Content-Type'] = 'application/json';
+      print("1");
+      final jsonPayload = jsonEncode(httpData);
+      print("2");
+      Map<String, dynamic> jsonMap = jsonDecode(jsonPayload);
+      print("3");
+      Map<String, String> stringMap = Map<String, String>.from(
+          jsonMap.map((key, value) => MapEntry(key, value.toString())));
+      print("4");
+      request.fields.addAll(stringMap);
+      print("5");
 
-    final request = MultipartRequest('POST', Uri.parse(mediaUrl.url));
-    final List<MultipartFile> files = [];
-    for (String localFile in httpData.media!) {
-      // print(localFile);
-      files.add(await MultipartFile.fromPath(
-        'files',
-        localFile,
-      ));
-    }
-    request.files.addAll(files);
-    request.headers['Content-Type'] = 'application/json';
-    print("1");
-    final jsonPayload = jsonEncode(httpData);
-    print("2");
-    Map<String, dynamic> jsonMap = jsonDecode(jsonPayload);
-    print("3");
-    Map<String, String> stringMap = Map<String, String>.from(
-        jsonMap.map((key, value) => MapEntry(key, value.toString())));
-    print("4");
-    request.fields.addAll(stringMap);
-    print("5");
+      final response = await request.send();
+      if (response.statusCode != 200) {
+        throw Exception("Error uploading blog media");
+      }
+      print("after mesia upload");
+      var responseString = await response.stream.bytesToString();
+      var decodedResponse = jsonDecode(responseString);
+      print(decodedResponse);
 
-    final response = await request.send();
-    if (response.statusCode != 200) {
-      throw Exception("Error uploading blog media");
-    }
-    print("after mesia upload");
-    var responseString = await response.stream.bytesToString();
-    var decodedResponse = jsonDecode(responseString);
-    print(decodedResponse);
-
-    for (var item in decodedResponse) {
-      httpData.coverMedia!.add(
-        MediaLink(
-          secureUrl: item['secure_url'],
-          publicId: item['public_id'],
-        ),
-      );
+      for (var item in decodedResponse) {
+        httpData.coverMedia!.add(
+          MediaLink(
+            secureUrl: item['secure_url'],
+            publicId: item['public_id'],
+          ),
+        );
+      }
     }
     //print(httpData.toJson());
     print("6");

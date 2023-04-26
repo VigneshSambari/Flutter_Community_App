@@ -5,7 +5,6 @@ import 'package:sessions/utils/classes.dart';
 class RoomModel {
   final String? _id;
   final String? name;
-  final String? groupIcon;
   final String? type;
   final String? description;
   final String? createdBy;
@@ -21,7 +20,6 @@ class RoomModel {
 
   RoomModel(this._id,
       {this.name,
-      this.groupIcon,
       this.type,
       this.description,
       this.createdBy,
@@ -37,7 +35,6 @@ class RoomModel {
     return <String, dynamic>{
       '_id': _id,
       'name': name,
-      'groupIcon': groupIcon,
       'type': type,
       'coverPic': coverPic,
       'description': description,
@@ -68,7 +65,6 @@ class RoomModel {
     return RoomModel(
       map['_id'] != null ? map['_id'] as String : null,
       name: map['name'] != null ? map['name'] as String : null,
-      groupIcon: map['groupIcon'] != null ? map['groupIcon'] as String : null,
       type: map['type'] != null ? map['type'] as String : null,
       description:
           map['description'] != null ? map['description'] as String : null,

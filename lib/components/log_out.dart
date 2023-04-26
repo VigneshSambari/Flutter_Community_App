@@ -24,7 +24,6 @@ class LogOutButton extends StatelessWidget {
         await clearBlocStates(context);
         BlocProvider.of<UserBloc>(context).add(UserIdealEvent());
         BlocProvider.of<ProfileBloc>(context).add(ProfileIdealEvent());
-
         navigatorPushReplacement(context, Loginscreen());
       },
       child: Container(

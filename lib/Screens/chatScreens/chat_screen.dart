@@ -82,7 +82,7 @@ class _ChatScreenState extends State<ChatScreen> {
       if (_isDisposed || !mounted) {
         return;
       }
-      if (messageController.text.isNotEmpty) {
+      if (messageController.text.trim().isNotEmpty) {
         setState(() {
           sendIconShow = true;
         });
@@ -143,8 +143,7 @@ class _ChatScreenState extends State<ChatScreen> {
           if (!mapIdProfile.containsKey(id)) {
             final ProfileModel? profile =
                 await _profileRepository.fetchPublicProfiles(userId: id);
-            print(profile!.toJson());
-            mapIdProfile.putIfAbsent(id, () => profile);
+            mapIdProfile.putIfAbsent(id, () => profile!);
           }
         }
       }
@@ -223,6 +222,14 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  void onSelectFun({required int value}) {}
+  List<PairPopMenu> popUpOptions = [
+    PairPopMenu(value: 0, option: "Clear Chat"),
+    PairPopMenu(value: 1, option: "Leave Room"),
+    PairPopMenu(value: 2, option: "Search Messages"),
+    PairPopMenu(value: 3, option: "Report Room"),
+  ];
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -260,11 +267,15 @@ class _ChatScreenState extends State<ChatScreen> {
                         leading: Wrap(
                           children: [
                             BackButtonNav(),
-                            CircleNetworkPicture(),
+                            CircleNetworkPicture(
+                              url: (widget.roomData.coverPic == null)
+                                  ? ""
+                                  : widget.roomData.coverPic!.secureUrl,
+                            ),
                           ],
                         ),
                         trailing: Icon(
-                          Icons.more_vert_rounded,
+                          Icons.more_vert,
                           color: Colors.white,
                         ),
                       ),
@@ -310,12 +321,25 @@ class _ChatScreenState extends State<ChatScreen> {
                                 } else {
                                   //print(msgUserProfiles[index].userName);
                                   return RoomMessageTile(
-                                    userName: mapIdProfile.containsKey(
-                                            messageList[index].sentBy!)
-                                        ? mapIdProfile[
-                                                messageList[index].sentBy!]!
-                                            .userName!
-                                        : "UserName",
+                                    userName: (mapIdProfile.containsKey(
+                                                messageList[index].sentBy!) &&
+                                            ((index - 1) >= 0) &&
+                                            mapIdProfile.containsKey(
+                                                messageList[index - 1]
+                                                    .sentBy!) &&
+                                            mapIdProfile[messageList[index].sentBy!]!
+                                                    .userName ==
+                                                mapIdProfile[
+                                                        messageList[index - 1]
+                                                            .sentBy!]!
+                                                    .userName)
+                                        ? ""
+                                        : mapIdProfile.containsKey(
+                                                messageList[index].sentBy!)
+                                            ? mapIdProfile[
+                                                    messageList[index].sentBy!]!
+                                                .userName!
+                                            : "UserName",
                                     message: messageList[index].content!,
                                     dateTime: messageList[index].createdAt!,
                                     repliesExist: true,
@@ -482,8 +506,12 @@ class TypeMessageTile extends StatelessWidget {
                   ? GestureDetector(
                       onTap: () async {
                         try {
+                          if (messageController.text.trim().isEmpty) {
+                            return;
+                          }
                           await sendMessageFun(
-                              content: messageController.text, type: "text");
+                              content: messageController.text.trim(),
+                              type: "text");
                           messageController.clear();
                         } catch (error) {}
                       },
@@ -566,13 +594,15 @@ class RoomMessageTile extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  userName,
-                  style: TextStyle(
-                    color: backgroundColor2,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                userName != ""
+                    ? Text(
+                        userName,
+                        style: TextStyle(
+                          color: backgroundColor2,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    : SizedBox(),
                 Wrap(
                   runSpacing: 7,
                   runAlignment: WrapAlignment.spaceBetween,

@@ -2,6 +2,7 @@ enum DropTypes {
   specializationDropDown,
   designationDropDown,
   collegeDropDown,
+  roomTypeDropDown,
 }
 
 enum RoomTypesEnum {
@@ -12,6 +13,7 @@ enum RoomTypesEnum {
   collegeQA,
   collegeNotifications,
   collegeBranch,
+  collegeSales,
   userPublic,
   userPrivate,
   userPlacement,

@@ -9,7 +9,9 @@ import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/screens/chatScreens/components/clips.dart';
 import 'package:sessions/screens/chatScreens/components/rooms_holder.dart';
+import 'package:sessions/screens/chatScreens/create_room.dart';
 import 'package:sessions/utils/classes.dart';
+import 'package:sessions/utils/navigations.dart';
 
 List<EventClip> events = [
   EventClip(),
@@ -33,8 +35,19 @@ List<PairPopMenu> popUpOptions = [
   PairPopMenu(value: 2, option: "View Status"),
 ];
 
-class ChatEntry extends StatelessWidget {
+class ChatEntry extends StatefulWidget {
   const ChatEntry({super.key});
+
+  @override
+  State<ChatEntry> createState() => _ChatEntryState();
+}
+
+class _ChatEntryState extends State<ChatEntry> {
+  void onSelectFun({required int value}) {
+    if (value == 0) {
+      navigatorPush(CreateRoom(), context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +59,7 @@ class ChatEntry extends StatelessWidget {
             padding: EdgeInsets.only(right: 15),
             child: PopUpMenuWidget(
               options: popUpOptions,
-              onSelect: ({required int value}) {},
+              onSelect: onSelectFun,
             ),
           ),
         ],

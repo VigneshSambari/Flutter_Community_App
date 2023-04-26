@@ -1,9 +1,10 @@
-// ignore_for_file: avoid_unnecessary_containers, prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: avoid_unnecessary_containers, prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last
 
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:sessions/components/carousal_slider.dart';
 import 'package:sessions/components/styles.dart';
+import 'package:sessions/components/trays.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/models/blogpost.model.dart';
 import 'package:sessions/screens/chatScreens/components/clips.dart';
@@ -25,10 +26,10 @@ List<EventClip> events = [
 ];
 
 class BlogTile extends StatefulWidget {
-  final BlogPostModel? blog;
+  final BlogPostModel blog;
   const BlogTile({
     super.key,
-    this.blog,
+    required this.blog,
   });
 
   @override
@@ -60,6 +61,7 @@ class _BlogTileState extends State<BlogTile> {
       child: Stack(
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Stack(
                 children: [
@@ -125,7 +127,7 @@ class _BlogTileState extends State<BlogTile> {
                               child: CircleAvatar(
                                 backgroundColor: Colors.transparent,
                                 child: Text(
-                                  "+${(events.length - 1)}",
+                                  "+${widget.blog.coverMedia!.length - 1}",
                                   style: TextStyle(
                                     fontSize: 13,
                                     color: Colors.white,
@@ -141,14 +143,15 @@ class _BlogTileState extends State<BlogTile> {
                 ],
               ),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                child: const Text(
-                  "Username: frwkjefisfo;grsgdgrrzdgzdfvvdjaskzdkjsndkjsjdvvvvvrffzdgzdgz;soef",
-                  style: TextStyle(
-                    color: Colors.black,
-                    //fontWeight: FontWeight.bold,
-                  ),
+                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                child: Wrap(
+                  children: [
+                    Text(
+                      "${widget.blog.postedBy!}  jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjffvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
+                      maxLines: 3,
+                      overflow: TextOverflow.fade,
+                    )
+                  ],
                 ),
               ),
             ],
@@ -174,21 +177,30 @@ class _BlogTileState extends State<BlogTile> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const CircleAvatar(
-                          backgroundColor: Colors.black,
+                        ClipRRect(
+                          child: CircleAvatar(
+                            backgroundColor: kPrimaryLightColor,
+                            radius: 20,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: CircleImageTile(
+                                  groupOrPerson: false, url: ""),
+                            ),
+                          ),
                         ),
                         SizedBox(
                           width: size.width * 0.03,
                         ),
                         Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
                             Text(
-                              "title",
+                              widget.blog.title!,
                               style: blogTitleStyle,
                             ),
                             Text(
-                              "subtitle",
+                              widget.blog.postedBy!,
                               style: blogSubtitleStyle,
                             )
                           ],

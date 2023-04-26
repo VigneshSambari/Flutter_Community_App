@@ -35,7 +35,7 @@ class _CreateBlogState extends State<CreateBlog> {
   TextEditingController bodyController = TextEditingController();
   final List<File> selectedFiles = [];
   bool _isLoading = false, _isDisposed = false;
-  BlogPostRepository _blogPostRepository = BlogPostRepository();
+  final BlogPostRepository _blogPostRepository = BlogPostRepository();
 
   void removeSelected(index) {
     selectedFiles.removeAt(index);

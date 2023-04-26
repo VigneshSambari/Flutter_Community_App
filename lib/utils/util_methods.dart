@@ -116,6 +116,8 @@ String getRoomTitles({required RoomTypesEnum type}) {
     return "Clg Notifications Channels";
   } else if (type == RoomTypesEnum.collegePlacement) {
     return "Clg Placements Channels";
+  } else if (type == RoomTypesEnum.collegeSales) {
+    return "Clg Sales Channels";
   } else if (type == RoomTypesEnum.collegePrivate) {
     return "Clg Private Channels";
   } else if (type == RoomTypesEnum.collegePublic) {
@@ -132,6 +134,35 @@ String getRoomTitles({required RoomTypesEnum type}) {
     return "Project Channels";
   } else if (type == RoomTypesEnum.userPublic) {
     return "Public Channels";
+  }
+  return "userPublic";
+}
+
+String roomTypeDropDown({required RoomTypesEnum type}) {
+  if (type == RoomTypesEnum.collegeClub) {
+    return "College Club";
+  } else if (type == RoomTypesEnum.collegeBranch) {
+    return "College Branch";
+  } else if (type == RoomTypesEnum.collegeNotifications) {
+    return "College Notification";
+  } else if (type == RoomTypesEnum.collegePlacement) {
+    return "College Placement";
+  } else if (type == RoomTypesEnum.collegeSales) {
+    return "College Sale";
+  } else if (type == RoomTypesEnum.collegePrivate) {
+    return "College Private";
+  } else if (type == RoomTypesEnum.collegePublic) {
+    return "College Public";
+  } else if (type == RoomTypesEnum.collegeQA) {
+    return "Collge Q&A";
+  } else if (type == RoomTypesEnum.userPlacement) {
+    return "Placement";
+  } else if (type == RoomTypesEnum.userPrivate) {
+    return "Private";
+  } else if (type == RoomTypesEnum.userProject) {
+    return "Project";
+  } else if (type == RoomTypesEnum.userPublic) {
+    return "Public";
   }
   return "userPublic";
 }

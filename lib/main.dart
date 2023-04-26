@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:month_year_picker/month_year_picker.dart';
@@ -76,6 +77,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  Widget currentScreen = WelcomeScreen();
   @override
   void initState() {
     super.initState();
@@ -145,8 +147,20 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           supportedLocales: [
             const Locale('en', 'US'),
           ],
-          //home: CreateBlog(),
-          home: ScreenChanger(),
+          home: Builder(builder: (BuildContext context) {
+            ProfileState profileState =
+                BlocProvider.of<ProfileBloc>(context).state;
+            UserState userState = BlocProvider.of<UserBloc>(context).state;
+            if (profileState is ProfileCreatedState) {
+              currentScreen = EntryPoint();
+            } else if (userState is UserSignedInState) {
+              currentScreen = CreateProfile();
+            } else if (userState is UserSignedUpState) {
+              currentScreen = Loginscreen();
+            }
+
+            return currentScreen;
+          }),
         ),
       ),
     );
@@ -224,7 +238,6 @@ class _ScreenChangerState extends State<ScreenChanger> {
         BlocListener<UserBloc, UserState>(
           listener: (context, state) {
             if (state is UserInitialState) {
-              print("initial state");
               currenScreen = WelcomeScreen();
               setState(() {
                 currenScreen;

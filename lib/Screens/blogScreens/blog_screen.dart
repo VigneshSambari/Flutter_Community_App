@@ -11,18 +11,6 @@ import 'package:sessions/screens/blogScreens/createblog_screen.dart';
 import 'package:sessions/utils/classes.dart';
 import 'package:sessions/utils/navigations.dart';
 
-List<Widget> widgets = [
-  BlogTile(),
-  BlogTile(),
-  BlogTile(),
-  BlogTile(),
-  BlogTile(),
-  BlogTile(),
-  BlogTile(),
-  BlogTile(),
-  BlogTile()
-];
-
 List<PairPopMenu> popUpOptions = [
   PairPopMenu(value: 0, option: "Create Blog"),
   PairPopMenu(value: 1, option: "College Blogs"),
@@ -89,10 +77,12 @@ class _BlogScreenState extends State<BlogScreen> {
                         //return LoadingIndicator();
                         return ListView.builder(
                           scrollDirection: Axis.vertical,
-                          itemCount: widgets.length + 1,
+                          itemCount: state.blogs.length + 1,
                           itemBuilder: (BuildContext context, int index) {
-                            if (index != widgets.length) {
-                              return BlogTile();
+                            if (index != state.blogs.length) {
+                              return BlogTile(
+                                blog: state.blogs[index],
+                              );
                             } else {
                               return SizedBox(
                                 height: 100,

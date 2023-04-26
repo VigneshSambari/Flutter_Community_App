@@ -9,6 +9,50 @@ import 'package:sessions/utils/server_urls.dart';
 import 'package:sessions/utils/util_methods.dart';
 
 class RoomRepository {
+  Future<void> creatRoom({required CreateRoomSend httpData}) async {
+    Pair urlInfo = RoomUrls.create, mediaUrl = MediaUploadUrls.uploadMedia;
+
+    if (httpData.media!.isNotEmpty) {
+      final request = MultipartRequest('POST', Uri.parse(mediaUrl.url));
+      final List<MultipartFile> files = [];
+
+      files.add(await MultipartFile.fromPath(
+        'files',
+        httpData.media!,
+      ));
+
+      request.files.addAll(files);
+      request.headers['Content-Type'] = 'application/json';
+      final jsonPayload = jsonEncode(httpData);
+      Map<String, dynamic> jsonMap = jsonDecode(jsonPayload);
+      Map<String, String> stringMap = Map<String, String>.from(
+          jsonMap.map((key, value) => MapEntry(key, value.toString())));
+      request.fields.addAll(stringMap);
+
+      final response = await request.send();
+      if (response.statusCode != 200) {
+        throw Exception("Error uploading room coverpic!");
+      }
+      var responseString = await response.stream.bytesToString();
+      var decodedResponse = jsonDecode(responseString);
+      decodedResponse = decodedResponse[0];
+      httpData.coverPic = MediaLink(
+        secureUrl: decodedResponse['secure_url'],
+        publicId: decodedResponse['public_id'],
+      );
+    }
+
+    Response responseData =
+        await httpRequestMethod(urlInfo: urlInfo, body: httpData);
+    final body = jsonDecode(responseData.body);
+
+    if (responseData.statusCode == 200) {
+      return;
+    } else {
+      throw Exception(body['_message']);
+    }
+  }
+
   Future<List<RoomModel>> getAllRooms() async {
     Pair urlInfo = RoomUrls.getAllRooms;
 
@@ -83,45 +127,5 @@ class RoomRepository {
     } else {
       throw Exception(body['_message']);
     }
-  }
-}
-
-class CreateMessageSend {
-  final String sentBy;
-  final String sentTo;
-  final String type;
-  final String content;
-  final String roomId;
-  final String messageId;
-
-  CreateMessageSend({
-    required this.sentBy,
-    required this.sentTo,
-    required this.type,
-    required this.content,
-    required this.roomId,
-    required this.messageId,
-  });
-
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      'sentBy': sentBy,
-      'sentTo': sentTo,
-      'type': type,
-      'content': content,
-      'roomId': roomId,
-      'messageId': messageId,
-    };
-  }
-
-  factory CreateMessageSend.fromJson(Map<String, dynamic> map) {
-    return CreateMessageSend(
-      sentBy: map['sentBy'] as String,
-      sentTo: map['sentTo'] as String,
-      type: map['type'] as String,
-      content: map['content'] as String,
-      roomId: map['roomId'] as String,
-      messageId: map['messageId'] as String,
-    );
   }
 }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:sessions/components/trays.dart';
 import 'package:sessions/constants.dart';
+import 'package:sessions/screens/chatScreens/components/tiles.dart';
 
 class CircleNetworkPicture extends StatelessWidget {
-  const CircleNetworkPicture({super.key, this.url = ""});
+  const CircleNetworkPicture({super.key, this.url});
 
-  final String url;
+  final String? url;
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +21,7 @@ class CircleNetworkPicture extends StatelessWidget {
         backgroundColor: kPrimaryLightColor,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(25),
-          child: Image.asset(
-            "assets/global/user.png",
-            fit: BoxFit.cover,
-          ),
+          child: CircleImageTile(url: url),
         ),
       ),
     );

@@ -19,6 +19,10 @@ class RoomHolder extends StatefulWidget {
 class _RoomHolderState extends State<RoomHolder> {
   late final List<RoomModel> rooms;
 
+  void pushRoomfun({required RoomTypesEnum roomType}) {
+    navigatorPush(ChatsDisplay(roomType: roomType), context);
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -37,43 +41,92 @@ class _RoomHolderState extends State<RoomHolder> {
           ExpandableWidget(
             children: [
               RoomClip(
-                  title: "Clubs",
-                  assetUrl: Assets.assetsChatEntryClubs,
-                  onPressed: () {
-                    navigatorPush(
-                        ChatsDisplay(roomType: RoomTypesEnum.collegeClub),
-                        context);
-                  }),
+                title: "Clubs",
+                assetUrl: Assets.assetsChatEntryClubs,
+                onPressed: pushRoomfun,
+                roomType: RoomTypesEnum.collegeClub,
+              ),
               RoomClip(
-                  title: "Placements",
-                  assetUrl: Assets.assetsChatEntryPlacement),
-              RoomClip(title: "Q&A", assetUrl: Assets.assetsChatEntryQuesans),
-              RoomClip(title: "Sales", assetUrl: Assets.assetsChatEntrySales),
+                title: "Placements",
+                assetUrl: Assets.assetsChatEntryPlacement,
+                onPressed: pushRoomfun,
+                roomType: RoomTypesEnum.collegePlacement,
+              ),
               RoomClip(
-                  title: "Notifications",
-                  assetUrl: Assets.assetsChatEntryNotification),
-              RoomClip(title: "Public", assetUrl: Assets.assetsChatEntryPublic),
+                title: "Q&A",
+                assetUrl: Assets.assetsChatEntryQuesans,
+                onPressed: pushRoomfun,
+                roomType: RoomTypesEnum.collegeQA,
+              ),
               RoomClip(
-                  title: "Private", assetUrl: Assets.assetsChatEntryPrivate),
+                title: "Sales",
+                assetUrl: Assets.assetsChatEntrySales,
+                onPressed: pushRoomfun,
+                roomType: RoomTypesEnum.collegeSales,
+              ),
               RoomClip(
-                  title: "Attendance",
-                  assetUrl: Assets.assetsChatEntryAttendance),
+                title: "Notifications",
+                assetUrl: Assets.assetsChatEntryNotification,
+                onPressed: pushRoomfun,
+                roomType: RoomTypesEnum.collegeNotifications,
+              ),
+              RoomClip(
+                title: "Public",
+                assetUrl: Assets.assetsChatEntryPublic,
+                onPressed: pushRoomfun,
+                roomType: RoomTypesEnum.collegePublic,
+              ),
+              RoomClip(
+                title: "Private",
+                assetUrl: Assets.assetsChatEntryPrivate,
+                onPressed: pushRoomfun,
+                roomType: RoomTypesEnum.collegePrivate,
+              ),
+              RoomClip(
+                title: "Attendance",
+                assetUrl: Assets.assetsChatEntryAttendance,
+              ),
             ],
           ),
           Wrap(
             alignment: WrapAlignment.center,
             children: [
-              RoomClip(title: "Public", assetUrl: Assets.assetsChatEntryPublic),
               RoomClip(
-                  title: "Private", assetUrl: Assets.assetsChatEntryPrivate),
+                title: "Public",
+                assetUrl: Assets.assetsChatEntryPublic,
+                onPressed: pushRoomfun,
+                roomType: RoomTypesEnum.userPublic,
+              ),
               RoomClip(
-                  title: "Placements",
-                  assetUrl: Assets.assetsChatEntryPlacement),
+                title: "Private",
+                assetUrl: Assets.assetsChatEntryPrivate,
+                onPressed: pushRoomfun,
+                roomType: RoomTypesEnum.userPrivate,
+              ),
               RoomClip(
-                  title: "Projects", assetUrl: Assets.assetsChatEntryProjects),
-              RoomClip(title: "Chats", assetUrl: Assets.assetsChatEntryChat),
+                title: "Placements",
+                assetUrl: Assets.assetsChatEntryPlacement,
+                onPressed: pushRoomfun,
+                roomType: RoomTypesEnum.userPlacement,
+              ),
               RoomClip(
-                  title: "Sessions", assetUrl: Assets.assetsChatEntrySessions),
+                title: "Projects",
+                assetUrl: Assets.assetsChatEntryProjects,
+                onPressed: pushRoomfun,
+                roomType: RoomTypesEnum.userProject,
+              ),
+              RoomClip(
+                title: "Chats",
+                assetUrl: Assets.assetsChatEntryChat,
+                onPressed: pushRoomfun,
+                roomType: RoomTypesEnum.userChats,
+              ),
+              RoomClip(
+                title: "Sessions",
+                assetUrl: Assets.assetsChatEntrySessions,
+                onPressed: pushRoomfun,
+                roomType: RoomTypesEnum.userSessions,
+              ),
             ],
           )
         ],

@@ -72,6 +72,14 @@ class ProfileUrls {
   }
 }
 
+class MediaUploadUrls {
+  static String mediaEndPoint = "$httpServerUrl/media";
+  static Pair uploadMedia =
+      Pair(url: "$mediaEndPoint/upload", requestType: true);
+  static Pair deleteMedia =
+      Pair(url: "$mediaEndPoint/delete", requestType: true);
+}
+
 class RoomUrls {
   static String roomEndPoint = "$httpServerUrl/room";
   static Pair getAllRooms = Pair(url: "$roomEndPoint", requestType: false);

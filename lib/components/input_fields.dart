@@ -96,6 +96,7 @@ class RoundedInputField extends StatelessWidget {
     this.height = 0,
     this.enabled = true,
     this.controller,
+    this.maxLength,
   });
 
   final TextEditingController? controller;
@@ -104,11 +105,13 @@ class RoundedInputField extends StatelessWidget {
   final double height;
   final IconData iconData;
   final bool extensible, enabled;
+  final int? maxLength;
 
   @override
   Widget build(BuildContext context) {
     return TextFieldContainer(
       widget: TextField(
+        maxLength: maxLength,
         enabled: enabled,
         controller: controller,
         maxLines: extensible ? 10 : 2,
@@ -146,7 +149,7 @@ class TextFieldContainer extends StatelessWidget {
       //height: height == 0 ? null : height,
       width: size.width,
       margin: EdgeInsets.symmetric(
-        vertical: 10,
+        vertical: 5,
       ),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       decoration: BoxDecoration(
@@ -159,26 +162,34 @@ class TextFieldContainer extends StatelessWidget {
 }
 
 class SizedInputField extends StatelessWidget {
-  const SizedInputField(
-      {super.key,
-      this.enabled = true,
-      required this.fieldName,
-      this.height = 60,
-      this.controller});
+  const SizedInputField({
+    super.key,
+    this.enabled = true,
+    required this.fieldName,
+    this.height = 60,
+    this.controller,
+    this.icon,
+    this.extensible = false,
+    this.maxLength,
+  });
 
   final TextEditingController? controller;
   final String fieldName;
   final bool enabled;
   final double height;
+  final IconData? icon;
+  final bool extensible;
+  final int? maxLength;
   @override
   Widget build(BuildContext context) {
     return RoundedInputField(
       fieldName: fieldName,
-      iconData: Icons.abc,
+      iconData: icon != null ? icon! : Icons.abc,
       height: height,
-      extensible: false,
+      extensible: extensible,
       enabled: enabled,
       controller: controller,
+      maxLength: maxLength,
     );
   }
 }

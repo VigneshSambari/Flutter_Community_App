@@ -79,13 +79,14 @@ class _CreateProfileState extends State<CreateProfile> {
   }
 
   ProfileInputVariables inputVariables = ProfileInputVariables(
-      firstName: "",
-      lastName: "",
-      profilePic: "",
-      userName: "",
-      coverPhoto: "",
-      designation: "",
-      specialization: "");
+    firstName: "",
+    lastName: "",
+    profilePic: "",
+    userName: "",
+    coverPhoto: "",
+    designation: "",
+    specialization: "",
+  );
 
   ProfileInputControllers inputControllers = ProfileInputControllers();
   String collegeValue = "", specializationValue = "", designationValue = "";
@@ -115,7 +116,10 @@ class _CreateProfileState extends State<CreateProfile> {
   //   if (jsonData != null) {}
   // }
 
-  void setDropDownValue({required String value, required DropTypes dropType}) {
+  void setDropDownValue({required String? value, required DropTypes dropType}) {
+    if (value == null) {
+      return;
+    }
     if (dropType == DropTypes.collegeDropDown) {
       collegeValue = value;
     } else if (dropType == DropTypes.designationDropDown) {
@@ -152,7 +156,7 @@ class _CreateProfileState extends State<CreateProfile> {
           return Scaffold(
             appBar: CurvedAppBar(
               title: "Create Profile",
-              leading: Icon(Icons.arrow_back_ios),
+              leading: BackButtonNav(),
               actions: [],
             ),
             body: Container(
