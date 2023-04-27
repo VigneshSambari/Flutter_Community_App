@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, prefer_final_fields, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
 
@@ -83,10 +83,10 @@ class CustomDraggableSheet extends StatefulWidget {
     required this.minHeight,
   });
   @override
-  _CustomDraggableSheetState createState() => _CustomDraggableSheetState();
+  CustomDraggableSheetState createState() => CustomDraggableSheetState();
 }
 
-class _CustomDraggableSheetState extends State<CustomDraggableSheet> {
+class CustomDraggableSheetState extends State<CustomDraggableSheet> {
   late double _currentHeight;
   DraggableScrollableController controller = DraggableScrollableController();
   double maxHeight = 700;
@@ -153,7 +153,7 @@ class _CustomDraggableSheetState extends State<CustomDraggableSheet> {
                       ),
                       child: BlurDivider(size: size),
                     ),
-                    Container(
+                    SizedBox(
                       height: _currentHeight - 10,
                       child: MyExpansionPanelList(),
                     )
@@ -170,10 +170,10 @@ class _CustomDraggableSheetState extends State<CustomDraggableSheet> {
 
 class MyExpansionPanelList extends StatefulWidget {
   @override
-  _MyExpansionPanelListState createState() => _MyExpansionPanelListState();
+  MyExpansionPanelListState createState() => MyExpansionPanelListState();
 }
 
-class _MyExpansionPanelListState extends State<MyExpansionPanelList> {
+class MyExpansionPanelListState extends State<MyExpansionPanelList> {
   List<Item> _data = generateItems(8);
 
   @override

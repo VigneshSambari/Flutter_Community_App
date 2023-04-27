@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:sessions/bloc/profile/profile_bloc_imports.dart';
 import 'package:sessions/components/appbar.dart';
 import 'package:sessions/components/popup_menus.dart';
-import 'package:sessions/constants.dart';
 import 'package:sessions/screens/profile/bottom_sheet.dart';
-import 'package:sessions/screens/profile/components/profile_image_utils.dart';
 import 'package:sessions/screens/profile/components/tiles.dart';
 import 'package:sessions/screens/profile/components/trays.dart';
 import 'package:sessions/utils/classes.dart';
@@ -14,6 +12,7 @@ import 'package:sessions/utils/classes.dart';
 List<PairPopMenu> popUpOptions = [
   PairPopMenu(value: 0, option: "Edit Profile"),
   PairPopMenu(value: 1, option: "Edit Blogs"),
+  PairPopMenu(value: 2, option: "Refresh"),
 ];
 
 class ViewProfile extends StatelessWidget {

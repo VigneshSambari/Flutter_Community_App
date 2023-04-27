@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, unused_local_variable
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, unused_local_variable, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:sessions/bloc/blog/blog_bloc_imports.dart';
@@ -75,20 +75,38 @@ class _BlogScreenState extends State<BlogScreen> {
                       }
                       if (state is BlogLoadedState) {
                         //return LoadingIndicator();
-                        return ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          itemCount: state.blogs.length + 1,
-                          itemBuilder: (BuildContext context, int index) {
-                            if (index != state.blogs.length) {
-                              return BlogTile(
-                                blog: state.blogs[index],
-                              );
-                            } else {
-                              return SizedBox(
-                                height: 100,
-                              );
-                            }
-                          },
+                        return SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              RefreshIndicator(
+                                onRefresh: () async {
+                                  await Future.delayed(Duration(seconds: 2));
+                                  BlocProvider.of<BlogBloc>(context)
+                                      .add(LoadBlogEvent());
+                                },
+                                child: SizedBox(
+                                  width: size.width,
+                                  height: size.height,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: state.blogs.length + 1,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      if (index != state.blogs.length) {
+                                        return BlogTile(
+                                          blog: state.blogs[index],
+                                        );
+                                      } else {
+                                        return SizedBox(
+                                          height: 100,
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         );
                       }
                       if (state is BlogErrorState) {

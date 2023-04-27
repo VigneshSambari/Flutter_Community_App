@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sessions/components/trays.dart';
 import 'package:sessions/constants.dart';
-import 'package:sessions/screens/chatScreens/components/tiles.dart';
 
 class CircleNetworkPicture extends StatelessWidget {
   const CircleNetworkPicture({super.key, this.url});

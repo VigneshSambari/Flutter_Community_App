@@ -1,7 +1,6 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/utils/util_methods.dart';
@@ -12,10 +11,10 @@ class CustomCalendarWidget extends StatefulWidget {
   final Size size;
 
   @override
-  _CustomCalendarWidgetState createState() => _CustomCalendarWidgetState();
+  CustomCalendarWidgetState createState() => CustomCalendarWidgetState();
 }
 
-class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
+class CustomCalendarWidgetState extends State<CustomCalendarWidget> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
@@ -36,53 +35,51 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: TableCalendar(
-        calendarStyle: CalendarStyle(
-          todayDecoration: BoxDecoration(
-            color: kPrimaryColor.withOpacity(0.65),
-            shape: BoxShape.circle,
-          ),
-          selectedDecoration: BoxDecoration(
-            color: kPrimaryColor,
-            shape: BoxShape.circle,
-          ),
+    return TableCalendar(
+      calendarStyle: CalendarStyle(
+        todayDecoration: BoxDecoration(
+          color: kPrimaryColor.withOpacity(0.65),
+          shape: BoxShape.circle,
         ),
-        firstDay: DateTime.utc(2020, 01, 01),
-        lastDay: DateTime.utc(2100, 12, 31),
-        focusedDay: _focusedDay,
-        calendarFormat: _calendarFormat,
-        selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-        onDaySelected: (selectedDay, focusedDay) {
-          setState(() {
-            _selectedDay = selectedDay;
-            _focusedDay = focusedDay;
-          });
-
-          // Get the selected date and day
-          String selectedDate = formatDate(date: selectedDay);
-          String selectedDayOfWeek = formatDay(day: selectedDay);
-        },
-        onFormatChanged: (format) {
-          setState(() {
-            _calendarFormat = format;
-          });
-        },
-        onPageChanged: (focusedDay) {
+        selectedDecoration: BoxDecoration(
+          color: kPrimaryColor,
+          shape: BoxShape.circle,
+        ),
+      ),
+      firstDay: DateTime.utc(2020, 01, 01),
+      lastDay: DateTime.utc(2100, 12, 31),
+      focusedDay: _focusedDay,
+      calendarFormat: _calendarFormat,
+      selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+      onDaySelected: (selectedDay, focusedDay) {
+        setState(() {
+          _selectedDay = selectedDay;
           _focusedDay = focusedDay;
-        },
-        onHeaderTapped: (date) async {
-          await _showMonthYearPicker(context);
-        },
-        headerStyle: HeaderStyle(
-          titleCentered: true,
-          titleTextStyle: TextStyle(
-            color: kPrimaryDarkColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 15,
-          ),
-          formatButtonVisible: false,
+        });
+
+        // Get the selected date and day
+        String selectedDate = formatDate(date: selectedDay);
+        String selectedDayOfWeek = formatDay(day: selectedDay);
+      },
+      onFormatChanged: (format) {
+        setState(() {
+          _calendarFormat = format;
+        });
+      },
+      onPageChanged: (focusedDay) {
+        _focusedDay = focusedDay;
+      },
+      onHeaderTapped: (date) async {
+        await _showMonthYearPicker(context);
+      },
+      headerStyle: HeaderStyle(
+        titleCentered: true,
+        titleTextStyle: TextStyle(
+          color: kPrimaryDarkColor,
+          fontWeight: FontWeight.bold,
+          fontSize: 15,
         ),
+        formatButtonVisible: false,
       ),
     );
   }
@@ -90,10 +87,10 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
 
 class MonthYearPicker extends StatefulWidget {
   @override
-  _MonthYearPickerState createState() => _MonthYearPickerState();
+  MonthYearPickerState createState() => MonthYearPickerState();
 }
 
-class _MonthYearPickerState extends State<MonthYearPicker> {
+class MonthYearPickerState extends State<MonthYearPicker> {
   late int selectedMonth;
   late int selectedYear;
 
@@ -109,7 +106,7 @@ class _MonthYearPickerState extends State<MonthYearPicker> {
   void _showMonthPicker() {
     showCupertinoModalPopup(
       context: context,
-      builder: (_) => Container(
+      builder: (_) => SizedBox(
         height: 200,
         child: CupertinoDatePicker(
           mode: CupertinoDatePickerMode.date,
@@ -128,7 +125,7 @@ class _MonthYearPickerState extends State<MonthYearPicker> {
   void _showYearPicker() {
     showCupertinoModalPopup(
       context: context,
-      builder: (_) => Container(
+      builder: (_) => SizedBox(
         height: 200,
         child: CupertinoDatePicker(
           mode: CupertinoDatePickerMode.date,

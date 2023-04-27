@@ -209,6 +209,10 @@ class Assets {
   /// assets/riveAssets/pulltorefreshskate.riv
   static const String assetsRiveAssetsPulltorefreshskate = "assets/riveAssets/pulltorefreshskate.riv";
 
+  /// Assets for assetsRiveAssetsRefreshIndicator
+  /// assets/riveAssets/refresh_indicator.riv
+  static const String assetsRiveAssetsRefreshIndicator = "assets/riveAssets/refresh_indicator.riv";
+
   /// Assets for assetsRiveAssetsShapes
   /// assets/riveAssets/shapes.riv
   static const String assetsRiveAssetsShapes = "assets/riveAssets/shapes.riv";

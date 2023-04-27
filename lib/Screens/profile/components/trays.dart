@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables
 
 import 'package:flutter/material.dart';
 import 'package:sessions/constants.dart';
@@ -44,7 +44,7 @@ class PhotoTray extends StatelessWidget {
             bottom: 15,
             child: Row(
               children: [
-                Container(
+                SizedBox(
                   width: size.width * 0.25,
                   height: size.width * 0.25,
                   child: Padding(
@@ -60,7 +60,7 @@ class PhotoTray extends StatelessWidget {
                 SizedBox(
                   width: 0,
                 ),
-                Container(
+                SizedBox(
                   width: size.width,
                   height: size.width * 0.25,
                   child: Stack(

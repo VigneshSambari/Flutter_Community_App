@@ -151,86 +151,92 @@ class _ChatsDisplayState extends State<ChatsDisplay> {
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                       height: size.height,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: rooms.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return GestureDetector(
-                            onTap: () {
-                              navigatorPush(
-                                  ChatScreen(
-                                    roomData: rooms[index],
-                                  ),
-                                  context);
-                            },
-                            child: Dismissible(
-                              key: UniqueKey(),
-                              background: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: 20),
-                                    child:
-                                        Icon(Icons.delete, color: Colors.white),
-                                  ),
-                                ),
-                              ),
-                              secondaryBackground: Container(
-                                decoration: BoxDecoration(
-                                  color: kPrimaryColor,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(right: 20),
-                                    child:
-                                        Icon(Icons.check, color: Colors.white),
-                                  ),
-                                ),
-                              ),
-                              direction: DismissDirection.horizontal,
-                              confirmDismiss: (direction) async {
-                                final bool confirm = await showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: const Text("Confirm"),
-                                      content: const Text(
-                                          "Are you sure you wish to leave this room?"),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.of(context).pop(true),
-                                          child: const Text("LEAVE"),
-                                        ),
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.of(context).pop(false),
-                                          child: const Text("CANCEL"),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                                return confirm;
-                              },
-                              onDismissed: (direction) {
-                                setState(() {
-                                  rooms.removeAt(index);
-                                });
-                              },
-                              child: ChatsTile(
-                                size: size,
-                                roomData: state.rooms[index],
-                              ),
-                            ),
-                          );
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          await Future.delayed(Duration(seconds: 5));
                         },
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: rooms.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return GestureDetector(
+                              onTap: () {
+                                navigatorPush(
+                                    ChatScreen(
+                                      roomData: rooms[index],
+                                    ),
+                                    context);
+                              },
+                              child: Dismissible(
+                                key: UniqueKey(),
+                                background: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(left: 20),
+                                      child: Icon(Icons.delete,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                                secondaryBackground: Container(
+                                  decoration: BoxDecoration(
+                                    color: kPrimaryColor,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(right: 20),
+                                      child: Icon(Icons.check,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                                direction: DismissDirection.horizontal,
+                                confirmDismiss: (direction) async {
+                                  final bool confirm = await showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text("Confirm"),
+                                        content: const Text(
+                                            "Are you sure you wish to leave this room?"),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.of(context).pop(true),
+                                            child: const Text("LEAVE"),
+                                          ),
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.of(context)
+                                                    .pop(false),
+                                            child: const Text("CANCEL"),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                  return confirm;
+                                },
+                                onDismissed: (direction) {
+                                  setState(() {
+                                    rooms.removeAt(index);
+                                  });
+                                },
+                                child: ChatsTile(
+                                  size: size,
+                                  roomData: state.rooms[index],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     )
                   ],
