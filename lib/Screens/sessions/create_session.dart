@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:sessions/components/appbar.dart';
 import 'package:sessions/components/buttons.dart';
 import 'package:sessions/components/drop_downs.dart';
+import 'package:sessions/components/input_fields.dart';
+import 'package:sessions/components/snackbar.dart';
 import 'package:sessions/components/trays.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
+import 'package:sessions/repositories/session_repository.dart';
 import 'package:sessions/utils/enums.dart';
 import 'package:sessions/utils/navigations.dart';
 
@@ -17,8 +20,26 @@ class CreateSession extends StatefulWidget {
   State<CreateSession> createState() => _CreateSessionState();
 }
 
+class SessionInputController {
+  TextEditingController titleController = TextEditingController(),
+      descController = TextEditingController(),
+      amountController = TextEditingController(),
+      startDateController = TextEditingController(),
+      endDateController = TextEditingController(),
+      startTimeController = TextEditingController(),
+      endTimeController = TextEditingController();
+}
+
+class SessionInputVar {
+  String field = "", type = "", repeat = "", coverPic = "";
+  DateTime? startDate, endDate, startTime, endTime;
+}
+
 class _CreateSessionState extends State<CreateSession> {
-  String path = "", field = "";
+  SessionRepository sessionRepository = SessionRepository();
+  SessionInputVar inputVariables = SessionInputVar();
+  SessionInputController sessionController = SessionInputController();
+  String field = "";
   TimeOfDay? startTime, endTime;
   DateTime? startDate, endDate;
   List<String> typeDropDown = [
@@ -49,7 +70,7 @@ class _CreateSessionState extends State<CreateSession> {
 
   void addCoverPhoto(String path) {
     setState(() {
-      this.path = path;
+      inputVariables.coverPic = path;
     });
   }
 
@@ -71,18 +92,20 @@ class _CreateSessionState extends State<CreateSession> {
             children: [
               LandScapePhotoTray(
                 addCoverPhoto: addCoverPhoto,
-                coverPhoto: path,
+                coverPhoto: inputVariables.coverPic,
               ),
               EntryField(
                 hintText: "Enter your title",
                 title: "Title",
                 maxLines: 1,
                 maxLength: 50,
+                controller: sessionController.titleController,
               ),
               EntryField(
                 hintText: "Description of the session",
                 title: "Description",
                 maxLines: 10,
+                controller: sessionController.descController,
               ),
               DropDownWithTitle(
                 typeDropDown: typeDropDown,
@@ -108,16 +131,21 @@ class _CreateSessionState extends State<CreateSession> {
                 hintText: "Pay amount in rupees...",
                 title: "Pay amount",
                 inputType: TextInputType.number,
+                controller: sessionController.amountController,
               ),
               EntryField(
                 hintText: "Start date",
                 title: "Start date",
                 suffix: MyDatePicker(),
+                enabled: false,
+                controller: sessionController.startDateController,
               ),
               EntryField(
                 hintText: "End date",
                 title: "End date",
                 suffix: MyDatePicker(),
+                enabled: false,
+                controller: sessionController.endDateController,
               ),
               Row(
                 children: [
@@ -126,13 +154,17 @@ class _CreateSessionState extends State<CreateSession> {
                       hintText: "Start time",
                       title: "Start time",
                       suffix: TimePickerWidget(),
+                      enabled: false,
+                      controller: sessionController.startTimeController,
                     ),
                   ),
                   Expanded(
                     child: EntryField(
-                      hintText: "Start time",
+                      hintText: "End time",
                       title: "End time",
                       suffix: TimePickerWidget(),
+                      enabled: false,
+                      controller: sessionController.startDateController,
                     ),
                   ),
                 ],
@@ -146,7 +178,9 @@ class _CreateSessionState extends State<CreateSession> {
               RoundedButton(
                   title: "Create",
                   onPress: () {
-                    navigatorPop(context);
+                    try {} catch (error) {
+                      showMySnackBar(context, error.toString());
+                    }
                   }),
             ],
           ),
@@ -267,88 +301,6 @@ class TimePickerWidgetState extends State<TimePickerWidget> {
           });
         }
       },
-    );
-  }
-}
-
-class EntryField extends StatelessWidget {
-  final String? title, hintText;
-  final int? maxLines, maxLength;
-  final TextInputType inputType;
-  final Widget suffix;
-  EntryField({
-    super.key,
-    this.title,
-    this.hintText,
-    this.maxLines = 1,
-    this.maxLength,
-    this.inputType = TextInputType.text,
-    this.suffix = const SizedBox(),
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title!,
-            style: TextStyle(
-              fontSize: 16,
-              color: kPrimaryDarkColor,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          BlueOutlinedInputField(
-            hintText: hintText,
-            maxLength: maxLength,
-            maxLines: maxLines,
-            inputType: inputType,
-            suffix: suffix,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class BlueOutlinedInputField extends StatelessWidget {
-  final String? hintText;
-  final TextInputType inputType;
-  final int? maxLines, maxLength;
-  final Widget suffix;
-  const BlueOutlinedInputField({
-    super.key,
-    this.hintText,
-    this.maxLength,
-    this.maxLines = 1,
-    this.inputType = TextInputType.text,
-    this.suffix = const SizedBox(),
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      keyboardType: inputType,
-      maxLength: maxLength,
-      maxLines: maxLines,
-      minLines: 1,
-      decoration: InputDecoration(
-        suffixIcon: suffix,
-        hintText: hintText,
-        border: OutlineInputBorder(
-          borderSide: BorderSide(
-            width: 1,
-            color: kPrimaryColor,
-          ),
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
     );
   }
 }

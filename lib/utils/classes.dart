@@ -332,15 +332,16 @@ class CreateRoomSend {
   final String createdBy;
   final String? media;
   MediaLink? coverPic;
+  String folderName;
 
-  CreateRoomSend({
-    required this.name,
-    required this.description,
-    required this.createdBy,
-    required this.type,
-    this.media,
-    this.coverPic,
-  });
+  CreateRoomSend(
+      {required this.name,
+      required this.description,
+      required this.createdBy,
+      required this.type,
+      this.media,
+      this.coverPic,
+      this.folderName = "global"});
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -350,11 +351,13 @@ class CreateRoomSend {
       'createdBy': createdBy,
       'media': media,
       'coverPic': coverPic?.toJson(),
+      'folderName': folderName,
     };
   }
 
   factory CreateRoomSend.fromJson(Map<String, dynamic> map) {
     return CreateRoomSend(
+      folderName: map['folderName'] as String,
       name: map['name'] as String,
       type: map['type'] as String,
       description: map['description'] as String,

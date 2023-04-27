@@ -240,3 +240,106 @@ class SearchBar extends StatelessWidget {
         ));
   }
 }
+
+class EntryField extends StatelessWidget {
+  final String? title, hintText;
+  final int? maxLines, maxLength;
+  final TextInputType inputType;
+  final Widget suffix;
+  final bool enabled;
+  final TextEditingController? controller;
+  EntryField({
+    super.key,
+    this.title,
+    this.hintText,
+    this.maxLines = 1,
+    this.maxLength,
+    this.inputType = TextInputType.text,
+    this.suffix = const SizedBox(),
+    this.controller,
+    this.enabled = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title!,
+            style: TextStyle(
+              fontSize: 16,
+              color: kPrimaryDarkColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          BlueOutlinedInputField(
+            hintText: hintText,
+            maxLength: maxLength,
+            maxLines: maxLines,
+            inputType: inputType,
+            suffix: suffix,
+            controller: controller,
+            enabled: enabled,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BlueOutlinedInputField extends StatelessWidget {
+  final String? hintText;
+  final TextInputType inputType;
+  final int? maxLines, maxLength;
+  final Widget suffix;
+  final TextEditingController? controller;
+  final bool enabled;
+  const BlueOutlinedInputField({
+    super.key,
+    this.hintText,
+    this.maxLength,
+    this.maxLines = 1,
+    this.inputType = TextInputType.text,
+    this.suffix = const SizedBox(),
+    this.controller,
+    this.enabled = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        TextField(
+          enabled: enabled,
+          controller: controller,
+          keyboardType: inputType,
+          maxLength: maxLength,
+          maxLines: maxLines,
+          minLines: 1,
+          decoration: InputDecoration(
+            hintText: hintText,
+            border: OutlineInputBorder(
+              borderSide: BorderSide(
+                width: 1,
+                color: kPrimaryColor,
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        ),
+        Positioned(
+          right: 0,
+          top: 0,
+          bottom: 0,
+          child: suffix,
+        )
+      ],
+    );
+  }
+}

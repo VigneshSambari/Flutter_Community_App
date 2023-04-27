@@ -13,6 +13,7 @@ class RoomRepository {
     Pair urlInfo = RoomUrls.create, mediaUrl = MediaUploadUrls.uploadMedia;
 
     if (httpData.media!.isNotEmpty) {
+      httpData.folderName = "room";
       final request = MultipartRequest('POST', Uri.parse(mediaUrl.url));
       final List<MultipartFile> files = [];
 

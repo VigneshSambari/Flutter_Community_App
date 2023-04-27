@@ -113,3 +113,11 @@ class MessageUrls {
   static Pair deleteReply =
       Pair(url: "$messageEndPoint/deletereply", requestType: true);
 }
+
+class SessionUrls {
+  static String sessionEndPoint = "$httpServerUrl/session";
+  static Pair getAll = Pair(url: "$sessionEndPoint/getall", requestType: false);
+  static Pair create = Pair(url: "$sessionEndPoint/create", requestType: true);
+  static Pair exit = Pair(url: "$sessionEndPoint/exit", requestType: true);
+  static Pair update = Pair(url: "$sessionEndPoint/update", requestType: true);
+}
