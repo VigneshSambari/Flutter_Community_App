@@ -1,15 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first;
 
-import 'dart:convert';
-
 import 'package:sessions/utils/classes.dart';
 
-class RoomModel {
+class SessionModel {
   final String? _id;
-  final double? payAmount;
+  final int? payAmount;
   final String? field;
   final List<IdObject>? paidUsers;
-  final IdObject? roomId;
+  final String? roomId;
   final String? createdBy;
   final DateTime? startDate;
   final DateTime? endDate;
@@ -20,7 +18,7 @@ class RoomModel {
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
-  RoomModel(
+  SessionModel(
     this._id, {
     this.payAmount,
     this.field,
@@ -43,7 +41,7 @@ class RoomModel {
       'payAmount': payAmount,
       'field': field,
       'paidUsers': paidUsers!.map((x) => x.toJson()).toList(),
-      'roomId': roomId!.toJson(),
+      'roomId': roomId,
       'createdBy': createdBy,
       'startDate': startDate?.toUtc().toIso8601String(),
       'endDate': endDate?.toUtc().toIso8601String(),
@@ -56,19 +54,17 @@ class RoomModel {
     };
   }
 
-  factory RoomModel.fromJson(Map<String, dynamic> map) {
+  factory SessionModel.fromJson(Map<String, dynamic> map) {
     List<IdObject> newPaidUsers = [];
     for (var item in map['paidUsers']) {
       newPaidUsers.add(IdObject.fromJson(item));
     }
-    return RoomModel(
+    return SessionModel(
       map['_id'] != null ? map['_id'] as String : null,
-      payAmount: map['payAmount'] != null ? map['payAmount'] as double : null,
+      payAmount: map['payAmount'] != null ? map['payAmount'] as int : null,
       field: map['field'] != null ? map['field'] as String : null,
       paidUsers: newPaidUsers,
-      roomId: map['roomId'] != null
-          ? IdObject.fromJson(map['roomId'] as Map<String, dynamic>)
-          : null,
+      roomId: map['roomId'] != null ? map['roomId'] as String : null,
       createdBy: map['createdBy'] != null ? map['createdBy'] as String : null,
       startDate: map['startDate'] != null
           ? DateTime.parse(map['startDate']).toLocal()

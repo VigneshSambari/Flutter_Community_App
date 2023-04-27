@@ -9,7 +9,7 @@ import 'package:sessions/utils/server_urls.dart';
 import 'package:sessions/utils/util_methods.dart';
 
 class RoomRepository {
-  Future<void> creatRoom({required CreateRoomSend httpData}) async {
+  Future<RoomModel> creatRoom({required CreateRoomSend httpData}) async {
     Pair urlInfo = RoomUrls.create, mediaUrl = MediaUploadUrls.uploadMedia;
 
     if (httpData.media!.isNotEmpty) {
@@ -48,7 +48,8 @@ class RoomRepository {
     final body = jsonDecode(responseData.body);
 
     if (responseData.statusCode == 200) {
-      return;
+      RoomModel room = RoomModel.fromJson(body);
+      return room;
     } else {
       throw Exception(body['_message']);
     }

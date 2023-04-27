@@ -4,20 +4,24 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 import 'package:sessions/models/room.model.dart';
+import 'package:sessions/models/session.model.dart';
 import 'package:sessions/utils/classes.dart';
 import 'package:sessions/utils/server_urls.dart';
 import 'package:sessions/utils/util_methods.dart';
 
 class SessionRepository {
-  Future<void> createSession({required CreateSessionSend httpData}) async {
+  Future<SessionModel> createSession(
+      {required CreateSessionSend httpData}) async {
     Pair urlInfo = SessionUrls.create;
-
+    print("1");
     Response responseData =
         await httpRequestMethod(urlInfo: urlInfo, body: httpData);
+    print("2");
     final body = jsonDecode(responseData.body);
-
+    print("3");
     if (responseData.statusCode == 200) {
-      return;
+      SessionModel session = SessionModel.fromJson(body);
+      return session;
     } else {
       throw Exception(body['_message']);
     }
@@ -49,15 +53,15 @@ class CreateSessionSend {
   final String field;
   final DateTime startDate;
   final DateTime endDate;
-  final double payAmount;
+  final int payAmount;
   final String roomId;
   final String createdBy;
   final DateTime startTime;
   final DateTime endTime;
   final String repeat;
 
-  CreateSessionSend(
-    this.field, {
+  CreateSessionSend({
+    required this.field,
     required this.startDate,
     required this.endDate,
     required this.payAmount,
@@ -68,7 +72,7 @@ class CreateSessionSend {
     required this.repeat,
   });
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'field': field,
       'startDate': startDate.toUtc().toIso8601String(),
@@ -82,12 +86,12 @@ class CreateSessionSend {
     };
   }
 
-  factory CreateSessionSend.fromMap(Map<String, dynamic> map) {
+  factory CreateSessionSend.fromJson(Map<String, dynamic> map) {
     return CreateSessionSend(
-      map['field'] as String,
+      field: map['field'] as String,
       startDate: DateTime.parse(map['startDate']).toLocal(),
       endDate: DateTime.parse(map['endDate']).toLocal(),
-      payAmount: map['payAmount'] as double,
+      payAmount: map['payAmount'] as int,
       roomId: map['roomId'] as String,
       createdBy: map['createdBy'] as String,
       startTime: DateTime.parse(map['startTime']).toLocal(),
