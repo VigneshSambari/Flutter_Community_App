@@ -2,10 +2,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:sessions/bloc/blog/blog_bloc_imports.dart';
+import 'package:sessions/bloc/user/user_bloc.dart';
 import 'package:sessions/components/appbar.dart';
 import 'package:sessions/components/popup_menus.dart';
+import 'package:sessions/components/snackbar.dart';
 import 'package:sessions/components/utils.dart';
+import 'package:sessions/models/blogpost.model.dart';
+import 'package:sessions/models/profile.model.dart';
 import 'package:sessions/repositories/blog_repository.dart';
+import 'package:sessions/repositories/profile_repository.dart';
 import 'package:sessions/screens/blogScreens/components/blog_utils.dart';
 import 'package:sessions/screens/blogScreens/createblog_screen.dart';
 import 'package:sessions/utils/classes.dart';
@@ -27,9 +32,98 @@ class BlogScreen extends StatefulWidget {
 }
 
 class _BlogScreenState extends State<BlogScreen> {
+  int pageCounter = 1;
+  List<BlogPostModel> blogList = [];
+  List<String> blogUserIds = [];
+  int blogCount = 0;
+  int limit = 20;
+  String? userId;
+  bool endReached = false;
+  bool _isDisposed = false;
+  bool _isLoading = false, sendLoading = false;
+  late ScrollController _scrollController;
+  String? errorString;
+  Map<String, ProfileModel> mapIdProfile = {};
+  final BlogPostRepository _blogPostRepository = BlogPostRepository();
+  final ProfileRepository _profileRepository = ProfileRepository();
+
+  @override
+  void initState() {
+    final UserState userState = BlocProvider.of<UserBloc>(context).state;
+    if (userState is UserSignedInState) {
+      userId = userState.user.userId!;
+    }
+    fetchData();
+
+    _scrollController = ScrollController();
+
+    super.initState();
+  }
+
+  Future<void> fetchData() async {
+    if (_isDisposed || !mounted) {
+      return;
+    }
+    setState(() {
+      _isLoading = true;
+      // print("on");
+      endReached = true;
+    });
+    try {
+      final List<BlogPostModel> blogsNew =
+          await _blogPostRepository.getPagedBlogs(
+              httpData:
+                  FetchPagedBlogs(limit: limit - blogCount, page: pageCounter));
+      blogCount += blogsNew.length;
+      for (BlogPostModel blog in blogsNew) {
+        blogUserIds.add(blog.postedBy!);
+        String id = blog.postedBy!;
+        final ProfileModel? profile =
+            await _profileRepository.loadProfile(userId: id);
+        if (!mapIdProfile.containsKey(id)) {
+          mapIdProfile[id] = profile!;
+        }
+        blogList.add(blog);
+      }
+    } catch (error) {
+      showMySnackBar(context, error.toString());
+    }
+    if (blogCount == limit) {
+      pageCounter++;
+      blogCount = 0;
+      blogUserIds = [];
+    }
+    if (_isDisposed || !mounted) {
+      return;
+    }
+
+    if (blogCount != 0) {
+      endReached = false;
+    } else {
+      endReached = true;
+    }
+
+    setState(() {
+      _isLoading = false;
+      // print("off");
+      blogList;
+      errorString;
+      blogUserIds;
+    });
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   void popUpMenuFun({required int value}) {
     if (value == 0) {
-      navigatorPush(CreateBlog(), context);
+      navigatorPush(CreateBlog(callback: () {
+        fetchData();
+      }), context);
     }
   }
 
@@ -56,76 +150,42 @@ class _BlogScreenState extends State<BlogScreen> {
             ],
             leading: SizedBox(),
           ),
-          body: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                  ),
-                  width: size.width,
-                  height: size.height,
-                  padding: EdgeInsets.all(2),
-                  child: BlocBuilder<BlogBloc, BlogState>(
-                    builder: (context, state) {
-                      if (state is BlogLoadingState) {
-                        return LoadingIndicator();
-                        //return Center(child: CircularProgressIndicator());
-                      }
-                      if (state is BlogLoadedState) {
-                        //return LoadingIndicator();
-                        return SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              RefreshIndicator(
-                                onRefresh: () async {
-                                  await Future.delayed(Duration(seconds: 2));
-                                  BlocProvider.of<BlogBloc>(context)
-                                      .add(LoadBlogEvent());
-                                },
-                                child: SizedBox(
-                                  width: size.width,
-                                  height: size.height,
-                                  child: ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    itemCount: state.blogs.length + 1,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      if (index != state.blogs.length) {
-                                        return BlogTile(
-                                          blog: state.blogs[index],
-                                        );
-                                      } else {
-                                        return SizedBox(
-                                          height: 100,
-                                        );
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                      if (state is BlogErrorState) {
-                        return Center(
-                            child: Text(
-                          "Error",
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
-                        ));
-                      }
-                      return Center(
-                        child: Text("Default"),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ],
+          body: Container(
+            height: size.height,
+            decoration: BoxDecoration(
+              color: Colors.white,
+            ),
+            padding: EdgeInsets.all(2),
+            child: NotificationListener(
+              onNotification: (ScrollNotification scrollInfo) {
+                if (!_isLoading &&
+                    scrollInfo.metrics.pixels ==
+                        scrollInfo.metrics.maxScrollExtent) {
+                  fetchData();
+                }
+                return true;
+              },
+              child: _isLoading && blogList.isEmpty
+                  ? LoadingIndicator()
+                  : RefreshIndicator(
+                      onRefresh: () async {
+                        Duration(seconds: 2);
+
+                        await fetchData();
+                      },
+                      child: ListView.builder(
+                        controller: _scrollController,
+                        scrollDirection: Axis.vertical,
+                        itemCount: blogList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return BlogTile(
+                            blog: blogList[index],
+                            user: mapIdProfile[blogList[index].postedBy]!,
+                          );
+                        },
+                      ),
+                    ),
+            ),
           ),
         ),
       ),

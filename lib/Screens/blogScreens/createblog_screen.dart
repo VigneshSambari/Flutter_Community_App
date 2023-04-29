@@ -24,7 +24,8 @@ import 'package:sessions/utils/file_picker.dart';
 import 'package:sessions/utils/navigations.dart';
 
 class CreateBlog extends StatefulWidget {
-  const CreateBlog({super.key});
+  final Function callback;
+  const CreateBlog({super.key, required this.callback});
 
   @override
   State<CreateBlog> createState() => _CreateBlogState();
@@ -289,6 +290,7 @@ class _CreateBlogState extends State<CreateBlog> {
                                     _isLoading = false;
                                   });
                                 }
+                                widget.callback();
                                 navigatorPop(context);
                               } catch (error) {
                                 showMySnackBar(context, error.toString());

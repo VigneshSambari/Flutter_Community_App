@@ -72,7 +72,6 @@ class _EntryPointState extends State<EntryPoint>
   void setSocketServer() {
     final UserState userState = BlocProvider.of<UserBloc>(context).state;
     if (userState is UserSignedInState) {
-      print(userState.user.toJson());
       //Initialize socket client
       socketService = SocketService(query: {
         'userid': userState.user.userId,

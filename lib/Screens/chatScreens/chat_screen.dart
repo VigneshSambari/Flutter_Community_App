@@ -1,10 +1,11 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last, sized_box_for_whitespace, avoid_unnecessary_containers, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, library_private_types_in_public_api, no_leading_underscores_for_local_identifiers, prefer_final_fields, unused_field
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last, sized_box_for_whitespace, avoid_unnecessary_containers, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, library_private_types_in_public_api, no_leading_underscores_for_local_identifiers, prefer_final_fields, unused_field, must_be_immutable
 
 import 'package:flutter/material.dart';
 import 'package:sessions/bloc/blog/blog_bloc_imports.dart';
 import 'package:sessions/bloc/user/user_bloc.dart';
 
 import 'package:sessions/components/circle_avatars.dart';
+import 'package:sessions/components/snackbar.dart';
 import 'package:sessions/components/swipers.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
@@ -136,18 +137,21 @@ class _ChatScreenState extends State<ChatScreen> {
       if (currMessageIds.isNotEmpty) {
         final List<MessageModel> messagesNew = await _messageRepository
             .getListedMessages(messageIds: MessageIdList(ids: currMessageIds));
+
         for (MessageModel message in messagesNew) {
-          messageList.add(message);
           msgUserIds.add(message.sentBy!);
           String id = message.sentBy!;
           if (!mapIdProfile.containsKey(id)) {
             final ProfileModel? profile =
-                await _profileRepository.fetchPublicProfiles(userId: id);
+                await _profileRepository.loadProfile(userId: id);
             mapIdProfile.putIfAbsent(id, () => profile!);
           }
+          messageList.add(message);
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      showMySnackBar(context, error.toString());
+    }
     //print(msgUserProfiles.length);
     if (messageIds.length == limit) {
       pageCounter++;
@@ -181,7 +185,9 @@ class _ChatScreenState extends State<ChatScreen> {
       scrollToPositionFun(
         scrollPosition: _scrollController.position.maxScrollExtent + 150,
       );
-    } catch (error) {}
+    } catch (error) {
+      showMySnackBar(context, error.toString());
+    }
   }
 
   Future<void> sendMsgButtonFunction({
@@ -205,7 +211,9 @@ class _ChatScreenState extends State<ChatScreen> {
           type: type!,
         ),
       );
-    } catch (error) {}
+    } catch (error) {
+      showMySnackBar(context, error.toString());
+    }
     if (_isDisposed || !mounted) {
       return;
     }
@@ -513,7 +521,9 @@ class TypeMessageTile extends StatelessWidget {
                               content: messageController.text.trim(),
                               type: "text");
                           messageController.clear();
-                        } catch (error) {}
+                        } catch (error) {
+                          showMySnackBar(context, error.toString());
+                        }
                       },
                       child: CircleAvatar(
                         backgroundColor: kPrimaryColor.withOpacity(0.5),

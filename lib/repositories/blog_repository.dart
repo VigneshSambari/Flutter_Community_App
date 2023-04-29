@@ -31,6 +31,28 @@ class BlogPostRepository {
     }
   }
 
+  Future<List<BlogPostModel>> getPagedBlogs(
+      {required FetchPagedBlogs httpData}) async {
+    Pair urlInfo = BlogUrls.pagedBlogs;
+
+    Response response = await httpRequestMethod(
+      urlInfo: urlInfo,
+      body: httpData,
+    );
+
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      final List result = body;
+
+      return result.map((e) {
+        BlogPostModel newBlog = BlogPostModel.fromJson(e);
+        return newBlog;
+      }).toList();
+    } else {
+      throw Exception(body['_message']);
+    }
+  }
+
   Future<void> creatBlog({required CreateBlogSend httpData}) async {
     Pair urlInfo = BlogUrls.create, mediaUrl = BlogUrls.mediaUpload;
     print("before mesia upload");

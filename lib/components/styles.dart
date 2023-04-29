@@ -24,13 +24,13 @@ const TextStyle sideMenuTileStyle = TextStyle(
 const TextStyle blogTitleStyle = TextStyle(
   fontWeight: FontWeight.bold,
   fontSize: 18,
-  color: Colors.white,
+  color: Colors.black,
 );
 
 const TextStyle blogSubtitleStyle = TextStyle(
   fontWeight: FontWeight.w200,
-  fontSize: 10,
-  color: Colors.white,
+  fontSize: 13,
+  color: Colors.black,
 );
 
 TextStyle popUpMenuItemStyle() {

@@ -1,35 +1,59 @@
 // ignore_for_file: avoid_unnecessary_containers, prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last
 
-import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:mime/mime.dart';
+import 'package:sessions/assets.dart';
 import 'package:sessions/components/carousal_slider.dart';
 import 'package:sessions/components/styles.dart';
 import 'package:sessions/components/trays.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/models/blogpost.model.dart';
-import 'package:sessions/screens/chatScreens/components/clips.dart';
+import 'package:sessions/models/profile.model.dart';
 
-List<EventClip> events = [
-  EventClip(),
-  EventClip(),
-  EventClip(),
-  EventClip(),
-  EventClip(),
-  EventClip(),
-  EventClip(),
-  EventClip(),
-  EventClip(),
-  EventClip(),
-  EventClip(),
-  EventClip(),
-  EventClip(),
-];
+class BlogImageTile extends StatelessWidget {
+  final String url;
+
+  const BlogImageTile({
+    super.key,
+    required this.url,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return url.isEmpty
+        ? Placeholder()
+        : ClipRRect(
+            child: CachedNetworkImage(
+              fit: BoxFit.cover,
+              placeholder: (context, _) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+              imageUrl: url,
+            ),
+          );
+  }
+}
+
+class BlogVideoTile extends StatelessWidget {
+  final String url;
+  const BlogVideoTile({super.key, required this.url});
+
+  @override
+  Widget build(BuildContext context) {
+    return Placeholder();
+  }
+}
 
 class BlogTile extends StatefulWidget {
+  final ProfileModel user;
   final BlogPostModel blog;
   const BlogTile({
     super.key,
     required this.blog,
+    required this.user,
   });
 
   @override
@@ -38,7 +62,37 @@ class BlogTile extends StatefulWidget {
 
 int mediaIndex = 0;
 
+String getFileType(String url) {
+  final mimeType = lookupMimeType(url);
+  if (mimeType == null) {
+    return 'unknown';
+  } else if (mimeType.startsWith('image/')) {
+    return 'image';
+  } else if (mimeType.startsWith('audio/')) {
+    return 'audio';
+  } else if (mimeType.startsWith('video/')) {
+    return 'video';
+  } else {
+    return 'other';
+  }
+}
+
 class _BlogTileState extends State<BlogTile> {
+  List<Widget> media = [];
+
+  @override
+  void initState() {
+    for (var item in widget.blog.coverMedia!) {
+      if (getFileType(item.secureUrl!) == "image") {
+        media.add(BlogImageTile(
+          url: item.secureUrl!,
+        ));
+      }
+    }
+
+    super.initState();
+  }
+
   void pageChange({required int value}) {
     mediaIndex = value;
 
@@ -51,7 +105,6 @@ class _BlogTileState extends State<BlogTile> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      height: 300,
       padding: const EdgeInsets.symmetric(horizontal: 3.5, vertical: 3.5),
       margin: const EdgeInsets.symmetric(horizontal: 2.5, vertical: 5),
       decoration: BoxDecoration(
@@ -63,107 +116,10 @@ class _BlogTileState extends State<BlogTile> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Stack(
-                children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      width: size.width,
-                      height: 220,
-                      decoration: BoxDecoration(
-                        color: Colors.pink,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Stack(
-                        children: [
-                          CarouselSlider(
-                            height: size.height * 0.25,
-                            items: events,
-                            margin: 0,
-                            scroll: false,
-                            pageChange: pageChange,
-                          ),
-                          Positioned(
-                            bottom: 3,
-                            right: 0,
-                            left: 0,
-                            child: Center(
-                              child: Wrap(
-                                children: List.generate(
-                                  events.length,
-                                  (index) => Container(
-                                    width: 7,
-                                    height: 7,
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 2.0),
-                                    decoration: BoxDecoration(
-                                      color: mediaIndex == index
-                                          ? Colors.white
-                                          : Colors.white70,
-                                      shape: BoxShape.circle,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 10,
-                    right: 10,
-                    child: GestureDetector(
-                      onTap: () {},
-                      child: SizedBox(
-                        height: 35,
-                        width: 35,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-                            child: Container(
-                              child: CircleAvatar(
-                                backgroundColor: Colors.transparent,
-                                child: Text(
-                                  "+${widget.blog.coverMedia!.length - 1}",
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                child: Wrap(
-                  children: [
-                    Text(
-                      "${widget.blog.postedBy!}  jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjffvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
-                      maxLines: 3,
-                      overflow: TextOverflow.fade,
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-          Positioned(
-            // height: 50,
-            child: GestureDetector(
-              onTap: () {},
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              GestureDetector(
+                onTap: () {},
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
                   child: Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -184,7 +140,9 @@ class _BlogTileState extends State<BlogTile> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
                               child: CircleImageTile(
-                                  groupOrPerson: false, url: ""),
+                                groupOrPerson: false,
+                                url: widget.user.profilePic!.secureUrl,
+                              ),
                             ),
                           ),
                         ),
@@ -200,17 +158,131 @@ class _BlogTileState extends State<BlogTile> {
                               style: blogTitleStyle,
                             ),
                             Text(
-                              widget.blog.postedBy!,
+                              widget.user.userName!,
                               style: blogSubtitleStyle,
                             )
                           ],
+                        ),
+                        Spacer(),
+                        InkWell(
+                          child: Icon(Icons.more_vert),
+                          onTap: () {},
                         )
                       ],
                     ),
                   ),
                 ),
               ),
-            ),
+              Stack(
+                children: [
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      width: size.width,
+                      height: 220,
+                      decoration: BoxDecoration(
+                        color: kPrimaryLightColor,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(5),
+                            child: Center(
+                              child: media.isEmpty
+                                  ? Image.asset(
+                                      Assets.assetsGlobalNoimageexists,
+                                      fit: BoxFit.cover,
+                                      height: 220,
+                                      width: size.width,
+                                    )
+                                  : CarouselSlider(
+                                      height: size.height * 0.25,
+                                      items: media,
+                                      margin: 0,
+                                      scroll: false,
+                                      widthRatio: 1,
+                                      pageChange: pageChange,
+                                    ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 3,
+                            right: 0,
+                            left: 0,
+                            child: Center(
+                              child: Wrap(
+                                children: List.generate(
+                                  widget.blog.coverMedia!.length,
+                                  (index) => Container(
+                                    width: 7,
+                                    height: 7,
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 2.0),
+                                    decoration: BoxDecoration(
+                                      color: mediaIndex == index
+                                          ? Colors.white
+                                          : Colors.white70,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // Positioned(
+                  //   bottom: 10,
+                  //   right: 10,
+                  //   child: GestureDetector(
+                  //     onTap: () {},
+                  //     child: SizedBox(
+                  //       height: 35,
+                  //       width: 35,
+                  //       child: ClipRRect(
+                  //         borderRadius: BorderRadius.circular(15),
+                  //         child: BackdropFilter(
+                  //           filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+                  //           child: widget.blog.coverMedia!.length <= 1
+                  //               ? SizedBox()
+                  //               : Container(
+                  //                   child: CircleAvatar(
+                  //                     backgroundColor: Colors.transparent,
+                  //                     child: Text(
+                  //                       "+${widget.blog.coverMedia!.length - 1}",
+                  //                       style: TextStyle(
+                  //                         fontSize: 13,
+                  //                         color: Colors.white,
+                  //                       ),
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                ],
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                child: Wrap(
+                  children: [
+                    Text(
+                      "${widget.user.userName!} ",
+                      overflow: TextOverflow.fade,
+                    ),
+                    Text(
+                      "${widget.blog.body}",
+                      overflow: TextOverflow.fade,
+                    )
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),

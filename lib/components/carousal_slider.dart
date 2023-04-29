@@ -9,14 +9,17 @@ class CarouselSlider extends StatefulWidget {
   final double height;
   final double margin;
   final bool scroll;
+  final double widthRatio;
   final Function({required int value})? pageChange;
 
-  CarouselSlider(
-      {required this.items,
-      required this.height,
-      this.margin = 10,
-      this.scroll = true,
-      this.pageChange});
+  CarouselSlider({
+    required this.items,
+    required this.height,
+    this.margin = 10,
+    this.scroll = true,
+    this.pageChange,
+    this.widthRatio = .95,
+  });
 
   @override
   _CarouselSliderState createState() => _CarouselSliderState();
@@ -60,7 +63,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
       alignment: Alignment.center,
       margin: EdgeInsets.all(widget.margin),
       height: widget.height,
-      width: size.width * 0.95,
+      width: size.width * widget.widthRatio,
       child: Center(
         child: GestureDetector(
           onLongPressDown: (details) {

@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart';
 import 'package:sessions/bloc/user/user_bloc.dart';
 import 'package:sessions/components/appbar.dart';
 import 'package:sessions/components/buttons.dart';
@@ -97,7 +96,6 @@ class _CreateSessionState extends State<CreateSession> {
     } else {
       inputVariables.endTime = date;
       sessionController.endDateController.text = formatDate(date: date);
-      print(sessionController.endDateController.text);
       setState(() {
         sessionController.endTimeController;
       });
@@ -298,10 +296,8 @@ class _CreateSessionState extends State<CreateSession> {
                           setState(() {
                             isLoading = false;
                           });
-                          print(session.toJson());
                         }
                       } catch (error) {
-                        print(error);
                         setState(() {
                           isLoading = false;
                         });

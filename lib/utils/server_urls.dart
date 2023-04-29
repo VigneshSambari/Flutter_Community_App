@@ -22,6 +22,8 @@ class BlogUrls {
   static Pair create = Pair(url: "$blogEndPoint/create", requestType: true);
   static Pair delete = Pair(url: "$blogEndPoint/delete", requestType: true);
   static Pair update = Pair(url: "$blogEndPoint/update", requestType: true);
+  static Pair pagedBlogs =
+      Pair(url: "$blogEndPoint/pagedblogs", requestType: true);
   static Pair comment = Pair(url: "$blogEndPoint/comment", requestType: true);
   static Pair mediaUpload =
       Pair(url: "$blogEndPoint/uploadmedia", requestType: true);

@@ -13,12 +13,9 @@ class SessionRepository {
   Future<SessionModel> createSession(
       {required CreateSessionSend httpData}) async {
     Pair urlInfo = SessionUrls.create;
-    print("1");
     Response responseData =
         await httpRequestMethod(urlInfo: urlInfo, body: httpData);
-    print("2");
     final body = jsonDecode(responseData.body);
-    print("3");
     if (responseData.statusCode == 200) {
       SessionModel session = SessionModel.fromJson(body);
       return session;

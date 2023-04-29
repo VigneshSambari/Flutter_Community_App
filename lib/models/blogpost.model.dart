@@ -77,21 +77,21 @@ class Comment {
 class CoverMediaItem {
   String? _id;
   String? type;
-  String? url;
+  String? secureUrl;
   String? publicId;
 
   CoverMediaItem(
     this._id, {
     this.publicId,
     this.type,
-    this.url,
+    this.secureUrl,
   });
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       '_id': _id,
       'type': type,
-      'url': url,
+      'url': secureUrl,
       'publicId': publicId,
     };
   }
@@ -100,7 +100,7 @@ class CoverMediaItem {
     return CoverMediaItem(
       map['_id'] != null ? map['_id'] as String : null,
       type: map['type'] != null ? map['type'] as String : null,
-      url: map['url'] != null ? map['url'] as String : null,
+      secureUrl: map['secureUrl'] != null ? map['secureUrl'] as String : null,
       publicId: map['publicId'] != null ? map['publicId'] as String : null,
     );
   }

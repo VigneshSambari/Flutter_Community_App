@@ -369,3 +369,26 @@ class CreateRoomSend {
     );
   }
 }
+
+class FetchPagedBlogs {
+  final int page;
+  final int limit;
+  FetchPagedBlogs({
+    required this.page,
+    required this.limit,
+  });
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'page': page,
+      'limit': limit,
+    };
+  }
+
+  factory FetchPagedBlogs.fromJson(Map<String, dynamic> map) {
+    return FetchPagedBlogs(
+      page: map['page'] as int,
+      limit: map['limit'] as int,
+    );
+  }
+}

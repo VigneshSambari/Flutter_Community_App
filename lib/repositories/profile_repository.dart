@@ -51,14 +51,14 @@ class ProfileRepository {
     // var stream = response.stream;
     // var subscription = stream.listen((data) {
     //   var decodedData = utf8.decode(data);
-    //   print(decodedData);
+    //print(decodedData);
     // });
     if (response.statusCode != 200) {
       throw Exception("Error uploading profile media");
     }
     var responseString = await response.stream.bytesToString();
     var decodedResponse = jsonDecode(responseString);
-    //print(decodedResponse['uploadedProfilePic']);
+    //(decodedResponse['uploadedProfilePic']);
 
     httpData.profilePic = MediaLink(
         secureUrl: decodedResponse['uploadedProfilePic']['secure_url'],
@@ -66,16 +66,16 @@ class ProfileRepository {
     httpData.coverPic = MediaLink(
         secureUrl: decodedResponse['uploadedCoverPic']['secure_url'],
         publicId: decodedResponse['uploadedCoverPic']['public_id']);
-    // print(httpData.coverPic!.toJson());
-    // print(httpData.profilePic!.toJson());
-    //print(httpData.toJson());
+    //(httpData.coverPic!.toJson());
+    //(httpData.profilePic!.toJson());
+    //(httpData.toJson());
     Response responseData =
         await httpRequestMethod(urlInfo: urlInfo, body: httpData);
     final body = jsonDecode(responseData.body);
 
     if (responseData.statusCode == 200) {
       ProfileModel profile = ProfileModel.fromJson(body);
-
+      // //(profile.toJson());
       return profile;
     } else {
       throw Exception(body['_message']);
@@ -84,18 +84,22 @@ class ProfileRepository {
 
   Future<ProfileModel?> fetchPublicProfiles({required String userId}) async {
     Pair urlInfo = ProfileUrls.fetchPublicProfiles;
-
+    // //("1");
     Response responseData =
         await httpRequestMethod(urlInfo: urlInfo, body: {'userId': userId});
     final body = jsonDecode(responseData.body);
-
+    // //("2");
     if (responseData.statusCode == 200) {
+      // //("3");
       if (body != null) {
+        // //("4");
         ProfileModel profile = ProfileModel.fromJson(body);
+        // //(profile.toJson());
         return profile;
       }
       return null;
     } else {
+      // //("5");
       throw Exception(body['_message']);
     }
   }
