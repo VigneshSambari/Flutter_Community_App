@@ -76,6 +76,25 @@ class RoomRepository {
     }
   }
 
+  Future<List<RoomModel>> getListedRooms({required IdList ids}) async {
+    Pair urlInfo = RoomUrls.fetchListedRooms;
+
+    Response response = await httpRequestMethod(urlInfo: urlInfo, body: ids);
+
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      final List result = body;
+      final res = result.map((e) {
+        RoomModel room = RoomModel.fromJson(e);
+        return room;
+      }).toList();
+
+      return res;
+    } else {
+      throw Exception(body['_message']);
+    }
+  }
+
   Future<List<RoomModel>> getRoomsOfType({required String roomType}) async {
     Pair urlInfo = RoomUrls.getRoomsOfType(type: roomType);
 

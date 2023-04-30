@@ -17,6 +17,7 @@ import 'package:sessions/repositories/room_repository.dart';
 import 'package:sessions/repositories/session_repository.dart';
 import 'package:sessions/utils/classes.dart';
 import 'package:sessions/utils/enums.dart';
+import 'package:sessions/utils/navigations.dart';
 import 'package:sessions/utils/util_methods.dart';
 
 class CreateSession extends StatefulWidget {
@@ -47,8 +48,7 @@ class _CreateSessionState extends State<CreateSession> {
   RoomRepository roomRepository = RoomRepository();
   SessionInputVar inputVariables = SessionInputVar();
   SessionInputController sessionController = SessionInputController();
-  TimeOfDay? startTime, endTime;
-  DateTime? startDate, endDate;
+
   bool isLoading = false;
   List<String> typeDropDown = [
     "Electronics",
@@ -68,6 +68,10 @@ class _CreateSessionState extends State<CreateSession> {
         formatDate(date: DateTime.now());
     sessionController.startTimeController.text =
         formatTime(time: DateTime.now());
+    DateTime now = DateTime.now();
+    DateTime dateOnly = DateTime(now.year, now.month, now.day);
+    inputVariables.startDate = dateOnly;
+    inputVariables.startTime = now;
   }
 
   void setTime({required DateTime time, required bool startEnd}) {
@@ -88,16 +92,16 @@ class _CreateSessionState extends State<CreateSession> {
 
   void setDate({required DateTime date, required bool startEnd}) {
     if (!startEnd) {
-      inputVariables.startTime = date;
+      inputVariables.startDate = date;
       sessionController.startDateController.text = formatDate(date: date);
       setState(() {
         sessionController.startDateController;
       });
     } else {
-      inputVariables.endTime = date;
+      inputVariables.endDate = date;
       sessionController.endDateController.text = formatDate(date: date);
       setState(() {
-        sessionController.endTimeController;
+        sessionController.endDateController;
       });
     }
   }
@@ -256,8 +260,30 @@ class _CreateSessionState extends State<CreateSession> {
                             inputVariables.field.isEmpty ||
                             inputVariables.type.isEmpty ||
                             inputVariables.repeat.isEmpty) {
+                          print(inputVariables.startDate);
                           showMySnackBar(context, "Fill all the field!");
                           return;
+                        }
+                        if (inputVariables.startDate ==
+                            inputVariables.endDate) {
+                          DateTime date1 = inputVariables
+                              .startTime!; // get the first date with time set to 10:30 AM
+                          DateTime date2 = inputVariables
+                              .endTime!; // get the second date with time set to 2:45 PM
+
+                          DateTime time1 = DateTime(
+                              0, 0, 0, date1.hour, date1.minute, date1.second);
+                          DateTime time2 = DateTime(
+                              0, 0, 0, date2.hour, date2.minute, date2.second);
+
+                          int difference =
+                              time1.compareTo(time2); // compare the two times
+
+                          if (difference > 0) {
+                            showMySnackBar(context,
+                                "End time should be greater than start time!");
+                            return;
+                          }
                         }
 
                         setState(() {
@@ -282,14 +308,14 @@ class _CreateSessionState extends State<CreateSession> {
                               await sessionRepository.createSession(
                             httpData: CreateSessionSend(
                               field: inputVariables.field,
-                              startDate: DateTime.now(),
-                              endDate: DateTime.now(),
+                              startDate: inputVariables.startDate!,
+                              endDate: inputVariables.endDate!,
                               payAmount: int.parse(
                                   sessionController.amountController.text),
                               roomId: room.roomId!,
                               createdBy: userId,
-                              startTime: DateTime.now(),
-                              endTime: DateTime.now(),
+                              startTime: inputVariables.startTime!,
+                              endTime: inputVariables.endTime!,
                               repeat: inputVariables.repeat,
                             ),
                           );
@@ -297,6 +323,7 @@ class _CreateSessionState extends State<CreateSession> {
                             isLoading = false;
                           });
                         }
+                        navigatorPop(context);
                       } catch (error) {
                         setState(() {
                           isLoading = false;

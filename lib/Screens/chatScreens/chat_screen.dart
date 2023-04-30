@@ -136,7 +136,7 @@ class _ChatScreenState extends State<ChatScreen> {
       newMsgsLength = currMessageIds.length;
       if (currMessageIds.isNotEmpty) {
         final List<MessageModel> messagesNew = await _messageRepository
-            .getListedMessages(messageIds: MessageIdList(ids: currMessageIds));
+            .getListedMessages(messageIds: IdList(ids: currMessageIds));
 
         for (MessageModel message in messagesNew) {
           msgUserIds.add(message.sentBy!);

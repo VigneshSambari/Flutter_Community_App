@@ -1,14 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:sessions/models/room.model.dart';
 import 'package:sessions/repositories/room_repository.dart';
+import 'package:sessions/utils/classes.dart';
 
 part 'room_event.dart';
 part 'room_state.dart';
 
-class RoomBloc extends HydratedBloc<RoomEvent, RoomState> {
+class RoomBloc extends Bloc<RoomEvent, RoomState> {
   final RoomRepository _roomRepository;
 
   RoomBloc(this._roomRepository) : super(RoomInitialState()) {
@@ -26,21 +27,16 @@ class RoomBloc extends HydratedBloc<RoomEvent, RoomState> {
         emit(RoomErrorState(error: error.toString()));
       }
     });
-  }
+    on<LoadListedRoomsEvent>((event, emit) async {
+      emit(RoomLoadingState());
 
-  @override
-  RoomState? fromJson(Map<String, dynamic> json) {
-    if (json.isNotEmpty) {
-      return RoomLoadedState.fromJson(json);
-    }
-    return null;
-  }
-
-  @override
-  Map<String, dynamic>? toJson(RoomState state) {
-    if (state is RoomLoadedState) {
-      return state.toJson();
-    }
-    return null;
+      try {
+        final List<RoomModel> rooms =
+            await _roomRepository.getListedRooms(ids: event.ids);
+        emit(RoomLoadedState(rooms: rooms));
+      } catch (error) {
+        emit(RoomErrorState(error: error.toString()));
+      }
+    });
   }
 }

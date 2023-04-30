@@ -18,6 +18,8 @@ class SessionModel {
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
+  String get sessionId => _id!;
+
   SessionModel(
     this._id, {
     this.payAmount,

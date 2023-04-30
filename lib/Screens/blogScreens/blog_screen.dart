@@ -142,6 +142,13 @@ class _BlogScreenState extends State<BlogScreen> {
             actions: [
               Padding(
                 padding: EdgeInsets.only(right: 15),
+                child: GestureDetector(
+                  child: Icon(Icons.search),
+                  onTap: () {},
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(right: 15),
                 child: PopUpMenuWidget(
                   options: popUpOptions,
                   onSelect: popUpMenuFun,

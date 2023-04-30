@@ -1,6 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:sessions/bloc/blog/blog_bloc_imports.dart';
+import 'package:sessions/bloc/profile/profile_bloc.dart';
+import 'package:sessions/components/utils.dart';
 
 class GridBlogs extends StatelessWidget {
   GridBlogs({Key? key}) : super(key: key);
@@ -33,32 +37,44 @@ class GridBlogs extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 7),
-      child: GridView.builder(
-        shrinkWrap: true,
-        itemCount: images.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: crossAxisCount,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-        ),
-        itemBuilder: (BuildContext context, int index) {
-          if (index != images.length) {
-            return ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20.0),
-                bottomLeft: Radius.circular(20.0),
+      child: BlocBuilder<ProfileBloc, ProfileState>(
+        builder: (context, state) {
+          if (state is ProfileCreatedState) {
+            if (state.profile.blogs == null) {
+              return Center(
+                child: Text("Blogs donot exist!"),
+              );
+            }
+            return GridView.builder(
+              shrinkWrap: true,
+              itemCount: images.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: crossAxisCount,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
               ),
-              child: Image.network(
-                images[index],
-                fit: BoxFit
-                    .cover, // Set the fit property of the image to cover the entire cell
-              ),
-            );
-          } else {
-            return SizedBox(
-              height: 100,
+              itemBuilder: (BuildContext context, int index) {
+                if (index != images.length) {
+                  return ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        bottomLeft: Radius.circular(20.0),
+                      ),
+                      child: CachedNetworkImage(
+                        fit: BoxFit.cover,
+                        imageUrl: images[index],
+                      ));
+                } else {
+                  return SizedBox(
+                    height: 100,
+                  );
+                }
+              },
             );
           }
+          return LoadingIndicator(
+            circularBlue: true,
+          );
         },
       ),
     );

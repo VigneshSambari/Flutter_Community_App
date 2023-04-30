@@ -10,7 +10,7 @@ import 'package:sessions/utils/util_methods.dart';
 
 class MessageRepository {
   Future<List<MessageModel>> getListedMessages(
-      {required MessageIdList messageIds}) async {
+      {required IdList messageIds}) async {
     Pair urlInfo = MessageUrls.fetchListedMessages;
 
     Response response =
@@ -30,27 +30,5 @@ class MessageRepository {
     } else {
       throw Exception(body['_message']);
     }
-  }
-}
-
-class MessageIdList {
-  final List<IdObject>? ids;
-
-  MessageIdList({required this.ids});
-
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      'ids': ids!.map((x) => x.toJson()).toList(),
-    };
-  }
-
-  factory MessageIdList.fromJson(Map<String, dynamic> map) {
-    final List<IdObject> newIds = [];
-    for (var item in map['ids']) {
-      newIds.add(IdObject.fromJson(item));
-    }
-    return MessageIdList(
-      ids: newIds,
-    );
   }
 }

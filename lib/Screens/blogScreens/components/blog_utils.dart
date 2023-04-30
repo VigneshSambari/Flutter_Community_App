@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_unnecessary_containers, prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:mime/mime.dart';
 import 'package:sessions/assets.dart';
@@ -37,13 +38,102 @@ class BlogImageTile extends StatelessWidget {
   }
 }
 
-class BlogVideoTile extends StatelessWidget {
+class BlogVideoTile extends StatefulWidget {
   final String url;
   const BlogVideoTile({super.key, required this.url});
 
   @override
+  State<BlogVideoTile> createState() => _BlogVideoTileState();
+}
+
+class _BlogVideoTileState extends State<BlogVideoTile> {
+  late CachedVideoPlayerController controller;
+
+  @override
+  void initState() {
+    controller = CachedVideoPlayerController.network(widget.url);
+    controller.initialize().then((value) {
+      controller.play();
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Placeholder();
+    return GestureDetector(
+      onTap: () {
+        controller.pause();
+      },
+      child: Center(
+        child: controller.value.isInitialized
+            ? CachedVideoPlayer(
+                controller,
+              )
+            : const CircularProgressIndicator(),
+      ),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
+
+  // This widget is the home page of your application. It is stateful, meaning
+  // that it has a State object (defined below) that contains fields that affect
+  // how it looks.
+
+  // This class is the configuration for the state. It holds the values (in this
+  // case the title) provided by the parent (in this case the App widget) and
+  // used by the build method of the State. Fields in a Widget subclass are
+  // always marked "final".
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  late CachedVideoPlayerController controller;
+  @override
+  void initState() {
+    controller = CachedVideoPlayerController.network(
+        "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4");
+    controller.initialize().then((value) {
+      controller.play();
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // This method is rerun every time setState is called, for instance as done
+    // by the _incrementCounter method above.
+    //
+    // The Flutter framework has been optimized to make rerunning build methods
+    // fast, so that you can just rebuild anything that needs updating rather
+    // than having to individually change instances of widgets.
+    return Scaffold(
+      appBar: AppBar(
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: Text(widget.title),
+      ),
+      body: Center(
+          child: controller.value.isInitialized
+              ? AspectRatio(
+                  aspectRatio: controller.value.aspectRatio,
+                  child: CachedVideoPlayer(controller))
+              : const CircularProgressIndicator()), // This trailing comma makes auto-formatting nicer for build methods.
+    );
   }
 }
 
@@ -85,6 +175,11 @@ class _BlogTileState extends State<BlogTile> {
     for (var item in widget.blog.coverMedia!) {
       if (getFileType(item.secureUrl!) == "image") {
         media.add(BlogImageTile(
+          url: item.secureUrl!,
+        ));
+      }
+      if (getFileType(item.secureUrl!) == "video") {
+        media.add(BlogVideoTile(
           url: item.secureUrl!,
         ));
       }

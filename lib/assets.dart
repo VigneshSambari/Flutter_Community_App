@@ -89,6 +89,10 @@ class Assets {
   /// assets/global/portrait.jpg
   static const String assetsGlobalPortrait = "assets/global/portrait.jpg";
 
+  /// Assets for assetsGlobalSessions
+  /// assets/global/sessions.png
+  static const String assetsGlobalSessions = "assets/global/sessions.png";
+
   /// Assets for assetsGlobalUser
   /// assets/global/user.png
   static const String assetsGlobalUser = "assets/global/user.png";

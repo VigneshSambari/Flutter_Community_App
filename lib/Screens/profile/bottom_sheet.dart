@@ -27,11 +27,11 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
 
   @override
   void initState() {
-    _currentHeight = widget.minHeight - 65;
+    _currentHeight = widget.minHeight - 60;
 
     controller.addListener(() {
       setState(() {
-        _currentHeight = controller.pixels - 80;
+        _currentHeight = controller.pixels - 5;
       });
     });
 

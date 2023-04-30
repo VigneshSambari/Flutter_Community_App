@@ -64,27 +64,21 @@ class ViewProfileBody extends StatelessWidget {
           }
 
           ///
-          return SingleChildScrollView(
-            child: Column(
+          return Container(
+            // padding: EdgeInsets.symmetric(5),
+            height: size.height,
+            width: size.width,
+            child: Stack(
               children: [
-                Container(
-                  // padding: EdgeInsets.symmetric(5),
-                  height: size.height,
-                  width: size.width,
-                  child: Stack(
-                    children: [
-                      PhotoTray(
-                        coverPhoto: state.profile.coverPic!.secureUrl,
-                        profilePic: state.profile.profilePic!.secureUrl,
-                        userName: "${state.profile.userName}",
-                      ),
-                      MyBottomSheet(
-                        minHeight: size.height * 0.675,
-                        interests: interests,
-                        links: links,
-                      ),
-                    ],
-                  ),
+                PhotoTray(
+                  coverPhoto: state.profile.coverPic!.secureUrl,
+                  profilePic: state.profile.profilePic!.secureUrl,
+                  userName: "${state.profile.userName}",
+                ),
+                MyBottomSheet(
+                  minHeight: size.height * 0.65,
+                  interests: interests,
+                  links: links,
                 ),
               ],
             ),

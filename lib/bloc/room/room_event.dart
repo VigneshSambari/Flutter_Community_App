@@ -19,3 +19,12 @@ class LoadRoomsEvent extends RoomEvent {
   @override
   List<Object?> get props => [];
 }
+
+class LoadListedRoomsEvent extends RoomEvent {
+  final IdList ids;
+
+  LoadListedRoomsEvent({required this.ids});
+
+  @override
+  List<Object?> get props => [];
+}

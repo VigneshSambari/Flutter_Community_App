@@ -3,11 +3,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 import 'package:sessions/constants.dart';
-import 'package:sessions/utils/util_methods.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CustomCalendarWidget extends StatefulWidget {
-  const CustomCalendarWidget({super.key, required this.size});
+  final Function({required DateTime date}) callback;
+  const CustomCalendarWidget(
+      {super.key, required this.size, required this.callback});
   final Size size;
 
   @override
@@ -55,11 +56,8 @@ class CustomCalendarWidgetState extends State<CustomCalendarWidget> {
         setState(() {
           _selectedDay = selectedDay;
           _focusedDay = focusedDay;
+          widget.callback(date: selectedDay);
         });
-
-        // Get the selected date and day
-        String selectedDate = formatDate(date: selectedDay);
-        String selectedDayOfWeek = formatDay(day: selectedDay);
       },
       onFormatChanged: (format) {
         setState(() {
