@@ -37,6 +37,7 @@ import '../../bloc/session/session_bloc.dart';
 List<ExpandItem> expandedStatus = [];
 List<RoomModel> newRooms = [];
 List<SessionModel> newSession = [];
+ProfileModel? globalProfile;
 
 void setExpandedStatus(BuildContext context, DateTime selectedDate) {
   int index = 0;
@@ -93,6 +94,10 @@ class _SessionsScreenState extends State<SessionsScreen> {
   @override
   void initState() {
     currentDate = DateTime.now();
+    ProfileState profileState = BlocProvider.of<ProfileBloc>(context).state;
+    if (profileState is ProfileCreatedState) {
+      globalProfile = profileState.profile;
+    }
     loadProfile();
     super.initState();
   }
@@ -693,7 +698,7 @@ class SwipeVideoSessionInfo extends StatefulWidget {
 }
 
 class _SwipeVideoSessionInfoState extends State<SwipeVideoSessionInfo> {
-  bool _isOpen1 = false;
+  bool _isOpen1 = false, panelOpen = false;
   bool startSession = false, isDisposed = false;
 
   @override
@@ -744,146 +749,176 @@ class _SwipeVideoSessionInfoState extends State<SwipeVideoSessionInfo> {
     //print(calcTime);
     //print(today);
     final int endTimeMillis = calcTime.millisecondsSinceEpoch;
-    return SizedBox(
-      height: size.height * 0.75,
-      width: size.width,
-      child: Stack(
-        children: [
-          GestureDetector(
-            onTap: () {
-              _isOpen1 = true;
+    return Stack(
+      children: [
+        GestureDetector(
+          onTap: () async {
+            _isOpen1 = true;
+            setState(() {
+              _isOpen1;
+            });
+            await Future.delayed(Duration(milliseconds: 200));
+            setState(() {
+              panelOpen = true;
+            });
+          },
+          onVerticalDragUpdate: (details) {
+            if (!_isOpen1 && details.primaryDelta! > 0) {
               setState(() {
-                _isOpen1;
+                _isOpen1 = true;
               });
-            },
-            onVerticalDragUpdate: (details) {
-              if (!_isOpen1 && details.primaryDelta! > 0) {
-                setState(() {
-                  _isOpen1 = true;
-                });
-              }
-            },
-            onVerticalDragEnd: (details) {
-              if (_isOpen1 && details.primaryVelocity! < 0) {
-                setState(() {
-                  _isOpen1 = false;
-                });
-              }
-            },
-            child: Container(
-              height: 5,
-              margin: EdgeInsets.all(1),
-              decoration: BoxDecoration(
-                color: kPrimaryColor.withOpacity(0.6),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              width: size.width,
+            }
+          },
+          onVerticalDragEnd: (details) {
+            if (_isOpen1 && details.primaryVelocity! < 0) {
+              setState(() {
+                _isOpen1 = false;
+              });
+            }
+          },
+          child: Container(
+            height: 5,
+            margin: EdgeInsets.all(1),
+            decoration: BoxDecoration(
+              color: kPrimaryColor.withOpacity(0.6),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            width: size.width,
+          ),
+        ),
+        AnimatedContainer(
+          duration: Duration(milliseconds: 300),
+          height: _isOpen1 ? size.height * 0.225 : 0,
+          width: size.width,
+          decoration: BoxDecoration(
+            color: kPrimaryColor.withOpacity(0.4),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10),
             ),
           ),
-          AnimatedContainer(
-            duration: Duration(milliseconds: 300),
-            height: _isOpen1 ? size.height * 0.2 : 0,
-            width: size.width,
-            decoration: BoxDecoration(
-              color: kPrimaryColor.withOpacity(0.4),
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(10),
-                bottomRight: Radius.circular(10),
+          margin: EdgeInsets.symmetric(horizontal: 2, vertical: 5),
+          child: Stack(
+            children: [
+              !panelOpen
+                  ? SizedBox()
+                  : JoinVideoPanel(
+                      widget: widget, endTimeMillis: endTimeMillis),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: IconButton(
+                  icon: CircleAvatar(
+                    backgroundColor: kPrimaryColor,
+                    child: Icon(
+                      Icons.arrow_drop_up_rounded,
+                      color: Colors.white,
+                    ),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _isOpen1 = false;
+                      panelOpen = false;
+                    });
+                  },
+                ),
               ),
-            ),
-            margin: EdgeInsets.symmetric(horizontal: 2, vertical: 5),
-            child: Stack(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class JoinVideoPanel extends StatelessWidget {
+  const JoinVideoPanel({
+    super.key,
+    required this.widget,
+    required this.endTimeMillis,
+  });
+
+  final SwipeVideoSessionInfo widget;
+  final int endTimeMillis;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(top: 10),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.white,
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    "Upcoming session:",
+                    style: TextStyle(
+                      color: kPrimaryDarkColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  CountdownTimer(
+                    endWidget: Column(
                       children: [
-                        Column(
-                          children: [
-                            Text(
-                              "Upcoming session:",
-                              style: TextStyle(
-                                color: kPrimaryDarkColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                        Text(
+                          "The Session has started!",
+                          style: TextStyle(
+                            color: kPrimaryDarkColor,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            navigatorPush(
+                                VideoCallPage(
+                                  session: widget.session,
+                                  profile: globalProfile!,
+                                ),
+                                context);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(3),
+                            width: MediaQuery.of(context).size.width / 3,
+                            decoration: BoxDecoration(
+                              color: kPrimaryColor,
+                              borderRadius: BorderRadius.circular(12.5),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Join Video",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
                               ),
                             ),
-                            CountdownTimer(
-                              endWidget: Column(
-                                children: [
-                                  Text(
-                                    "The Session has started!",
-                                    style: TextStyle(
-                                      color: kPrimaryDarkColor,
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      navigatorPush(VideoCallPage(), context);
-                                    },
-                                    child: Container(
-                                      padding: EdgeInsets.all(3),
-                                      width:
-                                          MediaQuery.of(context).size.width / 3,
-                                      decoration: BoxDecoration(
-                                        color: kPrimaryColor,
-                                        borderRadius:
-                                            BorderRadius.circular(12.5),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "Join Video",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              endTime: endTimeMillis,
-                              textStyle: TextStyle(
-                                  fontSize: 25, color: kPrimaryDarkColor),
-                              onEnd: () {},
-                            ),
-                          ],
-                        )
+                          ),
+                        ),
                       ],
                     ),
+                    endTime: endTimeMillis,
+                    textStyle:
+                        TextStyle(fontSize: 25, color: kPrimaryDarkColor),
+                    onEnd: () {},
                   ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: IconButton(
-                    icon: CircleAvatar(
-                      backgroundColor: kPrimaryColor,
-                      child: Icon(
-                        Icons.arrow_drop_up_rounded,
-                        color: Colors.white,
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _isOpen1 = false;
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

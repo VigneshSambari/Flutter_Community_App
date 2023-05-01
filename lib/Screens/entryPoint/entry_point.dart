@@ -8,7 +8,9 @@ import 'package:sessions/bloc/room/room_bloc_imports.dart';
 import 'package:sessions/bloc/user/user_bloc.dart';
 import 'package:sessions/components/navbar.dart';
 import 'package:sessions/components/side_menu.dart';
+import 'package:sessions/components/snackbar.dart';
 import 'package:sessions/constants.dart';
+import 'package:sessions/notifications/onesignal/push_notifications.dart';
 import 'package:sessions/screens/blogScreens/blog_screen.dart';
 import 'package:sessions/screens/chatScreens/chat_entry.dart';
 import 'package:sessions/screens/profile/view_profile.dart';
@@ -98,6 +100,14 @@ class _EntryPointState extends State<EntryPoint>
         parent: _animationController, curve: Curves.fastOutSlowIn));
 
     super.initState();
+  }
+
+  void pushNotifications() async {
+    try {
+      //await PushNotifications().sendNotification(["64311af926e4ea69bd38063f"]);
+    } catch (error) {
+      showMySnackBar(context, error.toString());
+    }
   }
 
   @override

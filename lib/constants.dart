@@ -44,3 +44,7 @@ const allowedFileTypesBlog = [
 
 String? get httpServerUrl => dotenv.env['HTTP_SERVER_URL'];
 String? get socketServerUrl => dotenv.env['SOCKET_SERVER_URL'];
+int get zegoCloudAppId => int.parse(dotenv.env['ZEGO_CLOUD_APP_ID']!);
+String? get zegoCloudAppSign => dotenv.env['ZEGO_CLOUD_APP_SIGN'];
+String? get oneSignalAppId => dotenv.env['ONE_SIGNAL_APP_ID'];
+String? get oneSignalRestApiKey => dotenv.env['ONE_SIGNAL_REST_API_KEY'];

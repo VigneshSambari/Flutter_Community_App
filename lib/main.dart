@@ -14,6 +14,7 @@ import 'package:month_year_picker/month_year_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sessions/bloc/session/session_bloc.dart';
 import 'package:sessions/callback.dart';
+import 'package:sessions/notifications/onesignal/push_notifications.dart';
 import 'package:sessions/repositories/session_repository.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -78,9 +79,8 @@ void main() async {
   //Remove this method to stop OneSignal Debugging
   OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
 
-  OneSignal.shared.setAppId("7d3321cf-08aa-4092-af14-22fe6bb81798");
+  OneSignal.shared.setAppId(oneSignalAppId!);
 
-// The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
   OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
     print("Accepted permission: $accepted");
   });
@@ -201,54 +201,80 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           ),
         ],
         child: MaterialApp(
-          navigatorKey: widget.navigatorKey,
-          debugShowCheckedModeBanner: false,
-          title: 'CommunityApp',
-          theme: ThemeData(
-            fontFamily: "Intel",
-            primarySwatch: kPrimarySwatch,
-            scaffoldBackgroundColor: Colors.white,
-          ),
-          localizationsDelegates: [
-            GlobalMaterialLocalizations.delegate,
-            MonthYearPickerLocalizations.delegate,
-          ],
-          supportedLocales: [
-            const Locale('en', 'US'),
-          ],
-          builder: (BuildContext context, Widget? child) {
-            return Stack(
-              children: [
-                child!,
+            navigatorKey: widget.navigatorKey,
+            debugShowCheckedModeBanner: false,
+            title: 'CommunityApp',
+            theme: ThemeData(
+              fontFamily: "Intel",
+              primarySwatch: kPrimarySwatch,
+              scaffoldBackgroundColor: Colors.white,
+            ),
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              MonthYearPickerLocalizations.delegate,
+            ],
+            supportedLocales: [
+              const Locale('en', 'US'),
+            ],
+            builder: (BuildContext context, Widget? child) {
+              return Stack(
+                children: [
+                  child!,
 
-                /// support minimizing
-                ZegoUIKitPrebuiltCallMiniOverlayPage(
-                  contextQuery: () {
-                    return widget.navigatorKey.currentState!.context;
-                  },
-                ),
-              ],
-            );
-          },
-          home: Builder(builder: (BuildContext context) {
-            ProfileState profileState =
-                BlocProvider.of<ProfileBloc>(context).state;
-            UserState userState = BlocProvider.of<UserBloc>(context).state;
-            if (profileState is ProfileCreatedState) {
-              currentScreen = EntryPoint();
-            } else if (userState is UserSignedInState) {
-              currentScreen = CreateProfile();
-            } else if (userState is UserSignedUpState) {
-              currentScreen = Loginscreen();
-            }
+                  /// support minimizing
+                  ZegoUIKitPrebuiltCallMiniOverlayPage(
+                    contextQuery: () {
+                      return widget.navigatorKey.currentState!.context;
+                    },
+                  ),
+                ],
+              );
+            },
+            home: VideoList(
+              videoUrls: urls,
+            )
+            // home: Builder(builder: (BuildContext context) {
+            //   ProfileState profileState =
+            //       BlocProvider.of<ProfileBloc>(context).state;
+            //   UserState userState = BlocProvider.of<UserBloc>(context).state;
+            //   if (profileState is ProfileCreatedState) {
+            //     //set one signal userId
+            //     OneSignal.shared.setExternalUserId(profileState.profile.userId!);
+            //     currentScreen = EntryPoint();
+            //   } else if (userState is UserSignedInState) {
+            //     currentScreen = CreateProfile();
+            //   } else if (userState is UserSignedUpState) {
+            //     currentScreen = Loginscreen();
+            //   }
 
-            return currentScreen;
-          }),
-        ),
+            //   return currentScreen;
+            // }),
+            ),
       ),
     );
   }
 }
+
+List<String> urls = [
+  "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4",
+  "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4"
+      "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4",
+  "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4"
+      "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4",
+  "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4"
+      "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4",
+  "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4"
+      "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4",
+  "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4"
+      "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4",
+  "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4"
+      "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4",
+  "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4"
+      "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4",
+  "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4"
+      "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4",
+  "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4"
+];
 
 class ScreenChanger extends StatefulWidget {
   const ScreenChanger({super.key});
@@ -286,130 +312,67 @@ class _ScreenChangerState extends State<ScreenChanger> {
   }
 }
 
-// class MyApp extends StatefulWidget {
-//   final GlobalKey<NavigatorState> navigatorKey;
+class VideoList extends StatelessWidget {
+  final List<String> videoUrls;
 
-//   const MyApp({
-//     required this.navigatorKey,
-//     Key? key,
-//   }) : super(key: key);
+  const VideoList({Key? key, required this.videoUrls}) : super(key: key);
 
-//   @override
-//   State<StatefulWidget> createState() => MyAppState();
-// }
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: videoUrls.length,
+      itemBuilder: (BuildContext context, int index) {
+        return VideoListItem(
+          url: videoUrls[index],
+        );
+      },
+    );
+  }
+}
 
-// class MyAppState extends State<MyApp> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: HomePage(),
-//       navigatorKey: widget.navigatorKey,
-//       builder: (BuildContext context, Widget? child) {
-//         return Stack(
-//           children: [
-//             child!,
+class VideoListItem extends StatefulWidget {
+  final String url;
 
-//             /// support minimizing
-//             ZegoUIKitPrebuiltCallMiniOverlayPage(
-//               contextQuery: () {
-//                 return widget.navigatorKey.currentState!.context;
-//               },
-//             ),
-//           ],
-//         );
-//       },
-//     );
-//   }
-// }
+  const VideoListItem({Key? key, required this.url}) : super(key: key);
 
-// class HomePage extends StatelessWidget {
-//   /// Users who use the same callID can in the same call.
-//   final callIDTextCtrl = TextEditingController(text: "call_id");
+  @override
+  _VideoListItemState createState() => _VideoListItemState();
+}
 
-//   HomePage({Key? key}) : super(key: key);
+class _VideoListItemState extends State<VideoListItem> {
+  late CachedVideoPlayerController _controller;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Center(
-//         child: Padding(
-//           padding: const EdgeInsets.symmetric(horizontal: 10),
-//           child: Row(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             crossAxisAlignment: CrossAxisAlignment.center,
-//             children: [
-//               Expanded(
-//                 child: TextFormField(
-//                   controller: callIDTextCtrl,
-//                   decoration:
-//                       const InputDecoration(labelText: "join a call by id"),
-//                 ),
-//               ),
-//               ElevatedButton(
-//                 onPressed: () {
-//                   if (ZegoUIKitPrebuiltCallMiniOverlayMachine().isMinimizing) {
-//                     /// when the application is minimized (in a minimized state),
-//                     /// disable button clicks to prevent multiple PrebuiltCall components from being created.
-//                     return;
-//                   }
+  @override
+  void initState() {
+    super.initState();
+    _controller = CachedVideoPlayerController.network(widget.url)
+      ..initialize().then((_) {
+        setState(() {});
+      });
+  }
 
-//                   Navigator.push(
-//                     context,
-//                     MaterialPageRoute(builder: (context) {
-//                       return CallPage(callID: callIDTextCtrl.text);
-//                     }),
-//                   );
-//                 },
-//                 child: const Text("join"),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
-// /// Note that the userID needs to be globally unique,
-// final String localUserID = math.Random().nextInt(10000).toString();
-
-// class CallPage extends StatelessWidget {
-//   final String callID;
-
-//   const CallPage({
-//     Key? key,
-//     required this.callID,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return SafeArea(
-//       child: ZegoUIKitPrebuiltCall(
-//         appID: 986122463 /*input your AppID*/,
-//         appSign:
-//             "9f715aac3a5f82878d2f1b168f21e0309d9300451c792f69ea4b93779dc0c189" /*input your AppSign*/,
-//         userID: localUserID,
-//         userName: "user_$localUserID",
-//         callID: callID,
-//         config: ZegoUIKitPrebuiltCallConfig.groupVideoCall()
-//           ..onOnlySelfInRoom = (context) {
-//             if (PrebuiltCallMiniOverlayPageState.idle !=
-//                 ZegoUIKitPrebuiltCallMiniOverlayMachine().state()) {
-//               /// in minimizing
-//               ZegoUIKitPrebuiltCallMiniOverlayMachine()
-//                   .changeState(PrebuiltCallMiniOverlayPageState.idle);
-//             } else {
-//               Navigator.of(context).pop();
-//             }
-//           }
-
-//           /// support minimizing
-//           ..topMenuBarConfig.isVisible = true
-//           ..topMenuBarConfig.buttons = [
-//             ZegoMenuBarButtonName.minimizingButton,
-//             ZegoMenuBarButtonName.showMemberListButton,
-//           ],
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: _controller.value.isInitialized
+          ? GestureDetector(
+              onTap: () {
+                _controller.value.isPlaying
+                    ? _controller.pause()
+                    : _controller.play();
+              },
+              child: AspectRatio(
+                aspectRatio: _controller.value.aspectRatio,
+                child: CachedVideoPlayer(_controller),
+              ),
+            )
+          : CircularProgressIndicator(),
+    );
+  }
+}
