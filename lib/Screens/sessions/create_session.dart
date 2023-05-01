@@ -1,7 +1,8 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_init_to_null, use_key_in_widget_constructors, prefer_const_constructors_in_immutables
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_init_to_null, use_key_in_widget_constructors, prefer_const_constructors_in_immutables, curly_braces_in_flow_control_structures
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sessions/bloc/profile/profile_bloc.dart';
 import 'package:sessions/bloc/user/user_bloc.dart';
 import 'package:sessions/components/appbar.dart';
 import 'package:sessions/components/buttons.dart';
@@ -264,6 +265,16 @@ class _CreateSessionState extends State<CreateSession> {
                           showMySnackBar(context, "Fill all the field!");
                           return;
                         }
+                        int diff = inputVariables.endDate!
+                            .difference(inputVariables.startDate!)
+                            .inDays;
+
+                        if (diff < 0) {
+                          showMySnackBar(
+                              context, "End date cannot be behind start date");
+                          return;
+                        }
+
                         if (inputVariables.startDate ==
                             inputVariables.endDate) {
                           DateTime date1 = inputVariables
@@ -322,7 +333,10 @@ class _CreateSessionState extends State<CreateSession> {
                           setState(() {
                             isLoading = false;
                           });
+                          BlocProvider.of<ProfileBloc>(context).add(
+                              LoadProfileEvent(userId: userState.user.userId!));
                         }
+
                         navigatorPop(context);
                       } catch (error) {
                         setState(() {

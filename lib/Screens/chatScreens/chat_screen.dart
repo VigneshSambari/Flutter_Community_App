@@ -39,8 +39,8 @@ List<EventClip> events = [
 
 class ChatScreen extends StatefulWidget {
   final RoomModel roomData;
-
-  ChatScreen({super.key, required this.roomData});
+  final Widget? overLayDrap;
+  ChatScreen({super.key, required this.roomData, this.overLayDrap});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -359,7 +359,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             ),
                           ),
                         ),
-                        SwipeDownRow(events: events),
+                        widget.overLayDrap ?? SwipeDownRow(events: events),
                       ],
                     ),
                   ),

@@ -42,6 +42,9 @@ import 'package:sessions/socket/socket_client.dart';
 import 'package:sessions/utils/classes.dart';
 import 'package:sessions/utils/navigations.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
+import 'package:zego_uikit/zego_uikit.dart';
 
 import 'bloc/message/message_bloc.dart';
 import 'bloc/room/room_bloc.dart';
@@ -72,11 +75,57 @@ void main() async {
   //   print(err);
   // }
 
-  runApp(MyApp());
+  //Remove this method to stop OneSignal Debugging
+  OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+
+  OneSignal.shared.setAppId("7d3321cf-08aa-4092-af14-22fe6bb81798");
+
+// The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+  OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
+    print("Accepted permission: $accepted");
+  });
+
+  OneSignal.shared.setNotificationWillShowInForegroundHandler(
+      (OSNotificationReceivedEvent event) {
+    // Will be called whenever a notification is received in foreground
+    // Display Notification, pass null param for not displaying the notification
+    event.complete(event.notification);
+  });
+
+  OneSignal.shared
+      .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
+    // Will be called whenever a notification is opened/button pressed.
+  });
+
+  OneSignal.shared.setPermissionObserver((OSPermissionStateChanges changes) {
+    // Will be called whenever the permission changes
+    // (ie. user taps Allow on the permission prompt in iOS)
+  });
+
+  OneSignal.shared
+      .setSubscriptionObserver((OSSubscriptionStateChanges changes) {
+    // Will be called whenever the subscription changes
+    // (ie. user gets registered with OneSignal and gets a user ID)
+  });
+
+  OneSignal.shared.setEmailSubscriptionObserver(
+      (OSEmailSubscriptionStateChanges emailChanges) {
+    // Will be called whenever then user's email subscription changes
+    // (ie. OneSignal.setEmail(email) is called and the user gets registered
+  });
+
+  //zego cloud
+  final navigatorKey = GlobalKey<NavigatorState>();
+  ZegoUIKit().initLog().then((value) {
+    runApp(MyApp(
+      navigatorKey: navigatorKey,
+    ));
+  });
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final GlobalKey<NavigatorState> navigatorKey;
+  const MyApp({super.key, required this.navigatorKey});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -152,6 +201,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           ),
         ],
         child: MaterialApp(
+          navigatorKey: widget.navigatorKey,
           debugShowCheckedModeBanner: false,
           title: 'CommunityApp',
           theme: ThemeData(
@@ -166,6 +216,20 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           supportedLocales: [
             const Locale('en', 'US'),
           ],
+          builder: (BuildContext context, Widget? child) {
+            return Stack(
+              children: [
+                child!,
+
+                /// support minimizing
+                ZegoUIKitPrebuiltCallMiniOverlayPage(
+                  contextQuery: () {
+                    return widget.navigatorKey.currentState!.context;
+                  },
+                ),
+              ],
+            );
+          },
           home: Builder(builder: (BuildContext context) {
             ProfileState profileState =
                 BlocProvider.of<ProfileBloc>(context).state;
@@ -221,26 +285,6 @@ class _ScreenChangerState extends State<ScreenChanger> {
     );
   }
 }
-// // Flutter imports:
-// import 'package:flutter/material.dart';
-
-// // Package imports:
-// import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
-// import 'package:zego_uikit/zego_uikit.dart';
-
-// // Dart imports:
-// import 'dart:math' as math;
-
-// void main() {
-//   WidgetsFlutterBinding.ensureInitialized();
-
-//   final navigatorKey = GlobalKey<NavigatorState>();
-//   ZegoUIKit().initLog().then((value) {
-//     runApp(MyApp(
-//       navigatorKey: navigatorKey,
-//     ));
-//   });
-// }
 
 // class MyApp extends StatefulWidget {
 //   final GlobalKey<NavigatorState> navigatorKey;
