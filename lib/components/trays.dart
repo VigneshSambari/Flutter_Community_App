@@ -47,7 +47,7 @@ class ProfileNameEditTray extends StatelessWidget {
 }
 
 class CircleImageTile extends StatelessWidget {
-  const CircleImageTile({super.key, this.url, this.groupOrPerson = true});
+  const CircleImageTile({super.key, this.url = "", this.groupOrPerson = true});
 
   final String? url;
   final bool groupOrPerson;

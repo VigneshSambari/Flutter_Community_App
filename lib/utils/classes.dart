@@ -108,6 +108,8 @@ class RoomItem {
 
   RoomItem(this._id, {required this.page});
 
+  String get id => _id!;
+
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       '_id': _id,

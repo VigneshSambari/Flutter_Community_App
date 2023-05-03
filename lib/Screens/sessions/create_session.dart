@@ -190,7 +190,7 @@ class _CreateSessionState extends State<CreateSession> {
                         )
                       : SizedBox(),
                   DropDownWithTitle(
-                    typeDropDown: ["Private", "Public"],
+                    typeDropDown: ["privateSession", "publicSession"],
                     setDropDownValue: dropDownType,
                     title: "Select session type",
                     dropDowntitle: "Private, public...",

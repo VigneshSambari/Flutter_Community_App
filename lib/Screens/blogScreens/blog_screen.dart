@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, unused_local_variable, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:sessions/bloc/blog/blog_bloc_imports.dart';
 import 'package:sessions/bloc/user/user_bloc.dart';
 import 'package:sessions/components/appbar.dart';
@@ -54,17 +53,12 @@ class _BlogScreenState extends State<BlogScreen> {
     if (userState is UserSignedInState) {
       userId = userState.user.userId!;
     }
-    oneSignalIdSet();
+
     fetchData();
 
     _scrollController = ScrollController();
 
     super.initState();
-  }
-
-  void oneSignalIdSet() async {
-    await OneSignal.shared.setExternalUserId(userId!);
-    //await sendPushNotification(userId!, "message");
   }
 
   Future<void> fetchData() async {

@@ -8,6 +8,7 @@ import 'package:sessions/constants.dart';
 import 'package:sessions/screens/chatScreens/chat_screen.dart';
 import 'package:sessions/screens/chatScreens/components/status.dart';
 import 'package:sessions/screens/chatScreens/components/tiles.dart';
+import 'package:sessions/screens/chatScreens/search_screen.dart';
 import 'package:sessions/utils/enums.dart';
 import 'package:sessions/utils/navigations.dart';
 import 'package:sessions/utils/util_methods.dart';
@@ -48,7 +49,12 @@ class _ChatsDisplayState extends State<ChatsDisplay> {
             child: IconButton(
               splashRadius: 25,
               onPressed: () {
-                navigatorPush(SizedBox(), context);
+                navigatorPush(
+                    RoomSearchScreen(
+                      title: getRoomTitles(type: widget.roomType),
+                      searchKey: getRoomType(type: widget.roomType),
+                    ),
+                    context);
               },
               icon: Icon(Icons.search),
             ),

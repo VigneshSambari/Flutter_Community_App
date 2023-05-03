@@ -195,7 +195,8 @@ class SizedInputField extends StatelessWidget {
 }
 
 class SearchBar extends StatelessWidget {
-  const SearchBar({super.key, required this.controller});
+  final VoidCallback fetch;
+  const SearchBar({super.key, required this.controller, required this.fetch});
 
   final TextEditingController controller;
 
@@ -217,6 +218,9 @@ class SearchBar extends StatelessWidget {
           children: [
             Expanded(
               child: TextField(
+                onChanged: (String value) {
+                  fetch();
+                },
                 controller: controller,
                 maxLines: 1,
                 decoration: InputDecoration(
@@ -230,7 +234,9 @@ class SearchBar extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                fetch();
+              },
               child: Icon(
                 Icons.search_rounded,
                 color: kPrimaryColor,

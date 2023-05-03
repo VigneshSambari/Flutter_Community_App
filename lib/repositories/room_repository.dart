@@ -95,6 +95,27 @@ class RoomRepository {
     }
   }
 
+  Future<List<RoomModel>> searchRooms(
+      {required SearchRoomSend httpData}) async {
+    Pair urlInfo = RoomUrls.queryRooms;
+
+    Response response =
+        await httpRequestMethod(urlInfo: urlInfo, body: httpData);
+
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      final List result = body;
+      final res = result.map((e) {
+        RoomModel room = RoomModel.fromJson(e);
+        return room;
+      }).toList();
+
+      return res;
+    } else {
+      throw Exception(body['_message']);
+    }
+  }
+
   Future<List<RoomModel>> getRoomsOfType({required String roomType}) async {
     Pair urlInfo = RoomUrls.getRoomsOfType(type: roomType);
 
@@ -148,5 +169,67 @@ class RoomRepository {
     } else {
       throw Exception(body['_message']);
     }
+  }
+
+  Future<String> joinRoom({required JoinLeaveRoomSend httpData}) async {
+    Pair urlInfo = RoomUrls.join;
+    Response response =
+        await httpRequestMethod(urlInfo: urlInfo, body: httpData);
+
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return body['number'];
+    } else {
+      throw Exception(body['_message']);
+    }
+  }
+}
+
+class JoinLeaveRoomSend {
+  final String userId;
+  final String roomId;
+  final String joinOrLeave;
+
+  JoinLeaveRoomSend({
+    required this.userId,
+    required this.roomId,
+    required this.joinOrLeave,
+  });
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'userId': userId,
+      'roomId': roomId,
+      'joinOrLeave': joinOrLeave,
+    };
+  }
+
+  factory JoinLeaveRoomSend.fromJson(Map<String, dynamic> map) {
+    return JoinLeaveRoomSend(
+      userId: map['userId'] as String,
+      roomId: map['roomId'] as String,
+      joinOrLeave: map['joinOrLeave'] as String,
+    );
+  }
+}
+
+class SearchRoomSend {
+  final String type;
+  final String query;
+
+  SearchRoomSend({required this.type, required this.query});
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'type': type,
+      'query': query,
+    };
+  }
+
+  factory SearchRoomSend.fromJson(Map<String, dynamic> map) {
+    return SearchRoomSend(
+      type: map['type'] as String,
+      query: map['query'] as String,
+    );
   }
 }

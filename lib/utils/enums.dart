@@ -19,5 +19,6 @@ enum RoomTypesEnum {
   userPlacement,
   userProject,
   userChats,
-  userSessions,
+  sessionPublic,
+  sessionPrivate,
 }

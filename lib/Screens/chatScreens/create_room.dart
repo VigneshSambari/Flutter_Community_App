@@ -73,7 +73,7 @@ class _CreateRoomState extends State<CreateRoom> {
     });
   }
 
-  void createRoomApi({required CreateRoomSend roomData}) async {
+  Future<void> createRoomApi({required CreateRoomSend roomData}) async {
     try {
       if (isDisposed || !mounted) {
         return;
@@ -184,7 +184,9 @@ class _CreateRoomState extends State<CreateRoom> {
                               media: inputVariables.coverPic,
                               type: inputVariables.type,
                             );
-                            createRoomApi(roomData: roomSend);
+                            await createRoomApi(roomData: roomSend);
+                            BlocProvider.of<ProfileBloc>(context)
+                                .add(LoadProfileEvent(userId: userIdUser));
                           },
                         ),
                       ],

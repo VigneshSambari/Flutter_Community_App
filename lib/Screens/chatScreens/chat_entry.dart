@@ -10,6 +10,7 @@ import 'package:sessions/constants.dart';
 import 'package:sessions/screens/chatScreens/components/clips.dart';
 import 'package:sessions/screens/chatScreens/components/rooms_holder.dart';
 import 'package:sessions/screens/chatScreens/create_room.dart';
+import 'package:sessions/screens/chatScreens/search_screen.dart';
 import 'package:sessions/utils/classes.dart';
 import 'package:sessions/utils/navigations.dart';
 
@@ -56,7 +57,15 @@ class _ChatEntryState extends State<ChatEntry> {
         title: "Chat",
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              navigatorPush(
+                RoomSearchScreen(
+                  searchKey: "",
+                  title: "All rooms",
+                ),
+                context,
+              );
+            },
             splashRadius: 25,
             icon: Icon(Icons.search),
           ),

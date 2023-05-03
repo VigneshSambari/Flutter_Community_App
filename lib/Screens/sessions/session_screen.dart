@@ -138,7 +138,7 @@ class _SessionsScreenState extends State<SessionsScreen> {
   void dateSelectCallBack({required DateTime date}) {
     setState(() {
       currentDate = date;
-      loadProfile();
+
       setExpandedStatus(context, currentDate);
     });
   }

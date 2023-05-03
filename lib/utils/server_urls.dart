@@ -86,6 +86,7 @@ class RoomUrls {
   static String roomEndPoint = "$httpServerUrl/room";
   static Pair getAllRooms = Pair(url: "$roomEndPoint", requestType: false);
   static Pair create = Pair(url: "$roomEndPoint/create", requestType: true);
+  static Pair queryRooms = Pair(url: "$roomEndPoint/query", requestType: true);
   static Pair join = Pair(url: "$roomEndPoint/join", requestType: true);
   static Pair leave = Pair(url: "$roomEndPoint/leave", requestType: true);
   static Pair checkIfMember =

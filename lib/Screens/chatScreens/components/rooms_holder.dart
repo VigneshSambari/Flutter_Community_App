@@ -125,7 +125,7 @@ class _RoomHolderState extends State<RoomHolder> {
                 title: "Sessions",
                 assetUrl: Assets.assetsChatEntrySessions,
                 onPressed: pushRoomfun,
-                roomType: RoomTypesEnum.userSessions,
+                roomType: RoomTypesEnum.sessionPublic,
               ),
             ],
           )
