@@ -6,6 +6,7 @@ import 'package:sessions/bloc/profile/profile_bloc.dart';
 import 'package:sessions/bloc/user/user_bloc_imports.dart';
 import 'package:sessions/components/styles.dart';
 import 'package:sessions/components/trays.dart';
+import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/screens/profile/components/tiles.dart';
 import 'package:sessions/screens/profile/components/utils.dart';
@@ -36,7 +37,7 @@ class ProfileDetails extends StatelessWidget {
       builder: (context, state) {
         if (state is ProfileCreatedState) {
           return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,11 +122,16 @@ class ProfileDetails extends StatelessWidget {
             ),
           );
         }
-        return Center(
-          child: Text(
-            "Error in fetching profile",
-            style: TextStyle(color: Colors.red),
-          ),
+        if (state is ProfileErrorState) {
+          return Center(
+            child: Text(
+              "Error in fetching profile",
+              style: TextStyle(color: Colors.red),
+            ),
+          );
+        }
+        return LoadingIndicator(
+          circularBlue: true,
         );
       },
     );

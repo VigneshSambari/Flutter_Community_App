@@ -21,13 +21,13 @@ class SocketService {
 
       // Listen for connection events
       _singleton._socket!.onConnect((_) {
-        print('Connected to socket server!');
+        //print('Connected to socket server!');
       });
 
       _singleton._socket!.on(
         'fetchedRoomMessages',
         (data) => {
-          print("called back"),
+          //print("called back"),
           fetchMessages!(),
         },
       );
@@ -73,7 +73,7 @@ class SocketService {
     _socket!.on(
       'fetchedRoomMessages',
       (data) => {
-        print("called back"),
+        //print("called back"),
         fetchMessages(),
       },
     );

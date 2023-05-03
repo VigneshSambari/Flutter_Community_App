@@ -183,8 +183,6 @@ class _BlogScreenState extends State<BlogScreen> {
                   ? LoadingIndicator()
                   : RefreshIndicator(
                       onRefresh: () async {
-                        Duration(seconds: 2);
-
                         await fetchData();
                       },
                       child: ListView.builder(

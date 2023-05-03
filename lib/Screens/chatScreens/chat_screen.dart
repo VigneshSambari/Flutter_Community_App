@@ -260,6 +260,8 @@ class _ChatScreenState extends State<ChatScreen> {
                         tileColor: kPrimaryColor,
                         title: Text(
                           widget.roomData.name!,
+                          maxLines: 1,
+                          overflow: TextOverflow.fade,
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.white,
@@ -268,6 +270,8 @@ class _ChatScreenState extends State<ChatScreen> {
                         ),
                         subtitle: Text(
                           widget.roomData.description!,
+                          maxLines: 2,
+                          overflow: TextOverflow.fade,
                           style: TextStyle(
                             color: kPrimaryLightColor,
                           ),

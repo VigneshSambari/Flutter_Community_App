@@ -90,7 +90,7 @@ class _EntryChatBodyState extends State<EntryChatBody> {
       padding: EdgeInsets.all(5),
       height: size.height,
       width: size.width,
-      color: kPrimaryLightColor,
+      color: Colors.white,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(

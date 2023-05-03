@@ -238,11 +238,11 @@ Widget BackButtonNav() {
   return Builder(
     builder: (context) => Container(
       padding: EdgeInsets.all(5),
-      child: IconButton(
-        onPressed: () {
+      child: GestureDetector(
+        onTap: () {
           navigatorPop(context);
         },
-        icon: Icon(
+        child: Icon(
           Icons.arrow_back_ios,
           color: Colors.white,
         ),

@@ -580,7 +580,7 @@ class MyExpansionPanelListState extends State<MyExpansionPanelList> {
                                                         title: "Created by",
                                                       ),
                                                       Text(
-                                                        "${newRooms[expandItem.index].userName!}",
+                                                        "${newRooms[expandItem.index].userName}",
                                                       ),
                                                     ],
                                                   ),
