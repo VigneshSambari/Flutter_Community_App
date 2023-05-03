@@ -22,15 +22,15 @@ const TextStyle sideMenuTileStyle = TextStyle(
 );
 
 const TextStyle blogTitleStyle = TextStyle(
-  fontWeight: FontWeight.bold,
-  fontSize: 18,
-  color: Colors.black,
+  fontWeight: FontWeight.w500,
+  fontSize: 17,
+  color: Colors.black87,
 );
 
 const TextStyle blogSubtitleStyle = TextStyle(
-  fontWeight: FontWeight.w200,
+  fontWeight: FontWeight.w500,
   fontSize: 13,
-  color: Colors.black,
+  color: kPrimaryDarkColor,
 );
 
 TextStyle popUpMenuItemStyle() {

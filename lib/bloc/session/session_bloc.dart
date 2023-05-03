@@ -1,5 +1,5 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sessions/models/session.model.dart';
 import 'package:sessions/repositories/session_repository.dart';
 import 'package:sessions/utils/classes.dart';

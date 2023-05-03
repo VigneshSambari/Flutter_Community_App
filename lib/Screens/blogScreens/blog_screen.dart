@@ -10,7 +10,6 @@ import 'package:sessions/components/snackbar.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/models/blogpost.model.dart';
 import 'package:sessions/models/profile.model.dart';
-import 'package:sessions/notifications/onesignal/push_notifications.dart';
 import 'package:sessions/repositories/blog_repository.dart';
 import 'package:sessions/repositories/profile_repository.dart';
 import 'package:sessions/screens/blogScreens/components/blog_utils.dart';

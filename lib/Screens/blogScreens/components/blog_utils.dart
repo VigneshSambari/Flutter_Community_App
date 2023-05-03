@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_unnecessary_containers, prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:mime/mime.dart';
 import 'package:sessions/assets.dart';
@@ -11,7 +10,7 @@ import 'package:sessions/components/trays.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/models/blogpost.model.dart';
 import 'package:sessions/models/profile.model.dart';
-import 'package:sessions/utils/navigations.dart';
+import 'package:video_player/video_player.dart';
 
 class BlogImageTile extends StatelessWidget {
   final String url;
@@ -39,50 +38,90 @@ class BlogImageTile extends StatelessWidget {
   }
 }
 
-class BlogVideoTile extends StatefulWidget {
+class VideoPlayerWidget extends StatefulWidget {
   final String url;
-  const BlogVideoTile({super.key, required this.url});
+
+  const VideoPlayerWidget({required this.url});
 
   @override
-  State<BlogVideoTile> createState() => _BlogVideoTileState();
+  _VideoPlayerWidgetState createState() => _VideoPlayerWidgetState();
 }
 
-class _BlogVideoTileState extends State<BlogVideoTile> {
-  late CachedVideoPlayerController controller;
+class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
+  late VideoPlayerController _videoPlayerController;
+  late Future<void> _initializeVideoPlayerFuture;
+  bool playing = false;
 
   @override
   void initState() {
-    controller = CachedVideoPlayerController.network(
-      widget.url,
-    );
-    controller.initialize().then((value) {
-      controller.play();
-      setState(() {});
-    });
     super.initState();
+    _videoPlayerController = VideoPlayerController.network(widget.url);
+    _initializeVideoPlayerFuture = _videoPlayerController.initialize();
   }
 
   @override
   void dispose() {
+    _videoPlayerController.dispose();
     super.dispose();
-    controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        controller.pause();
-        navigatorPush(BlogVideoTile(url: widget.url), context);
-      },
-      child: Center(
-        child: controller.value.isInitialized
-            ? ClipRRect(
-                child: CachedVideoPlayer(
-                  controller,
-                ),
-              )
-            : const CircularProgressIndicator(),
+    return Container(
+      color: kPrimaryLightColor,
+      child: FutureBuilder(
+        future: _initializeVideoPlayerFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return AspectRatio(
+              aspectRatio: _videoPlayerController.value.aspectRatio,
+              child: Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  VideoPlayer(_videoPlayerController),
+                  VideoProgressIndicator(
+                    _videoPlayerController,
+                    allowScrubbing: true,
+                    colors: VideoProgressColors(
+                      backgroundColor: Colors.white,
+                      bufferedColor: kPrimaryLightColor,
+                      playedColor: kPrimaryColor,
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: !playing
+                        ? IconButton(
+                            icon: Icon(Icons.play_arrow),
+                            color: Colors.white,
+                            onPressed: () {
+                              _videoPlayerController.play();
+                              setState(() {
+                                playing = true;
+                              });
+                            },
+                          )
+                        : IconButton(
+                            icon: Icon(Icons.pause),
+                            color: Colors.white,
+                            onPressed: () {
+                              _videoPlayerController.pause();
+                              setState(() {
+                                playing = false;
+                              });
+                            },
+                          ),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
     );
   }
@@ -101,7 +140,7 @@ class BlogTile extends StatefulWidget {
   State<BlogTile> createState() => _BlogTileState();
 }
 
-int mediaIndex = 0;
+int _mediaIndex = 0;
 
 String getFileType(String url) {
   final mimeType = lookupMimeType(url);
@@ -130,9 +169,7 @@ class _BlogTileState extends State<BlogTile> {
         ));
       }
       if (getFileType(item.secureUrl!) == "video") {
-        media.add(BlogVideoTile(
-          url: item.secureUrl!,
-        ));
+        media.add(VideoPlayerWidget(url: item.secureUrl!));
       }
     }
 
@@ -140,10 +177,10 @@ class _BlogTileState extends State<BlogTile> {
   }
 
   void pageChange({required int value}) {
-    mediaIndex = value;
+    _mediaIndex = value;
 
     setState(() {
-      mediaIndex;
+      _mediaIndex;
     });
   }
 
@@ -154,7 +191,7 @@ class _BlogTileState extends State<BlogTile> {
       padding: const EdgeInsets.symmetric(horizontal: 3.5, vertical: 3.5),
       margin: const EdgeInsets.symmetric(horizontal: 2.5, vertical: 5),
       decoration: BoxDecoration(
-        color: lightColor,
+        color: lightColor.withOpacity(0.4),
         borderRadius: BorderRadius.circular(15),
       ),
       child: Stack(
@@ -225,7 +262,7 @@ class _BlogTileState extends State<BlogTile> {
                     onTap: () {},
                     child: Container(
                       width: size.width,
-                      height: 220,
+                      height: size.height * 0.25,
                       decoration: BoxDecoration(
                         color: kPrimaryLightColor,
                         borderRadius: BorderRadius.circular(15),
@@ -239,7 +276,7 @@ class _BlogTileState extends State<BlogTile> {
                                   ? Image.asset(
                                       Assets.assetsGlobalNoimageexists,
                                       fit: BoxFit.cover,
-                                      height: 220,
+                                      height: size.height * 0.25,
                                       width: size.width,
                                     )
                                   : CarouselSlider(
@@ -266,7 +303,7 @@ class _BlogTileState extends State<BlogTile> {
                                     margin:
                                         EdgeInsets.symmetric(horizontal: 2.0),
                                     decoration: BoxDecoration(
-                                      color: mediaIndex == index
+                                      color: _mediaIndex == index
                                           ? Colors.white
                                           : Colors.white70,
                                       shape: BoxShape.circle,

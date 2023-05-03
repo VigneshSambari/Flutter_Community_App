@@ -1,11 +1,13 @@
-// ignore_for_file: prefer_const_constructors, unused_import, unnecessary_import, prefer_const_literals_to_create_immutables, prefer_final_fields
+// ignore_for_file: prefer_const_constructors, unused_import, unnecessary_import, prefer_const_literals_to_create_immutables, prefer_final_fields, use_key_in_widget_constructors, prefer_const_constructors_in_immutables, library_private_types_in_public_api
 
 import 'dart:math';
 
-import 'package:cached_video_player/cached_video_player.dart';
+import 'package:carousel_slider/carousel_options.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -42,10 +44,9 @@ import 'package:sessions/screens/welcome/welcome_screen.dart';
 import 'package:sessions/socket/socket_client.dart';
 import 'package:sessions/utils/classes.dart';
 import 'package:sessions/utils/navigations.dart';
+import 'package:video_player/video_player.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
-import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
-import 'package:zego_uikit/zego_uikit.dart';
 
 import 'bloc/message/message_bloc.dart';
 import 'bloc/room/room_bloc.dart';
@@ -81,9 +82,9 @@ void main() async {
 
   OneSignal.shared.setAppId(oneSignalAppId!);
 
-  OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
-    print("Accepted permission: $accepted");
-  });
+  OneSignal.shared
+      .promptUserForPushNotificationPermission()
+      .then((accepted) {});
 
   OneSignal.shared.setNotificationWillShowInForegroundHandler(
       (OSNotificationReceivedEvent event) {
@@ -201,55 +202,59 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           ),
         ],
         child: MaterialApp(
-            navigatorKey: widget.navigatorKey,
-            debugShowCheckedModeBanner: false,
-            title: 'CommunityApp',
-            theme: ThemeData(
-              fontFamily: "Intel",
-              primarySwatch: kPrimarySwatch,
-              scaffoldBackgroundColor: Colors.white,
-            ),
-            localizationsDelegates: [
-              GlobalMaterialLocalizations.delegate,
-              MonthYearPickerLocalizations.delegate,
-            ],
-            supportedLocales: [
-              const Locale('en', 'US'),
-            ],
-            builder: (BuildContext context, Widget? child) {
-              return Stack(
-                children: [
-                  child!,
+          navigatorKey: widget.navigatorKey,
+          debugShowCheckedModeBanner: false,
+          title: 'CommunityApp',
+          theme: ThemeData(
+            fontFamily: "Intel",
+            primarySwatch: kPrimarySwatch,
+            scaffoldBackgroundColor: Colors.white,
+          ),
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            MonthYearPickerLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('en', 'US'),
+          ],
+          builder: (BuildContext context, Widget? child) {
+            return Stack(
+              children: [
+                child!,
 
-                  /// support minimizing
-                  ZegoUIKitPrebuiltCallMiniOverlayPage(
-                    contextQuery: () {
-                      return widget.navigatorKey.currentState!.context;
-                    },
-                  ),
-                ],
-              );
-            },
-            home: VideoList(
-              videoUrls: urls,
-            )
-            // home: Builder(builder: (BuildContext context) {
-            //   ProfileState profileState =
-            //       BlocProvider.of<ProfileBloc>(context).state;
-            //   UserState userState = BlocProvider.of<UserBloc>(context).state;
-            //   if (profileState is ProfileCreatedState) {
-            //     //set one signal userId
-            //     OneSignal.shared.setExternalUserId(profileState.profile.userId!);
-            //     currentScreen = EntryPoint();
-            //   } else if (userState is UserSignedInState) {
-            //     currentScreen = CreateProfile();
-            //   } else if (userState is UserSignedUpState) {
-            //     currentScreen = Loginscreen();
-            //   }
+                /// support minimizing
+                ZegoUIKitPrebuiltCallMiniOverlayPage(
+                  contextQuery: () {
+                    return widget.navigatorKey.currentState!.context;
+                  },
+                ),
+              ],
+            );
+          },
+          // home: Scaffold(
+          //   body: Container(
+          //     child: VideoPlayerWidget(
+          //       url: urls[0],
+          //     ),
+          //   ),
+          // ),
+          home: Builder(builder: (BuildContext context) {
+            ProfileState profileState =
+                BlocProvider.of<ProfileBloc>(context).state;
+            UserState userState = BlocProvider.of<UserBloc>(context).state;
+            if (profileState is ProfileCreatedState) {
+              //set one signal userId
+              OneSignal.shared.setExternalUserId(profileState.profile.userId!);
+              currentScreen = EntryPoint();
+            } else if (userState is UserSignedInState) {
+              currentScreen = CreateProfile();
+            } else if (userState is UserSignedUpState) {
+              currentScreen = Loginscreen();
+            }
 
-            //   return currentScreen;
-            // }),
-            ),
+            return currentScreen;
+          }),
+        ),
       ),
     );
   }
@@ -257,23 +262,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
 List<String> urls = [
   "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4",
-  "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4"
-      "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4",
-  "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4"
-      "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4",
-  "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4"
-      "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4",
-  "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4"
-      "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4",
-  "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4"
-      "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4",
-  "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4"
-      "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4",
-  "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4"
-      "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4",
-  "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4"
-      "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4",
-  "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4"
+  "https://res.cloudinary.com/drx5qtqvh/video/upload/v1682424320/communityapplication/kyut26dq2ivpaqtiywnn.mp4",
 ];
 
 class ScreenChanger extends StatefulWidget {
@@ -308,71 +297,6 @@ class _ScreenChangerState extends State<ScreenChanger> {
         ),
       ],
       child: currenScreen,
-    );
-  }
-}
-
-class VideoList extends StatelessWidget {
-  final List<String> videoUrls;
-
-  const VideoList({Key? key, required this.videoUrls}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: videoUrls.length,
-      itemBuilder: (BuildContext context, int index) {
-        return VideoListItem(
-          url: videoUrls[index],
-        );
-      },
-    );
-  }
-}
-
-class VideoListItem extends StatefulWidget {
-  final String url;
-
-  const VideoListItem({Key? key, required this.url}) : super(key: key);
-
-  @override
-  _VideoListItemState createState() => _VideoListItemState();
-}
-
-class _VideoListItemState extends State<VideoListItem> {
-  late CachedVideoPlayerController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = CachedVideoPlayerController.network(widget.url)
-      ..initialize().then((_) {
-        setState(() {});
-      });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: _controller.value.isInitialized
-          ? GestureDetector(
-              onTap: () {
-                _controller.value.isPlaying
-                    ? _controller.pause()
-                    : _controller.play();
-              },
-              child: AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: CachedVideoPlayer(_controller),
-              ),
-            )
-          : CircularProgressIndicator(),
     );
   }
 }

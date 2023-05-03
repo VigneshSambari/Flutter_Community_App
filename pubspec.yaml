@@ -55,7 +55,7 @@ dependencies:
   table_calendar: ^3.0.0
   month_year_picker: ^0.2.0+3
   flutter_localization: ^0.1.10
-  cached_video_player: ^2.0.4
+  video_player: ^2.6.1
   mime: ^1.0.4
   permission_handler: ^10.2.0
   flutter_countdown_timer: ^4.1.0
@@ -64,9 +64,6 @@ dependencies:
 
 
 
-
-
-  
 
 dev_dependencies:
   flutter_test:

@@ -55,6 +55,11 @@ class _ChatEntryState extends State<ChatEntry> {
       appBar: CurvedAppBar(
         title: "Chat",
         actions: [
+          IconButton(
+            onPressed: () {},
+            splashRadius: 25,
+            icon: Icon(Icons.search),
+          ),
           Padding(
             padding: EdgeInsets.only(right: 15),
             child: PopUpMenuWidget(

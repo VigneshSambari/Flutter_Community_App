@@ -33,6 +33,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
   @override
   void initState() {
     super.initState();
+
     if (widget.scroll) {
       _startTimer();
     }

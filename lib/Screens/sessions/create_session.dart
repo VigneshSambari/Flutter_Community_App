@@ -1,9 +1,8 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_init_to_null, use_key_in_widget_constructors, prefer_const_constructors_in_immutables, curly_braces_in_flow_control_structures
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_init_to_null, use_key_in_widget_constructors, prefer_const_constructors_in_immutables, curly_braces_in_flow_control_structures, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sessions/bloc/profile/profile_bloc.dart';
-import 'package:sessions/bloc/user/user_bloc.dart';
 import 'package:sessions/components/appbar.dart';
 import 'package:sessions/components/buttons.dart';
 import 'package:sessions/components/drop_downs.dart';
@@ -13,7 +12,6 @@ import 'package:sessions/components/trays.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/models/room.model.dart';
-import 'package:sessions/models/session.model.dart';
 import 'package:sessions/repositories/room_repository.dart';
 import 'package:sessions/repositories/session_repository.dart';
 import 'package:sessions/utils/classes.dart';
@@ -261,7 +259,6 @@ class _CreateSessionState extends State<CreateSession> {
                             inputVariables.field.isEmpty ||
                             inputVariables.type.isEmpty ||
                             inputVariables.repeat.isEmpty) {
-                          print(inputVariables.startDate);
                           showMySnackBar(context, "Fill all the field!");
                           return;
                         }
@@ -301,12 +298,15 @@ class _CreateSessionState extends State<CreateSession> {
                           isLoading = true;
                         });
                         String userId = "";
-                        UserState userState =
-                            BlocProvider.of<UserBloc>(context).state;
-                        if (userState is UserSignedInState) {
-                          userId = userState.user.userId!;
+                        String userName = "";
+                        ProfileState profileState =
+                            BlocProvider.of<ProfileBloc>(context).state;
+                        if (profileState is ProfileCreatedState) {
+                          userId = profileState.profile.userId!;
+                          userName = profileState.profile.userName!;
                           RoomModel room = await roomRepository.creatRoom(
                             httpData: CreateRoomSend(
+                              userName: userName,
                               name: sessionController.titleController.text,
                               description:
                                   sessionController.descController.text,
@@ -315,8 +315,8 @@ class _CreateSessionState extends State<CreateSession> {
                               media: inputVariables.coverPic,
                             ),
                           );
-                          SessionModel session =
-                              await sessionRepository.createSession(
+
+                          await sessionRepository.createSession(
                             httpData: CreateSessionSend(
                               field: inputVariables.field,
                               startDate: inputVariables.startDate!,
@@ -334,7 +334,8 @@ class _CreateSessionState extends State<CreateSession> {
                             isLoading = false;
                           });
                           BlocProvider.of<ProfileBloc>(context).add(
-                              LoadProfileEvent(userId: userState.user.userId!));
+                              LoadProfileEvent(
+                                  userId: profileState.profile.userId!));
                         }
 
                         navigatorPop(context);
@@ -463,13 +464,7 @@ class TimePickerWidgetState extends State<TimePickerWidget> {
     super.initState();
 
     _selectedTime = TimeOfDay.now();
-    DateTime dateTime = DateTime(
-        DateTime.now().year,
-        DateTime.now().month,
-        DateTime.now().day,
-        _selectedTime.hourOfPeriod +
-            (_selectedTime.period == DayPeriod.pm ? 12 : 0),
-        _selectedTime.minute);
+
     // widget.setvalue(time: dateTime, startEnd: widget.startEnd);
   }
 
@@ -488,7 +483,6 @@ class TimePickerWidgetState extends State<TimePickerWidget> {
         if (newTime != null) {
           setState(() {
             _selectedTime = newTime;
-            print(_selectedTime);
             DateTime dateTime = DateTime(
                 DateTime.now().year,
                 DateTime.now().month,

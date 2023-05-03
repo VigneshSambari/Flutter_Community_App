@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/models/profile.model.dart';
-import 'package:sessions/models/room.model.dart';
+
 import 'package:sessions/models/session.model.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'dart:math' as math;

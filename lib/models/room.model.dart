@@ -6,6 +6,7 @@ class RoomModel {
   final String? _id;
   final String? name;
   final String? type;
+  final String? userName;
   final String? description;
   final String? createdBy;
   final List<IdObject>? users;
@@ -21,6 +22,7 @@ class RoomModel {
   RoomModel(this._id,
       {this.name,
       this.type,
+      this.userName,
       this.description,
       this.createdBy,
       this.users,
@@ -36,6 +38,7 @@ class RoomModel {
       '_id': _id,
       'name': name,
       'type': type,
+      'userName': userName,
       'coverPic': coverPic,
       'description': description,
       'createdBy': createdBy,
@@ -65,6 +68,7 @@ class RoomModel {
     return RoomModel(
       map['_id'] != null ? map['_id'] as String : null,
       name: map['name'] != null ? map['name'] as String : null,
+      userName: map['userName'] != null ? map['userName'] as String : null,
       type: map['type'] != null ? map['type'] as String : null,
       description:
           map['description'] != null ? map['description'] as String : null,

@@ -3,7 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sessions/bloc/user/user_bloc.dart';
+import 'package:sessions/bloc/profile/profile_bloc.dart';
 
 import 'package:sessions/components/appbar.dart';
 import 'package:sessions/components/buttons.dart';
@@ -152,10 +152,12 @@ class _CreateRoomState extends State<CreateRoom> {
                           title: "Create Room",
                           onPress: () async {
                             String userIdUser;
-                            final userState =
-                                BlocProvider.of<UserBloc>(context).state;
-                            if (userState is UserSignedInState) {
-                              userIdUser = userState.user.userId!;
+                            String userName;
+                            final profileState =
+                                BlocProvider.of<ProfileBloc>(context).state;
+                            if (profileState is ProfileCreatedState) {
+                              userIdUser = profileState.profile.userId!;
+                              userName = profileState.profile.userName!;
                             } else {
                               return;
                             }
@@ -175,6 +177,7 @@ class _CreateRoomState extends State<CreateRoom> {
                               return;
                             }
                             CreateRoomSend roomSend = CreateRoomSend(
+                              userName: userName,
                               createdBy: userIdUser,
                               description: roomControllers.descController.text,
                               name: roomControllers.nameController.text,

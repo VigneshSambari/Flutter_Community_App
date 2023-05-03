@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:sessions/bloc/room/room_bloc_imports.dart';
 import 'package:sessions/components/appbar.dart';
-import 'package:sessions/components/input_fields.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/screens/chatScreens/chat_screen.dart';
@@ -43,7 +42,18 @@ class _ChatsDisplayState extends State<ChatsDisplay> {
         title: (roomState is RoomLoadedState)
             ? getRoomTitles(type: widget.roomType)
             : "... Chats",
-        actions: [],
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 5),
+            child: IconButton(
+              splashRadius: 25,
+              onPressed: () {
+                navigatorPush(SizedBox(), context);
+              },
+              icon: Icon(Icons.search),
+            ),
+          )
+        ],
         leading: BackButtonNav(),
       ),
       body: BlocBuilder<RoomBloc, RoomState>(
@@ -58,7 +68,7 @@ class _ChatsDisplayState extends State<ChatsDisplay> {
                 physics: NeverScrollableScrollPhysics(),
                 child: Column(
                   children: [
-                    SearchBar(controller: searchController),
+                    //SearchBar(controller: searchController),
                     GestureDetector(
                       onTap: () {
                         setState(() {

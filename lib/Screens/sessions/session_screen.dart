@@ -1,27 +1,25 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, unnecessary_string_interpolations
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, prefer_final_fields, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_countdown_timer/index.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 
-import 'package:sessions/assets.dart';
 import 'package:sessions/bloc/profile/profile_bloc.dart';
 import 'package:sessions/bloc/room/room_bloc.dart';
 import 'package:sessions/bloc/user/user_bloc.dart';
 import 'package:sessions/components/appbar.dart';
 import 'package:sessions/components/popup_menus.dart';
-import 'package:sessions/components/snackbar.dart';
+
 import 'package:sessions/components/trays.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/models/profile.model.dart';
 import 'package:sessions/models/room.model.dart';
 import 'package:sessions/models/session.model.dart';
-import 'package:sessions/repositories/session_repository.dart';
+
 import 'package:sessions/screens/chatScreens/chat_screen.dart';
 import 'package:sessions/screens/profile/components/utils.dart';
 import 'package:sessions/screens/sessions/components/date_pickers.dart';
@@ -239,7 +237,7 @@ class CustomDraggableSheetState extends State<CustomDraggableSheet> {
 
   @override
   void initState() {
-    _currentHeight = widget.minHeight - 20;
+    _currentHeight = widget.minHeight - 40;
 
     controller.addListener(() {
       setState(() {
@@ -359,7 +357,6 @@ class MyExpansionPanelListState extends State<MyExpansionPanelList> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return BlocListener<RoomBloc, RoomState>(
       listener: (context, state) {
         setState(() {});
@@ -382,236 +379,262 @@ class MyExpansionPanelListState extends State<MyExpansionPanelList> {
                           child: Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 5, vertical: 5),
-                            child: ExpansionPanelList(
-                              dividerColor: kPrimaryColor,
-                              expansionCallback: (int index, bool isExpanded) {
-                                setState(() {
-                                  expandedStatus[index].status = !isExpanded;
-                                });
-                              },
-                              children: expandedStatus
-                                  .map<ExpansionPanel>((ExpandItem expandItem) {
-                                return ExpansionPanel(
-                                  backgroundColor: kPrimaryLightColor,
-                                  headerBuilder:
-                                      (BuildContext context, bool isExpanded) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        navigatorPush(
-                                            ChatScreen(
-                                              overLayDrap:
-                                                  SwipeVideoSessionInfo(
-                                                session: newSession[
-                                                    expandItem.index],
-                                                startTime: DateTime(
-                                                    newSession[expandItem.index]
-                                                        .startDate!
-                                                        .year,
-                                                    newSession[expandItem.index]
-                                                        .startDate!
-                                                        .month,
-                                                    newSession[expandItem.index]
-                                                        .startDate!
-                                                        .day,
-                                                    newSession[expandItem.index]
-                                                        .startTime!
-                                                        .hour,
-                                                    newSession[expandItem.index]
-                                                        .startTime!
-                                                        .minute,
-                                                    newSession[expandItem.index]
-                                                        .startTime!
-                                                        .second),
+                            child: Column(
+                              children: [
+                                ExpansionPanelList(
+                                  dividerColor: kPrimaryColor,
+                                  expansionCallback:
+                                      (int index, bool isExpanded) {
+                                    setState(() {
+                                      expandedStatus[index].status =
+                                          !isExpanded;
+                                    });
+                                  },
+                                  children: expandedStatus.map<ExpansionPanel>(
+                                      (ExpandItem expandItem) {
+                                    return ExpansionPanel(
+                                      backgroundColor: kPrimaryLightColor,
+                                      headerBuilder: (BuildContext context,
+                                          bool isExpanded) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            navigatorPush(
+                                                ChatScreen(
+                                                  overLayDrap:
+                                                      SwipeVideoSessionInfo(
+                                                    session: newSession[
+                                                        expandItem.index],
+                                                    startTime: DateTime(
+                                                        newSession[expandItem
+                                                                .index]
+                                                            .startDate!
+                                                            .year,
+                                                        newSession[expandItem
+                                                                .index]
+                                                            .startDate!
+                                                            .month,
+                                                        newSession[expandItem
+                                                                .index]
+                                                            .startDate!
+                                                            .day,
+                                                        newSession[expandItem
+                                                                .index]
+                                                            .startTime!
+                                                            .hour,
+                                                        newSession[expandItem
+                                                                .index]
+                                                            .startTime!
+                                                            .minute,
+                                                        newSession[expandItem
+                                                                .index]
+                                                            .startTime!
+                                                            .second),
+                                                  ),
+                                                  roomData: newRooms[
+                                                      expandItem.index],
+                                                ),
+                                                context);
+                                          },
+                                          child: ListTile(
+                                            contentPadding: EdgeInsets.all(5),
+                                            leading: CircleAvatar(
+                                              backgroundColor:
+                                                  kPrimaryLightColor,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                                child: CircleImageTile(
+                                                    url: newRooms[expandItem
+                                                                    .index]
+                                                                .coverPic ==
+                                                            null
+                                                        ? ""
+                                                        : newRooms[expandItem
+                                                                .index]
+                                                            .coverPic!
+                                                            .secureUrl),
                                               ),
-                                              roomData:
-                                                  newRooms[expandItem.index],
                                             ),
-                                            context);
-                                      },
-                                      child: ListTile(
-                                        contentPadding: EdgeInsets.all(5),
-                                        leading: CircleAvatar(
-                                          backgroundColor: kPrimaryLightColor,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(25),
-                                            child: CircleImageTile(
-                                                url: newRooms[expandItem.index]
-                                                            .coverPic ==
-                                                        null
-                                                    ? ""
-                                                    : newRooms[expandItem.index]
-                                                        .coverPic!
-                                                        .secureUrl),
+                                            title: Padding(
+                                              padding: EdgeInsets.all(2),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    newRooms[expandItem.index]
+                                                        .name!,
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 17,
+                                                    ),
+                                                  ),
+                                                  Wrap(
+                                                    children: [
+                                                      Text(
+                                                        "${newSession[expandItem.index].field!} ",
+                                                        style: TextStyle(
+                                                            color: Colors.grey),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                        title: Padding(
-                                          padding: EdgeInsets.all(2),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                newRooms[expandItem.index]
-                                                    .name!,
+                                        );
+                                      },
+                                      body: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 5.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            ListTile(
+                                              contentPadding: EdgeInsets.all(5),
+                                              leading: Column(
+                                                children: [
+                                                  SessionSubTitle(
+                                                    text: formatDate(
+                                                        date: newSession[
+                                                                expandItem
+                                                                    .index]
+                                                            .startDate!),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.all(2.0),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      child: Text(
+                                                        "to",
+                                                        style: TextStyle(
+                                                            fontSize: 12),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SessionSubTitle(
+                                                    text: formatDate(
+                                                        date: newSession[
+                                                                expandItem
+                                                                    .index]
+                                                            .endDate!),
+                                                  ),
+                                                ],
+                                              ),
+                                              title: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Wrap(
+                                                    children: [
+                                                      SessionListSubTitle(
+                                                        title: "Description",
+                                                      ),
+                                                      Text(
+                                                        "${newRooms[expandItem.index].description}",
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  // Wrap(
+                                                  //   children: [
+                                                  //     SessionListSubTitle(
+                                                  //       title: "Domain",
+                                                  //     ),
+                                                  //     Text(
+                                                  //       "${newSession[expandItem.index].field}",
+                                                  //     ),
+                                                  //   ],
+                                                  // ),
+                                                  Wrap(
+                                                    children: [
+                                                      SessionListSubTitle(
+                                                        title: "Pay amount",
+                                                      ),
+                                                      Text(
+                                                        "${newSession[expandItem.index].payAmount}",
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Wrap(
+                                                    children: [
+                                                      SessionListSubTitle(
+                                                        title: "Session type",
+                                                      ),
+                                                      Text(
+                                                        "${newRooms[expandItem.index].type}",
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Wrap(
+                                                    children: [
+                                                      SessionListSubTitle(
+                                                        title: "Created by",
+                                                      ),
+                                                      Text(
+                                                        "${newRooms[expandItem.index].userName!}",
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                              trailing: Column(
+                                                children: [
+                                                  SessionSubTitle(
+                                                    text: formatTime(
+                                                        time: newSession[
+                                                                expandItem
+                                                                    .index]
+                                                            .startTime!),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            2.0),
+                                                    child: Text(
+                                                      "to",
+                                                      style: TextStyle(
+                                                          fontSize: 12),
+                                                    ),
+                                                  ),
+                                                  SessionSubTitle(
+                                                    text: formatTime(
+                                                        time: newSession[
+                                                                expandItem
+                                                                    .index]
+                                                            .endTime!),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {},
+                                              child: Text(
+                                                "Exit",
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: 17,
                                                 ),
                                               ),
-                                              Wrap(
-                                                children: [
-                                                  Text(
-                                                    "${newSession[expandItem.index].field!} ",
-                                                    style: TextStyle(
-                                                        color: Colors.grey),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
                                       ),
+                                      isExpanded: expandItem.status,
                                     );
-                                  },
-                                  body: Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 5.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        ListTile(
-                                          contentPadding: EdgeInsets.all(5),
-                                          leading: Column(
-                                            children: [
-                                              SessionSubTitle(
-                                                text: formatDate(
-                                                    date: newSession[
-                                                            expandItem.index]
-                                                        .startDate!),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.all(2.0),
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(2.0),
-                                                  child: Text(
-                                                    "to",
-                                                    style:
-                                                        TextStyle(fontSize: 12),
-                                                  ),
-                                                ),
-                                              ),
-                                              SessionSubTitle(
-                                                text: formatDate(
-                                                    date: newSession[
-                                                            expandItem.index]
-                                                        .endDate!),
-                                              ),
-                                            ],
-                                          ),
-                                          title: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Wrap(
-                                                children: [
-                                                  SessionListSubTitle(
-                                                    title: "Description",
-                                                  ),
-                                                  Text(
-                                                    "${newRooms[expandItem.index].description}",
-                                                  ),
-                                                ],
-                                              ),
-                                              // Wrap(
-                                              //   children: [
-                                              //     SessionListSubTitle(
-                                              //       title: "Domain",
-                                              //     ),
-                                              //     Text(
-                                              //       "${newSession[expandItem.index].field}",
-                                              //     ),
-                                              //   ],
-                                              // ),
-                                              Wrap(
-                                                children: [
-                                                  SessionListSubTitle(
-                                                    title: "Pay amount",
-                                                  ),
-                                                  Text(
-                                                    "${newSession[expandItem.index].payAmount}",
-                                                  ),
-                                                ],
-                                              ),
-                                              Wrap(
-                                                children: [
-                                                  SessionListSubTitle(
-                                                    title: "Session type",
-                                                  ),
-                                                  Text(
-                                                    "${newRooms[expandItem.index].type}",
-                                                  ),
-                                                ],
-                                              ),
-                                              Wrap(
-                                                children: [
-                                                  SessionListSubTitle(
-                                                    title: "Created by",
-                                                  ),
-                                                  Text(
-                                                    "???????",
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          trailing: Column(
-                                            children: [
-                                              SessionSubTitle(
-                                                text: formatTime(
-                                                    time: newSession[
-                                                            expandItem.index]
-                                                        .startTime!),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(2.0),
-                                                child: Text(
-                                                  "to",
-                                                  style:
-                                                      TextStyle(fontSize: 12),
-                                                ),
-                                              ),
-                                              SessionSubTitle(
-                                                text: formatTime(
-                                                    time: newSession[
-                                                            expandItem.index]
-                                                        .endTime!),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {},
-                                          child: Text(
-                                            "Exit",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  isExpanded: expandItem.status,
-                                );
-                              }).toList(),
+                                  }).toList(),
+                                ),
+                                SizedBox(
+                                  height: 150,
+                                )
+                              ],
                             ),
                           ),
                         );
@@ -713,9 +736,7 @@ class _SwipeVideoSessionInfoState extends State<SwipeVideoSessionInfo> {
     DateTime today = DateTime.now(), calcTime = widget.startTime;
     Duration difference = widget.session.startDate!.difference(today);
     int days = difference.inDays;
-    print(today);
-    print(widget.startTime);
-    print(days);
+
     if (widget.session.endDate!.difference(today).inSeconds > 0) {
       if (widget.session.repeat == "Daily") {
         calcTime = DateTime(
