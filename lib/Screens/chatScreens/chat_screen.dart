@@ -41,8 +41,14 @@ List<EventClip> events = [
 
 class ChatScreen extends StatefulWidget {
   final RoomModel roomData;
+  final bool isSession;
   final Widget? overLayDrap;
-  ChatScreen({super.key, required this.roomData, this.overLayDrap});
+  ChatScreen({
+    super.key,
+    required this.roomData,
+    this.overLayDrap,
+    this.isSession = false,
+  });
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -50,6 +56,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   bool _isDisposed = false;
+
   late SocketService socketService;
   bool sendIconShow = false;
   bool isLoading = false, sendLoading = false;
@@ -263,7 +270,11 @@ class _ChatScreenState extends State<ChatScreen> {
                         title: GestureDetector(
                           onTap: () {
                             navigatorPush(
-                                RoomDetails(room: widget.roomData), context);
+                                RoomDetails(
+                                  room: widget.roomData,
+                                  isSession: widget.isSession,
+                                ),
+                                context);
                           },
                           child: Text(
                             widget.roomData.name!,

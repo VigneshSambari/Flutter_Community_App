@@ -24,7 +24,7 @@ import 'package:sessions/screens/chatScreens/chat_screen.dart';
 import 'package:sessions/screens/profile/components/utils.dart';
 import 'package:sessions/screens/sessions/components/date_pickers.dart';
 import 'package:sessions/screens/sessions/create_session.dart';
-import 'package:sessions/screens/sessions/search_sessions.dart';
+import 'package:sessions/screens/sessions/search_screen.dart';
 import 'package:sessions/screens/sessions/video_callpage.dart';
 import 'package:sessions/utils/classes.dart';
 import 'package:sessions/utils/navigations.dart';
@@ -148,7 +148,7 @@ class _SessionsScreenState extends State<SessionsScreen> {
       navigatorPush(CreateSession(), context);
     }
     if (value == 1) {
-      navigatorPush(SearchSession(), context);
+      //navigatorPush(SearchSession(), context);
     }
   }
 
@@ -179,7 +179,10 @@ class _SessionsScreenState extends State<SessionsScreen> {
               actions: [
                 IconButton(
                   onPressed: () {
-                    navigatorPush(SearchSession(), context);
+                    navigatorPush(
+                        SessionSearchScreen(
+                            title: "Search Sessions", searchKey: "session"),
+                        context);
                   },
                   icon: Icon(Icons.search),
                   splashRadius: 25,
@@ -400,6 +403,7 @@ class MyExpansionPanelListState extends State<MyExpansionPanelList> {
                                           onTap: () {
                                             navigatorPush(
                                                 ChatScreen(
+                                                  isSession: true,
                                                   overLayDrap:
                                                       SwipeVideoSessionInfo(
                                                     session: newSession[

@@ -23,6 +23,49 @@ class SessionRepository {
     }
   }
 
+  Future<SessionModel> findByRoomID({required IdObject httpData}) async {
+    Pair urlInfo = SessionUrls.findByRoomId;
+
+    Response response =
+        await httpRequestMethod(urlInfo: urlInfo, body: httpData);
+
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      SessionModel session = SessionModel.fromJson(body);
+      return session;
+    } else {
+      throw Exception(body['_message']);
+    }
+  }
+
+  Future<void> addSession({required SessionAddRemove httpData}) async {
+    Pair urlInfo = SessionUrls.add;
+
+    Response response =
+        await httpRequestMethod(urlInfo: urlInfo, body: httpData);
+
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      throw Exception(body['_message']);
+    }
+  }
+
+  Future<void> removeSession({required SessionAddRemove httpData}) async {
+    Pair urlInfo = SessionUrls.remove;
+
+    Response response =
+        await httpRequestMethod(urlInfo: urlInfo, body: httpData);
+
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      throw Exception(body['_message']);
+    }
+  }
+
   Future<List<SessionModel>> getListedSessions({required IdList ids}) async {
     Pair urlInfo = SessionUrls.fetchListed;
 

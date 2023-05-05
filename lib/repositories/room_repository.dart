@@ -115,7 +115,7 @@ class RoomRepository {
 
     Response response =
         await httpRequestMethod(urlInfo: urlInfo, body: httpData);
-    print(response.body);
+
     final body = jsonDecode(response.body);
     if (response.statusCode == 200) {
       return;
@@ -127,6 +127,27 @@ class RoomRepository {
   Future<List<RoomModel>> searchRooms(
       {required SearchRoomSend httpData}) async {
     Pair urlInfo = RoomUrls.queryRooms;
+
+    Response response =
+        await httpRequestMethod(urlInfo: urlInfo, body: httpData);
+
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      final List result = body;
+      final res = result.map((e) {
+        RoomModel room = RoomModel.fromJson(e);
+        return room;
+      }).toList();
+
+      return res;
+    } else {
+      throw Exception(body['_message']);
+    }
+  }
+
+  Future<List<RoomModel>> searchSessions(
+      {required SearchRoomSend httpData}) async {
+    Pair urlInfo = RoomUrls.getSessions;
 
     Response response =
         await httpRequestMethod(urlInfo: urlInfo, body: httpData);

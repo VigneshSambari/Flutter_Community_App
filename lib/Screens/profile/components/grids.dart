@@ -1,13 +1,10 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:sessions/bloc/blog/blog_bloc_imports.dart';
 import 'package:sessions/bloc/profile/profile_bloc.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/models/blogpost.model.dart';
-import 'package:sessions/repositories/blog_repository.dart';
-import 'package:sessions/utils/classes.dart';
 
 class GridBlogs extends StatefulWidget {
   GridBlogs({Key? key}) : super(key: key);
@@ -60,7 +57,7 @@ class _GridBlogsState extends State<GridBlogs> {
                 child: Text("Blogs donot exist!"),
               );
             }
-            List<IdObject> blogs = state.profile.blogs ?? [];
+            // List<IdObject> blogs = state.profile.blogs ?? [];
             return GridView.builder(
               shrinkWrap: true,
               itemCount:

@@ -475,3 +475,24 @@ class IdList {
     );
   }
 }
+
+class SessionAddRemove {
+  final String userId;
+  final String sessionId;
+
+  SessionAddRemove({required this.userId, required this.sessionId});
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'userId': userId,
+      'sessionId': sessionId,
+    };
+  }
+
+  factory SessionAddRemove.fromJson(Map<String, dynamic> map) {
+    return SessionAddRemove(
+      userId: map['userId'] as String,
+      sessionId: map['sessionId'] as String,
+    );
+  }
+}

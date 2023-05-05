@@ -15,6 +15,7 @@ import 'package:month_year_picker/month_year_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sessions/bloc/session/session_bloc.dart';
 import 'package:sessions/callback.dart';
+import 'package:sessions/models/session.model.dart';
 import 'package:sessions/notifications/onesignal/push_notifications.dart';
 import 'package:sessions/repositories/session_repository.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -69,13 +70,6 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  // try {
-  //   final rooms = await RoomRepository().getRoomsOfType(roomType: "private");
-  //   print(rooms);
-  // } catch (err) {
-  //   print(err);
-  // }
-
   //zego cloud
   final navigatorKey = GlobalKey<NavigatorState>();
   ZegoUIKit().initLog().then((value) {
@@ -98,7 +92,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   Future<void> oneSignalInit(BuildContext context) async {
     //Remove this method to stop OneSignal Debugging
-    OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+    //OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
 
     OneSignal.shared.setAppId(oneSignalAppId!);
 
@@ -107,9 +101,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         .then((accepted) {});
 // Set notification opened handler
     OneSignal.shared
-        .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
-      print(result);
-    });
+        .setNotificationOpenedHandler((OSNotificationOpenedResult result) {});
 
     OneSignal.shared.setNotificationWillShowInForegroundHandler(
         (OSNotificationReceivedEvent event) {

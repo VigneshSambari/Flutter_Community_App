@@ -6,7 +6,7 @@ import 'package:sessions/components/appbar.dart';
 import 'package:sessions/components/carousal_slider.dart';
 import 'package:sessions/components/popup_menus.dart';
 import 'package:sessions/components/utils.dart';
-import 'package:sessions/constants.dart';
+
 import 'package:sessions/screens/chatScreens/components/clips.dart';
 import 'package:sessions/screens/chatScreens/components/rooms_holder.dart';
 import 'package:sessions/screens/chatScreens/create_room.dart';

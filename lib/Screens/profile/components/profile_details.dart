@@ -9,10 +9,7 @@ import 'package:sessions/components/styles.dart';
 import 'package:sessions/components/trays.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
-import 'package:sessions/models/profile.model.dart';
-import 'package:sessions/models/room.model.dart';
 import 'package:sessions/screens/profile/components/tiles.dart';
-import 'package:sessions/screens/profile/components/utils.dart';
 import 'package:sessions/utils/classes.dart';
 
 List<LinkClip> links = [

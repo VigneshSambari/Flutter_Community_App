@@ -22,14 +22,10 @@ class PushNotifications {
       'data': {'route': routeName}
     };
 
-    var response = await http.post(
+    await http.post(
       Uri.parse(oneSignalApiUrl),
       headers: headers,
       body: json.encode(request),
     );
-
-    print(response);
-
-    print('OneSignal API response: ${response.body}');
   }
 }

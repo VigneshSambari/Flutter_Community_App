@@ -103,6 +103,8 @@ class RoomUrls {
       Pair(url: "$roomEndPoint/addtogroup", requestType: true);
   static Pair removeUser =
       Pair(url: "$roomEndPoint/removeusergroup", requestType: true);
+  static Pair getSessions =
+      Pair(url: "$roomEndPoint/getsessions", requestType: true);
 
   static Pair getRoomsOfType({required String type}) {
     return Pair(url: "$roomEndPoint/getroomstype/$type", requestType: false);
@@ -129,6 +131,10 @@ class SessionUrls {
   static Pair create = Pair(url: "$sessionEndPoint/create", requestType: true);
   static Pair exit = Pair(url: "$sessionEndPoint/exit", requestType: true);
   static Pair update = Pair(url: "$sessionEndPoint/update", requestType: true);
+  static Pair add = Pair(url: "$sessionEndPoint/add", requestType: true);
+  static Pair remove = Pair(url: "$sessionEndPoint/remove", requestType: true);
+  static Pair findByRoomId =
+      Pair(url: "$sessionEndPoint/find", requestType: true);
   static Pair fetchListed =
       Pair(url: "$sessionEndPoint/fetchlisted", requestType: true);
 }

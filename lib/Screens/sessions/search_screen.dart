@@ -15,16 +15,17 @@ import 'package:sessions/notifications/onesignal/push_notifications.dart';
 import 'package:sessions/repositories/room_repository.dart';
 import 'package:sessions/utils/classes.dart';
 
-class RoomSearchScreen extends StatefulWidget {
+class SessionSearchScreen extends StatefulWidget {
   final String title;
   final String searchKey;
-  RoomSearchScreen({super.key, required this.title, required this.searchKey});
+  SessionSearchScreen(
+      {super.key, required this.title, required this.searchKey});
 
   @override
-  State<RoomSearchScreen> createState() => _RoomSearchScreenState();
+  State<SessionSearchScreen> createState() => _SessionSearchScreenState();
 }
 
-class _RoomSearchScreenState extends State<RoomSearchScreen> {
+class _SessionSearchScreenState extends State<SessionSearchScreen> {
   TextEditingController searchController = TextEditingController();
   RoomRepository roomRepository = RoomRepository();
   List<RoomModel> queryRooms = [];
@@ -54,7 +55,7 @@ class _RoomSearchScreenState extends State<RoomSearchScreen> {
       isLoading = true;
     });
     try {
-      queryRooms = await roomRepository.searchRooms(
+      queryRooms = await roomRepository.searchSessions(
         httpData: SearchRoomSend(
           type: widget.searchKey,
           query: searchController.text,
@@ -207,7 +208,7 @@ class _SearchRoomTileState extends State<SearchRoomTile> {
       if (number == "1") {
         notifications.sendPushNotification(
             externalUserIds: [widget.room.createdBy!],
-            title: "Room join request!",
+            title: "Session join request!",
             message:
                 "You received a join request from ${widget.userName} to join ${widget.room.name}");
       }

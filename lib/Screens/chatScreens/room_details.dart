@@ -11,14 +11,17 @@ import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/models/profile.model.dart';
 import 'package:sessions/models/room.model.dart';
+import 'package:sessions/models/session.model.dart';
 import 'package:sessions/notifications/onesignal/push_notifications.dart';
 import 'package:sessions/repositories/profile_repository.dart';
 import 'package:sessions/repositories/room_repository.dart';
+import 'package:sessions/repositories/session_repository.dart';
 import 'package:sessions/utils/classes.dart';
 
 class RoomDetails extends StatefulWidget {
   final RoomModel room;
-  const RoomDetails({super.key, required this.room});
+  final bool isSession;
+  const RoomDetails({super.key, required this.room, this.isSession = false});
 
   @override
   State<RoomDetails> createState() => _RoomDetailsState();
@@ -27,6 +30,7 @@ class RoomDetails extends StatefulWidget {
 class _RoomDetailsState extends State<RoomDetails> {
   ProfileRepository profileRepository = ProfileRepository();
   RoomRepository roomRepository = RoomRepository();
+  SessionRepository sessionRepository = SessionRepository();
   PushNotifications pushNotifications = PushNotifications();
   List<ProfileModel> joinedProfiles = [];
   List<ProfileModel> requestProfiles = [];
@@ -44,14 +48,12 @@ class _RoomDetailsState extends State<RoomDetails> {
     super.dispose();
   }
 
-  void loadProfile() {
+  void loadProfile() async {
     UserState userState = BlocProvider.of<UserBloc>(context).state;
     if (userState is UserSignedInState) {
       ProfileState profileState = BlocProvider.of<ProfileBloc>(context).state;
       if (profileState is ProfileCreatedState) {
         if (widget.room.createdBy == profileState.profile.userId) {
-          print(widget.room.createdBy);
-          print(profileState.profile.userId);
           iAmAdmin = true;
         }
       }
@@ -59,20 +61,29 @@ class _RoomDetailsState extends State<RoomDetails> {
   }
 
   Future<void> addUserRoom({required ProfileModel profile}) async {
-    print("called");
     try {
-      await roomRepository.removeUserFromGroup(
+      await roomRepository.addUserToGroup(
         httpData: JoinLeaveRoomSend(
             userId: profile.userId!,
             roomId: widget.room.roomId ?? "",
             joinOrLeave: ""),
       );
-
+      if (widget.isSession) {
+        SessionModel session = await sessionRepository.findByRoomID(
+            httpData: IdObject(widget.room.roomId ?? ""));
+        print(session);
+        await sessionRepository.addSession(
+            httpData: SessionAddRemove(
+          userId: profile.userId!,
+          sessionId: session.sessionId,
+        ));
+      }
       pushNotifications.sendPushNotification(
-          externalUserIds: [profile.userId!],
-          title: " Join request accepted!",
-          message:
-              "You request to join room : ${widget.room.name} has been accepted.");
+        externalUserIds: [profile.userId!],
+        title: " Join request accepted!",
+        message:
+            "You request to join ${widget.isSession ? "session" : "room"} : ${widget.room.name} has been accepted.",
+      );
       int index = 0;
 
       for (var item in requestProfiles) {
@@ -98,9 +109,8 @@ class _RoomDetailsState extends State<RoomDetails> {
   }
 
   Future<void> removeUserGroup({required ProfileModel profile}) async {
-    print("called");
     try {
-      await roomRepository.addUserToGroup(
+      await roomRepository.removeUserFromGroup(
         httpData: JoinLeaveRoomSend(
             userId: profile.userId!,
             roomId: widget.room.roomId ?? "",
