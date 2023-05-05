@@ -2,7 +2,6 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:mime/mime.dart';
 import 'package:sessions/assets.dart';
 import 'package:sessions/components/carousal_slider.dart';
 import 'package:sessions/components/styles.dart';
@@ -10,6 +9,7 @@ import 'package:sessions/components/trays.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/models/blogpost.model.dart';
 import 'package:sessions/models/profile.model.dart';
+import 'package:sessions/utils/util_methods.dart';
 import 'package:video_player/video_player.dart';
 
 class BlogImageTile extends StatelessWidget {
@@ -141,21 +141,6 @@ class BlogTile extends StatefulWidget {
 }
 
 int _mediaIndex = 0;
-
-String getFileType(String url) {
-  final mimeType = lookupMimeType(url);
-  if (mimeType == null) {
-    return 'unknown';
-  } else if (mimeType.startsWith('image/')) {
-    return 'image';
-  } else if (mimeType.startsWith('audio/')) {
-    return 'audio';
-  } else if (mimeType.startsWith('video/')) {
-    return 'video';
-  } else {
-    return 'other';
-  }
-}
 
 class _BlogTileState extends State<BlogTile> {
   List<Widget> media = [];

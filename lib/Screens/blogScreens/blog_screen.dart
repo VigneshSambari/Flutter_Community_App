@@ -141,13 +141,13 @@ class _BlogScreenState extends State<BlogScreen> {
           appBar: CurvedAppBar(
             title: "Blogs",
             actions: [
-              Padding(
-                padding: EdgeInsets.only(right: 15),
-                child: GestureDetector(
-                  child: Icon(Icons.search),
-                  onTap: () {},
-                ),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.only(right: 15),
+              //   child: GestureDetector(
+              //     child: Icon(Icons.search),
+              //     onTap: () {},
+              //   ),
+              // ),
               Padding(
                 padding: EdgeInsets.only(right: 15),
                 child: PopUpMenuWidget(

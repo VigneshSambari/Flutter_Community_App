@@ -71,7 +71,7 @@ class _RoomDetailsState extends State<RoomDetails> {
       if (widget.isSession) {
         SessionModel session = await sessionRepository.findByRoomID(
             httpData: IdObject(widget.room.roomId ?? ""));
-        print(session);
+
         await sessionRepository.addSession(
             httpData: SessionAddRemove(
           userId: profile.userId!,

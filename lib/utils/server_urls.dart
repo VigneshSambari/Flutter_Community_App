@@ -30,6 +30,8 @@ class BlogUrls {
   static Pair deletecommentorreply =
       Pair(url: "$blogEndPoint/deletecommentorreply", requestType: true);
   static Pair addreply = Pair(url: "$blogEndPoint/addreply", requestType: true);
+  static Pair listedBlogs =
+      Pair(url: "$blogEndPoint/listedblogs", requestType: true);
 
   static Pair likeOrUnlike(String id, String choice, String commentorpost) {
     return Pair(

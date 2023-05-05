@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import 'package:sessions/bloc/room/room_bloc_imports.dart';
 import 'package:sessions/bloc/user/user_bloc.dart';
+import 'package:sessions/components/appbar.dart';
 import 'package:sessions/components/navbar.dart';
 import 'package:sessions/components/side_menu.dart';
 import 'package:sessions/components/snackbar.dart';
@@ -62,7 +63,13 @@ class _EntryPointState extends State<EntryPoint>
         width: MediaQuery.of(context).size.width,
         color: Colors.white,
         alignment: Alignment.center,
-        child: Text("Screen 5"),
+        child: Scaffold(
+          appBar: CurvedAppBar(
+              title: "Notifications", actions: [], leading: SizedBox()),
+          body: Center(
+            child: Text("No Notifications yet!"),
+          ),
+        ),
       );
     }
     setState(() {

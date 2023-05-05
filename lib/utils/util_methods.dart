@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
+import 'package:mime/mime.dart';
 import 'package:sessions/utils/classes.dart';
 import 'package:sessions/utils/enums.dart';
 
@@ -177,4 +178,19 @@ String formatTime({required DateTime time}) {
 
 String formatDay({required DateTime day}) {
   return DateFormat('EEEE').format(day);
+}
+
+String getFileType(String url) {
+  final mimeType = lookupMimeType(url);
+  if (mimeType == null) {
+    return 'unknown';
+  } else if (mimeType.startsWith('image/')) {
+    return 'image';
+  } else if (mimeType.startsWith('audio/')) {
+    return 'audio';
+  } else if (mimeType.startsWith('video/')) {
+    return 'video';
+  } else {
+    return 'other';
+  }
 }
