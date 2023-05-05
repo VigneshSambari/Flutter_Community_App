@@ -17,8 +17,10 @@ import 'package:sessions/repositories/profile_repository.dart';
 import 'package:sessions/repositories/room_repository.dart';
 
 import 'package:sessions/screens/chatScreens/components/clips.dart';
+import 'package:sessions/screens/chatScreens/room_details.dart';
 import 'package:sessions/socket/socket_client.dart';
 import 'package:sessions/utils/classes.dart';
+import 'package:sessions/utils/navigations.dart';
 import 'package:sessions/utils/util_methods.dart';
 
 List<EventClip> events = [
@@ -258,22 +260,34 @@ class _ChatScreenState extends State<ChatScreen> {
                       color: kPrimaryColor,
                       child: ListTile(
                         tileColor: kPrimaryColor,
-                        title: Text(
-                          widget.roomData.name!,
-                          maxLines: 1,
-                          overflow: TextOverflow.fade,
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                        title: GestureDetector(
+                          onTap: () {
+                            navigatorPush(
+                                RoomDetails(room: widget.roomData), context);
+                          },
+                          child: Text(
+                            widget.roomData.name!,
+                            maxLines: 1,
+                            overflow: TextOverflow.fade,
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                        subtitle: Text(
-                          widget.roomData.description!,
-                          maxLines: 2,
-                          overflow: TextOverflow.fade,
-                          style: TextStyle(
-                            color: kPrimaryLightColor,
+                        subtitle: GestureDetector(
+                          onTap: () {
+                            navigatorPush(
+                                RoomDetails(room: widget.roomData), context);
+                          },
+                          child: Text(
+                            widget.roomData.description!,
+                            maxLines: 2,
+                            overflow: TextOverflow.fade,
+                            style: TextStyle(
+                              color: kPrimaryLightColor,
+                            ),
                           ),
                         ),
                         leading: Wrap(

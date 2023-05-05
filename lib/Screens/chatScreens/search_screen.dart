@@ -11,6 +11,7 @@ import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/models/profile.model.dart';
 import 'package:sessions/models/room.model.dart';
+import 'package:sessions/notifications/onesignal/push_notifications.dart';
 import 'package:sessions/repositories/room_repository.dart';
 import 'package:sessions/utils/classes.dart';
 
@@ -100,7 +101,9 @@ class _RoomSearchScreenState extends State<RoomSearchScreen> {
               if (state is ProfileCreatedState) {
                 profile = state.profile;
               }
-              return SingleChildScrollView(
+              return Container(
+                width: size.width,
+                height: size.height,
                 child: Column(
                   children: [
                     SearchBar(controller: searchController, fetch: fetchRooms),
@@ -108,10 +111,10 @@ class _RoomSearchScreenState extends State<RoomSearchScreen> {
                         ? LoadingIndicator(
                             circularBlue: true,
                           )
-                        : SizedBox(
-                            width: size.width,
-                            height: size.height,
+                        : Expanded(
                             child: ListView.builder(
+                              physics: BouncingScrollPhysics(),
+                              shrinkWrap: true,
                               itemCount: queryRooms.length,
                               itemBuilder: (context, index) {
                                 List<RoomItem> joinedRoomIds =
@@ -140,13 +143,11 @@ class _RoomSearchScreenState extends State<RoomSearchScreen> {
                                   room: queryRooms[index],
                                   roomId: currRoom.roomId ?? "",
                                   userId: profile.userId ?? "",
+                                  userName: profile.userName ?? "",
                                 );
                               },
                             ),
                           ),
-                    SizedBox(
-                      height: 100,
-                    ),
                   ],
                 ),
               );
@@ -163,12 +164,14 @@ class SearchRoomTile extends StatefulWidget {
   final String status;
   final String userId;
   final String roomId;
+  final String userName;
   SearchRoomTile(
       {super.key,
       required this.room,
       required this.status,
       required this.userId,
-      required this.roomId});
+      required this.roomId,
+      this.userName = ""});
 
   @override
   State<SearchRoomTile> createState() => _SearchRoomTileState();
@@ -179,6 +182,7 @@ class _SearchRoomTileState extends State<SearchRoomTile> {
   String currentStatus = "";
   bool isDisposed = false, isLoading = false;
   RoomRepository roomRepository = RoomRepository();
+  final PushNotifications notifications = PushNotifications();
 
   @override
   void initState() {
@@ -199,6 +203,14 @@ class _SearchRoomTileState extends State<SearchRoomTile> {
           joinOrLeave: "join",
         ),
       );
+
+      if (number == "1") {
+        notifications.sendPushNotification(
+            externalUserIds: [widget.room.createdBy!],
+            title: "Room join request!",
+            message:
+                "You received a join request from ${widget.userName} to join ${widget.room.name}");
+      }
     } catch (error) {
       showMySnackBar(context, error.toString());
     }

@@ -95,6 +95,35 @@ class RoomRepository {
     }
   }
 
+  Future<void> addUserToGroup({required JoinLeaveRoomSend httpData}) async {
+    Pair urlInfo = RoomUrls.addUserToGroup;
+
+    Response response =
+        await httpRequestMethod(urlInfo: urlInfo, body: httpData);
+
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      throw Exception(body['_message']);
+    }
+  }
+
+  Future<void> removeUserFromGroup(
+      {required JoinLeaveRoomSend httpData}) async {
+    Pair urlInfo = RoomUrls.removeUser;
+
+    Response response =
+        await httpRequestMethod(urlInfo: urlInfo, body: httpData);
+    print(response.body);
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      throw Exception(body['_message']);
+    }
+  }
+
   Future<List<RoomModel>> searchRooms(
       {required SearchRoomSend httpData}) async {
     Pair urlInfo = RoomUrls.queryRooms;

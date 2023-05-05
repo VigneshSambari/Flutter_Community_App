@@ -99,6 +99,10 @@ class RoomUrls {
       Pair(url: "$roomEndPoint/fetchmessages", requestType: true);
   static Pair fetchListedRooms =
       Pair(url: "$roomEndPoint/fetchlisted", requestType: true);
+  static Pair addUserToGroup =
+      Pair(url: "$roomEndPoint/addtogroup", requestType: true);
+  static Pair removeUser =
+      Pair(url: "$roomEndPoint/removeusergroup", requestType: true);
 
   static Pair getRoomsOfType({required String type}) {
     return Pair(url: "$roomEndPoint/getroomstype/$type", requestType: false);

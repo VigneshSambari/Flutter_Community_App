@@ -3,13 +3,17 @@
 import 'package:flutter/material.dart';
 import 'package:sessions/assets.dart';
 import 'package:sessions/bloc/profile/profile_bloc.dart';
+import 'package:sessions/bloc/room/room_bloc.dart';
 import 'package:sessions/bloc/user/user_bloc_imports.dart';
 import 'package:sessions/components/styles.dart';
 import 'package:sessions/components/trays.dart';
 import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
+import 'package:sessions/models/profile.model.dart';
+import 'package:sessions/models/room.model.dart';
 import 'package:sessions/screens/profile/components/tiles.dart';
 import 'package:sessions/screens/profile/components/utils.dart';
+import 'package:sessions/utils/classes.dart';
 
 List<LinkClip> links = [
   LinkClip(title: "Github", url: "https://flutter.dev"),
@@ -138,107 +142,182 @@ class ProfileDetails extends StatelessWidget {
   }
 }
 
-class ProfileConnections extends StatelessWidget {
+class ProfileConnections extends StatefulWidget {
   const ProfileConnections({
     super.key,
   });
 
   @override
+  State<ProfileConnections> createState() => _ProfileConnectionsState();
+}
+
+class _ProfileConnectionsState extends State<ProfileConnections> {
+  late String userId;
+  String title = "Rooms";
+  @override
+  void initState() {
+    UserState userState = BlocProvider.of<UserBloc>(context).state;
+    if (userState is UserSignedInState) {
+      userId = userState.user.userId!;
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: 15,
+        horizontal: 5,
         vertical: 3,
       ),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: ProfileNameEditTray(
-                    title: "Connections",
-                    icon: Container(),
-                  ),
-                ),
-                PopupMenuButton(
-                  iconSize: 32.5,
-                  shape: Border.all(
-                    width: 2,
-                    color: kPrimaryColor,
-                  ),
-                  itemBuilder: (BuildContext context) {
-                    return <PopupMenuEntry>[
-                      PopupMenuItem(
-                        child: Text(
-                          'Connections',
-                          style: popUpMenuItemStyle(),
+      child: BlocBuilder<ProfileBloc, ProfileState>(
+        builder: (context, profileState) {
+          if (profileState is ProfileCreatedState) {
+            List<IdObject> roomIds = [];
+            for (RoomItem item in profileState.profile.rooms ?? []) {
+              roomIds.add(IdObject(item.id));
+            }
+            for (IdObject item in profileState.profile.requestsSent ?? []) {
+              roomIds.add(IdObject(item.id));
+            }
+            BlocProvider.of<RoomBloc>(context)
+                .add(LoadListedRoomsEvent(ids: IdList(ids: roomIds)));
+            return BlocBuilder<RoomBloc, RoomState>(
+              builder: (context, roomState) {
+                if (roomState is RoomLoadedState) {
+                  return SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ProfileNameEditTray(
+                                title: title,
+                                icon: Container(),
+                              ),
+                            ),
+                            PopupMenuButton(
+                              iconSize: 32.5,
+                              shape: Border.all(
+                                width: 2,
+                                color: kPrimaryColor,
+                              ),
+                              itemBuilder: (BuildContext context) {
+                                return <PopupMenuEntry>[
+                                  PopupMenuItem(
+                                    child: Text(
+                                      'Connections',
+                                      style: popUpMenuItemStyle(),
+                                    ),
+                                    value: "Connections",
+                                  ),
+                                  PopupMenuItem(
+                                    child: Text(
+                                      'Rooms',
+                                      style: popUpMenuItemStyle(),
+                                    ),
+                                    value: "Rooms",
+                                  ),
+                                ];
+                              },
+                              onSelected: (value) {
+                                setState(() {
+                                  title = value;
+                                });
+                              },
+                              icon: Icon(
+                                Icons.arrow_drop_down_circle,
+                                color: backgroundColor2.withOpacity(0.85),
+                              ),
+                            ),
+                          ],
                         ),
-                        value: 1,
-                      ),
-                      PopupMenuItem(
-                        child: Text(
-                          'Rooms',
-                          style: popUpMenuItemStyle(),
-                        ),
-                        value: 2,
-                      ),
-                    ];
-                  },
-                  onSelected: (value) {
-                    // Do something when a menu item is selected
-                  },
-                  icon: Icon(
-                    Icons.arrow_drop_down_circle,
-                    color: backgroundColor2.withOpacity(0.85),
-                  ),
-                ),
-              ],
-            ),
-            ConnectionRoomTile(
-              iconUrl:
-                  "https://images.pexels.com/photos/15784893/pexels-photo-15784893.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-              subTitle: "Room desc",
-              title: "Room Name",
-              trailing: ConnectionRoomButton(title: "connect"),
-            ),
-            ConnectionRoomTile(
-              iconUrl:
-                  "https://images.pexels.com/photos/15784893/pexels-photo-15784893.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-              subTitle: "Room desc",
-              title: "Room Name",
-              trailing: ConnectionRoomButton(title: "connect"),
-            ),
-            ConnectionRoomTile(
-              iconUrl:
-                  "https://images.pexels.com/photos/15784893/pexels-photo-15784893.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-              subTitle: "Room desc",
-              title: "Room Name",
-              trailing: ConnectionRoomButton(title: "connect"),
-            ),
-            ConnectionRoomTile(
-              iconUrl:
-                  "https://images.pexels.com/photos/15784893/pexels-photo-15784893.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-              subTitle: "Room desc",
-              title: "Room Name",
-              trailing: ConnectionRoomButton(title: "connect"),
-            ),
-            ConnectionRoomTile(
-              iconUrl:
-                  "https://images.pexels.com/photos/15784893/pexels-photo-15784893.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-              subTitle: "Room desc",
-              title: "Room Name",
-              trailing: ConnectionRoomButton(title: "connect"),
-            ),
-            ConnectionRoomTile(
-              iconUrl:
-                  "https://images.pexels.com/photos/15784893/pexels-photo-15784893.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-              subTitle: "Room desc",
-              title: "Room Name",
-              trailing: ConnectionRoomButton(title: "connect"),
-            ),
-          ],
-        ),
+                        ExistingRoomTitle(title: "Joined Rooms"),
+                        ...roomState.rooms.map((room) {
+                          for (RoomItem item
+                              in profileState.profile.rooms ?? []) {
+                            if (item.id == room.roomId!) {
+                              return ListTile(
+                                  leading: CircleAvatar(
+                                    backgroundColor: kPrimaryColor,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(25),
+                                      child: CircleImageTile(
+                                          url: room.coverPic == null
+                                              ? ""
+                                              : room.coverPic!.secureUrl),
+                                    ),
+                                  ),
+                                  title: Text(room.name!),
+                                  subtitle: Text(room.description ?? ""),
+                                  trailing: ListTileTrailing(
+                                    color: Colors.red,
+                                    title: "Exit",
+                                  ));
+                            }
+                          }
+                          return SizedBox();
+                        }).toList(),
+                        ExistingRoomTitle(title: "Room Requests Sent"),
+                        ...roomState.rooms.map((room) {
+                          for (IdObject item
+                              in profileState.profile.requestsSent ?? []) {
+                            if (item.id == room.roomId!) {
+                              return ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor: kPrimaryColor,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(25),
+                                    child: CircleImageTile(
+                                        url: room.coverPic == null
+                                            ? ""
+                                            : room.coverPic!.secureUrl),
+                                  ),
+                                ),
+                                title: Text(room.name!),
+                                subtitle: Text(room.description ?? ""),
+                                trailing: ListTileTrailing(
+                                    color: Colors.orange, title: "Cancel"),
+                              );
+                            }
+                          }
+                          return SizedBox();
+                        }).toList(),
+                        SizedBox(
+                          height: 150,
+                        )
+                      ],
+                    ),
+                  );
+                }
+                if (roomState is RoomErrorState) {
+                  return Center(
+                    child: Text(
+                      roomState.error,
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  );
+                }
+                return LoadingIndicator(
+                  circularBlue: true,
+                );
+              },
+            );
+          }
+          if (profileState is ProfileErrorState) {
+            return Center(
+              child: Text(
+                profileState.error,
+                style: TextStyle(color: Colors.red),
+              ),
+            );
+          }
+          return LoadingIndicator(
+            circularBlue: true,
+          );
+        },
       ),
     );
   }

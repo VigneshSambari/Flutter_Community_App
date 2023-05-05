@@ -2,8 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:sessions/bloc/profile/profile_bloc_imports.dart';
+import 'package:sessions/bloc/user/user_bloc.dart';
 import 'package:sessions/components/appbar.dart';
 import 'package:sessions/components/popup_menus.dart';
+import 'package:sessions/components/utils.dart';
 import 'package:sessions/screens/profile/bottom_sheet.dart';
 import 'package:sessions/screens/profile/components/tiles.dart';
 import 'package:sessions/screens/profile/components/trays.dart';
@@ -15,8 +17,25 @@ List<PairPopMenu> popUpOptions = [
   PairPopMenu(value: 2, option: "Refresh"),
 ];
 
-class ViewProfile extends StatelessWidget {
+class ViewProfile extends StatefulWidget {
   const ViewProfile({super.key});
+
+  @override
+  State<ViewProfile> createState() => _ViewProfileState();
+}
+
+class _ViewProfileState extends State<ViewProfile> {
+  late String userId;
+  @override
+  void initState() {
+    final userState = BlocProvider.of<UserBloc>(context).state;
+    if (userState is UserSignedInState) {
+      userId = userState.user.userId!;
+      BlocProvider.of<ProfileBloc>(context)
+          .add(LoadProfileEvent(userId: userId));
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,13 +103,18 @@ class ViewProfileBody extends StatelessWidget {
             ),
           );
         }
-        return Center(
-          child: Text(
-            "Error in fetching profile!",
-            style: TextStyle(
-              color: Colors.red,
+        if (state is ProfileErrorState) {
+          return Center(
+            child: Text(
+              "Error in fetching profile!",
+              style: TextStyle(
+                color: Colors.red,
+              ),
             ),
-          ),
+          );
+        }
+        return LoadingIndicator(
+          circularBlue: true,
         );
       },
     );

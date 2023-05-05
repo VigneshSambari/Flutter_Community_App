@@ -351,3 +351,58 @@ class DateTimeText extends StatelessWidget {
     );
   }
 }
+
+class ExistingRoomTitle extends StatelessWidget {
+  final String title;
+  const ExistingRoomTitle({
+    super.key,
+    required this.title,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        margin: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        decoration: BoxDecoration(
+          color: kPrimaryColor,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Text(
+          title,
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 17,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ListTileTrailing extends StatelessWidget {
+  final String title;
+  final Color color;
+  final Function? callBack;
+  const ListTileTrailing(
+      {super.key, required this.title, required this.color, this.callBack});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Text(
+        title,
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+}
