@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:sessions/bloc/blog/blog_bloc_imports.dart';
 import 'package:sessions/bloc/profile/profile_bloc.dart';
-import 'package:sessions/bloc/user/user_bloc.dart';
 
 import 'package:sessions/components/circle_avatars.dart';
 import 'package:sessions/components/snackbar.dart';

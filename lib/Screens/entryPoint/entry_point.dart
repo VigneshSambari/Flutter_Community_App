@@ -94,7 +94,7 @@ class _EntryPointState extends State<EntryPoint>
   void initState() {
     UserState userState = BlocProvider.of<UserBloc>(context).state;
     if (userState is UserSignedInState) {
-      OneSignal.shared.setExternalUserId(userState.user.userId! ?? "");
+      OneSignal.shared.setExternalUserId(userState.user.userId ?? "");
     }
 
     setSocketServer();
