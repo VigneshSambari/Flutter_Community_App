@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:sessions/bloc/blog/blog_bloc_imports.dart';
+import 'package:sessions/bloc/profile/profile_bloc.dart';
 import 'package:sessions/bloc/user/user_bloc.dart';
 
 import 'package:sessions/components/circle_avatars.dart';
@@ -79,9 +80,10 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
-    final UserState userState = BlocProvider.of<UserBloc>(context).state;
-    if (userState is UserSignedInState) {
-      userId = userState.user.userId!;
+    final ProfileState profileState =
+        BlocProvider.of<ProfileBloc>(context).state;
+    if (profileState is ProfileCreatedState) {
+      userId = profileState.profile.userId!;
     }
     fetchData();
     socketService = SocketService(query: {
@@ -351,12 +353,11 @@ class _ChatScreenState extends State<ChatScreen> {
                                             )
                                           : SizedBox(),
                                       SizedBox(
-                                        height: 175,
+                                        height: 500,
                                       )
                                     ],
                                   );
                                 } else {
-                                  //print(msgUserProfiles[index].userName);
                                   return RoomMessageTile(
                                     userName: (mapIdProfile.containsKey(
                                                 messageList[index].sentBy!) &&

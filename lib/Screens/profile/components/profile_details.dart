@@ -37,6 +37,15 @@ class ProfileDetails extends StatelessWidget {
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
         if (state is ProfileCreatedState) {
+          List<IdObject> roomIds = [];
+          for (RoomItem item in state.profile.rooms ?? []) {
+            roomIds.add(IdObject(item.id));
+          }
+          for (IdObject item in state.profile.requestsSent ?? []) {
+            roomIds.add(IdObject(item.id));
+          }
+          BlocProvider.of<RoomBloc>(context)
+              .add(LoadListedRoomsEvent(ids: IdList(ids: roomIds)));
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
             child: SingleChildScrollView(
@@ -171,15 +180,6 @@ class _ProfileConnectionsState extends State<ProfileConnections> {
       child: BlocBuilder<ProfileBloc, ProfileState>(
         builder: (context, profileState) {
           if (profileState is ProfileCreatedState) {
-            List<IdObject> roomIds = [];
-            for (RoomItem item in profileState.profile.rooms ?? []) {
-              roomIds.add(IdObject(item.id));
-            }
-            for (IdObject item in profileState.profile.requestsSent ?? []) {
-              roomIds.add(IdObject(item.id));
-            }
-            BlocProvider.of<RoomBloc>(context)
-                .add(LoadListedRoomsEvent(ids: IdList(ids: roomIds)));
             return BlocBuilder<RoomBloc, RoomState>(
               builder: (context, roomState) {
                 if (roomState is RoomLoadedState) {

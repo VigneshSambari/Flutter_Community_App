@@ -394,7 +394,7 @@ class _CreateProfileState extends State<CreateProfile> {
                     return Container(
                       width: size.width,
                       height: size.height,
-                      color: kPrimaryColor.withOpacity(0.3),
+                      color: kPrimaryLightColor.withOpacity(0.5),
                       child: Center(
                         child: LoadingIndicator(circularBlue: true),
                       ),
