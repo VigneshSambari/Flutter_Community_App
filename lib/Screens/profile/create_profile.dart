@@ -78,6 +78,11 @@ class _CreateProfileState extends State<CreateProfile> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   ProfileInputVariables inputVariables = ProfileInputVariables(
     firstName: "",
     lastName: "",
@@ -133,284 +138,275 @@ class _CreateProfileState extends State<CreateProfile> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return BlocConsumer<ProfileBloc, ProfileState>(
-      listener: (context, state) async {
-        if (state is ProfileCreatedState) {
-          navigatorPopAllExceptFirst(context);
-          navigatorPushReplacement(context, EntryPoint());
-        }
-        if (state is ProfileErrorState) {
-          showMySnackBar(context, state.error);
-        }
-        if (state is ProfileFetchFailedState) {
-          // final userState = BlocProvider.of<UserBloc>(context).state;
-          // if (userState is UserSignedInState) {
-          //   await Future.delayed(Duration(seconds: 5));
-          //   BlocProvider.of<ProfileBloc>(context)
-          //       .add(LoadProfileEvent(userId: userState.user.userId!));
-          // }
-        }
-      },
-      builder: (context, state) {
-        if (state is ProfileNotExistState) {
-          return Scaffold(
-            appBar: CurvedAppBar(
-              title: "Create Profile",
-              leading: BackButtonNav(),
-              actions: [],
-            ),
-            body: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: 7,
-                vertical: 5,
-              ),
-              width: size.width,
-              height: size.height,
-              child: Stack(
-                children: [
-                  Center(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: size.width,
-                            height: 300,
-                            child: Stack(
-                              children: [
-                                Container(
-                                  width: size.width,
-                                  height: 230,
-                                  decoration: BoxDecoration(
-                                    color: kPrimaryLightColor,
-                                    borderRadius: BorderRadius.circular(15),
+    return Scaffold(
+      appBar: CurvedAppBar(
+        title: "Create Profile",
+        leading: BackButtonNav(),
+        actions: [],
+      ),
+      body: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: 7,
+          vertical: 5,
+        ),
+        width: size.width,
+        height: size.height,
+        child: BlocListener<ProfileBloc, ProfileState>(
+          listener: (context, state) {
+            if (state is ProfileCreatedState) {
+              navigatorPopAllExceptFirst(context);
+              navigatorPushReplacement(context, EntryPoint());
+            }
+            if (state is ProfileErrorState) {
+              showMySnackBar(context, state.error);
+            }
+            if (state is ProfileFetchFailedState) {
+              // final userState = BlocProvider.of<UserBloc>(context).state;
+              // if (userState is UserSignedInState) {
+              //   await Future.delayed(Duration(seconds: 5));
+              //   BlocProvider.of<ProfileBloc>(context)
+              //       .add(LoadProfileEvent(userId: userState.user.userId!));
+              // }
+            }
+          },
+          child: Stack(
+            children: [
+              Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: size.width,
+                        height: 300,
+                        child: Stack(
+                          children: [
+                            Container(
+                              width: size.width,
+                              height: 230,
+                              decoration: BoxDecoration(
+                                color: kPrimaryLightColor,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              margin: EdgeInsets.all(5),
+                              child: Stack(
+                                children: [
+                                  Center(
+                                    child: AddImageIcon(
+                                      setProfile: addCoverPhoto,
+                                    ),
                                   ),
-                                  margin: EdgeInsets.all(5),
+                                  Stack(
+                                    children: [
+                                      inputVariables.coverPhoto == ""
+                                          ? SizedBox()
+                                          : CoverPhoto(
+                                              profilePicPath:
+                                                  inputVariables.coverPhoto,
+                                              size: size,
+                                            ),
+                                      inputVariables.coverPhoto == ""
+                                          ? SizedBox()
+                                          : Positioned(
+                                              bottom: 10,
+                                              right: 10,
+                                              child: AddImageIcon(
+                                                setProfile: addCoverPhoto,
+                                                plusRadius: 10,
+                                                iconSize: 15,
+                                                picIconSize: 40,
+                                              ),
+                                            ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Positioned(
+                              left: 15,
+                              bottom: 10,
+                              child: Container(
+                                width: size.width * 0.25,
+                                height: size.width * 0.25,
+                                child: Padding(
+                                  padding: EdgeInsets.all(1),
                                   child: Stack(
                                     children: [
-                                      Center(
-                                        child: AddImageIcon(
-                                          setProfile: addCoverPhoto,
+                                      CircleAvatar(
+                                        radius: 60,
+                                        child: CircleAvatar(
+                                          radius: 53.5,
+                                          backgroundColor: kPrimaryLightColor,
+                                          child: Center(
+                                            child: AddImageIcon(
+                                              setProfile: addProfilePic,
+                                              picIconSize: 27,
+                                              plusRadius: 6,
+                                              iconSize: 13,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                      Stack(
-                                        children: [
-                                          inputVariables.coverPhoto == ""
-                                              ? SizedBox()
-                                              : CoverPhoto(
-                                                  profilePicPath:
-                                                      inputVariables.coverPhoto,
-                                                  size: size,
-                                                ),
-                                          inputVariables.coverPhoto == ""
-                                              ? SizedBox()
-                                              : Positioned(
-                                                  bottom: 10,
-                                                  right: 10,
-                                                  child: AddImageIcon(
-                                                    setProfile: addCoverPhoto,
-                                                    plusRadius: 10,
-                                                    iconSize: 15,
-                                                    picIconSize: 40,
-                                                  ),
-                                                ),
-                                        ],
-                                      ),
+                                      inputVariables.profilePic == ""
+                                          ? SizedBox()
+                                          : ProfileImage(
+                                              radius: 60,
+                                              profilePicPath:
+                                                  inputVariables.profilePic,
+                                            ),
+                                      inputVariables.profilePic == ""
+                                          ? SizedBox()
+                                          : Positioned(
+                                              bottom: 0,
+                                              right: 0,
+                                              child: AddImageIcon(
+                                                setProfile: addProfilePic,
+                                                plusRadius: 7,
+                                                iconSize: 10,
+                                                picIconSize: 28,
+                                              ),
+                                            ),
                                     ],
                                   ),
                                 ),
-                                Positioned(
-                                  left: 15,
-                                  bottom: 10,
-                                  child: Container(
-                                    width: size.width * 0.25,
-                                    height: size.width * 0.25,
-                                    child: Padding(
-                                      padding: EdgeInsets.all(1),
-                                      child: Stack(
-                                        children: [
-                                          CircleAvatar(
-                                            radius: 60,
-                                            child: CircleAvatar(
-                                              radius: 53.5,
-                                              backgroundColor:
-                                                  kPrimaryLightColor,
-                                              child: Center(
-                                                child: AddImageIcon(
-                                                  setProfile: addProfilePic,
-                                                  picIconSize: 27,
-                                                  plusRadius: 6,
-                                                  iconSize: 13,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          inputVariables.profilePic == ""
-                                              ? SizedBox()
-                                              : ProfileImage(
-                                                  radius: 60,
-                                                  profilePicPath:
-                                                      inputVariables.profilePic,
-                                                ),
-                                          inputVariables.profilePic == ""
-                                              ? SizedBox()
-                                              : Positioned(
-                                                  bottom: 0,
-                                                  right: 0,
-                                                  child: AddImageIcon(
-                                                    setProfile: addProfilePic,
-                                                    plusRadius: 7,
-                                                    iconSize: 10,
-                                                    picIconSize: 28,
-                                                  ),
-                                                ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: SizedInputField(
+                                fieldName: "First Name",
+                                controller: inputControllers.firstName),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: SizedInputField(
-                                    fieldName: "First Name",
-                                    controller: inputControllers.firstName),
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Expanded(
-                                child: SizedInputField(
-                                  fieldName: "Last Name",
-                                  controller: inputControllers.lastName,
-                                ),
-                              ),
-                            ],
+                          SizedBox(
+                            width: 5,
                           ),
-                          SizedInputField(
-                            fieldName: "UserName",
-                            controller: inputControllers.userName,
-                          ),
-                          CustomDropdownButton(
-                            dropType: DropTypes.collegeDropDown,
-                            prefixIcon: Icons.school,
-                            options: collegeDropDown,
-                            fieldName: "Select your College",
-                            changeValue: setDropDownValue,
-                          ),
-                          CustomDropdownButton(
-                            dropType: DropTypes.specializationDropDown,
-                            prefixIcon: Icons.science,
-                            options: specializationDropDown,
-                            fieldName: "Select your Specialization",
-                            changeValue: setDropDownValue,
-                          ),
-                          CustomDropdownButton(
-                            dropType: DropTypes.designationDropDown,
-                            prefixIcon: Icons.work,
-                            options: designationDropDown,
-                            fieldName: "Select your Designation",
-                            changeValue: setDropDownValue,
-                          ),
-                          InterestsTile(
-                              size: size,
-                              controller: inputControllers.interests,
-                              interestsList: interestList),
-                          Container(
-                            margin: EdgeInsets.symmetric(vertical: 10),
-                            decoration: BoxDecoration(
-                              color: kPrimaryLightColor,
-                              borderRadius: BorderRadius.circular(15),
+                          Expanded(
+                            child: SizedInputField(
+                              fieldName: "Last Name",
+                              controller: inputControllers.lastName,
                             ),
-                            child: AddLinksBox(linkTiles: linkTiles),
-                          ),
-                          RoundedButton(
-                            title: "Save",
-                            onPress: () async {
-                              String userIdUser;
-                              final userState =
-                                  BlocProvider.of<UserBloc>(context).state;
-                              if (userState is UserSignedInState) {
-                                userIdUser = userState.user.userId!;
-                              } else {
-                                return;
-                              }
-                              if (inputControllers.firstName.text.isEmpty ||
-                                  inputControllers.lastName.text.isEmpty) {
-                                showMySnackBar(context,
-                                    "First name and last name cannot be empty!");
-                                return;
-                              }
-                              if (inputControllers.userName.text.isEmpty) {
-                                showMySnackBar(
-                                    context, "Username cannot be empty!");
-                                return;
-                              }
-                              List<LinkSend> links = [];
-                              for (var link in linkTiles) {
-                                if (link.nameCont.text.isEmpty ||
-                                    link.linkCont.text.isEmpty) {
-                                  showMySnackBar(
-                                      context, "Fill all link fields!");
-
-                                  return;
-                                }
-                                LinkSend currLink = LinkSend(
-                                    name: link.nameCont.text,
-                                    link: link.linkCont.text);
-                                links.add(currLink);
-                              }
-
-                              BlocProvider.of<ProfileBloc>(context).add(
-                                CreateProfileEvent(
-                                  profileData: CreateProfileSend(
-                                      userName: inputControllers.userName.text,
-                                      name:
-                                          "${inputControllers.firstName.text} ${inputControllers.lastName.text}",
-                                      userId: userIdUser,
-                                      college: collegeValue,
-                                      specialization: specializationValue,
-                                      designation: designationValue,
-                                      interests: interestList.toList(),
-                                      links: links,
-                                      coverPicFileUrl:
-                                          inputVariables.coverPhoto,
-                                      profilePicFileUrl:
-                                          inputVariables.profilePic),
-                                ),
-                              );
-                            },
                           ),
                         ],
                       ),
-                    ),
+                      SizedInputField(
+                        fieldName: "UserName",
+                        controller: inputControllers.userName,
+                      ),
+                      CustomDropdownButton(
+                        dropType: DropTypes.collegeDropDown,
+                        prefixIcon: Icons.school,
+                        options: collegeDropDown,
+                        fieldName: "Select your College",
+                        changeValue: setDropDownValue,
+                      ),
+                      CustomDropdownButton(
+                        dropType: DropTypes.specializationDropDown,
+                        prefixIcon: Icons.science,
+                        options: specializationDropDown,
+                        fieldName: "Select your Specialization",
+                        changeValue: setDropDownValue,
+                      ),
+                      CustomDropdownButton(
+                        dropType: DropTypes.designationDropDown,
+                        prefixIcon: Icons.work,
+                        options: designationDropDown,
+                        fieldName: "Select your Designation",
+                        changeValue: setDropDownValue,
+                      ),
+                      InterestsTile(
+                          size: size,
+                          controller: inputControllers.interests,
+                          interestsList: interestList),
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                        decoration: BoxDecoration(
+                          color: kPrimaryLightColor,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: AddLinksBox(linkTiles: linkTiles),
+                      ),
+                      RoundedButton(
+                        title: "Save",
+                        onPress: () async {
+                          String userIdUser;
+                          final userState =
+                              BlocProvider.of<UserBloc>(context).state;
+                          if (userState is UserSignedInState) {
+                            userIdUser = userState.user.userId!;
+                          } else {
+                            return;
+                          }
+                          if (inputControllers.firstName.text.isEmpty ||
+                              inputControllers.lastName.text.isEmpty) {
+                            showMySnackBar(context,
+                                "First name and last name cannot be empty!");
+                            return;
+                          }
+                          if (inputControllers.userName.text.isEmpty) {
+                            showMySnackBar(
+                                context, "Username cannot be empty!");
+                            return;
+                          }
+                          List<LinkSend> links = [];
+                          for (var link in linkTiles) {
+                            if (link.nameCont.text.isEmpty ||
+                                link.linkCont.text.isEmpty) {
+                              showMySnackBar(context, "Fill all link fields!");
+
+                              return;
+                            }
+                            LinkSend currLink = LinkSend(
+                                name: link.nameCont.text,
+                                link: link.linkCont.text);
+                            links.add(currLink);
+                          }
+
+                          BlocProvider.of<ProfileBloc>(context).add(
+                            CreateProfileEvent(
+                              profileData: CreateProfileSend(
+                                  userName: inputControllers.userName.text,
+                                  name:
+                                      "${inputControllers.firstName.text} ${inputControllers.lastName.text}",
+                                  userId: userIdUser,
+                                  college: collegeValue,
+                                  specialization: specializationValue,
+                                  designation: designationValue,
+                                  interests: interestList.toList(),
+                                  links: links,
+                                  coverPicFileUrl: inputVariables.coverPhoto,
+                                  profilePicFileUrl: inputVariables.profilePic),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                  BlocBuilder<ProfileBloc, ProfileState>(
-                    builder: (context, state) {
-                      if (state is ProfileLoadingState) {
-                        return Center(
-                          child: CircularProgressIndicatorOnStack(),
-                        );
-                      }
-                      return SizedBox();
-                    },
-                  ),
-                ],
+                ),
               ),
-            ),
-          );
-        }
-        return Container(
-          height: size.height,
-          width: size.width,
-          color: Colors.white,
-          child: LoadingIndicator(),
-        );
-      },
+              BlocBuilder<ProfileBloc, ProfileState>(
+                builder: (context, state) {
+                  if (state is ProfileLoadingState) {
+                    return Container(
+                      width: size.width,
+                      height: size.height,
+                      color: kPrimaryColor.withOpacity(0.3),
+                      child: Center(
+                        child: LoadingIndicator(circularBlue: true),
+                      ),
+                    );
+                  }
+                  return SizedBox();
+                },
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

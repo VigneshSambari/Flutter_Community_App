@@ -169,46 +169,49 @@ class _AddLinksBoxState extends State<AddLinksBox> {
               color: kPrimaryColor.withOpacity(0.6),
               borderRadius: BorderRadius.circular(15),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Add links to enhance your profile",
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Add links to enhance your profile",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    Text(
-                      "For example: Github, Linkedin, Leetcode...",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
+                      Text(
+                        "For example: Github, Linkedin, Leetcode...",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                GestureDetector(
-                  onTap: () {
-                    TextEditingController nameCont = TextEditingController(),
-                        linkCont = TextEditingController();
-                    widget.linkTiles.add(LinkTile(
-                      linkCont: linkCont,
-                      nameCont: nameCont,
-                      linkList: linkTiles,
-                      stateUpdate: stateUpdate,
-                    ));
-                    stateUpdate();
-                  },
-                  child: CircleAvatar(
-                    child: Icon(Icons.add),
+                    ],
                   ),
-                )
-              ],
+                  GestureDetector(
+                    onTap: () {
+                      TextEditingController nameCont = TextEditingController(),
+                          linkCont = TextEditingController();
+                      widget.linkTiles.add(LinkTile(
+                        linkCont: linkCont,
+                        nameCont: nameCont,
+                        linkList: linkTiles,
+                        stateUpdate: stateUpdate,
+                      ));
+                      stateUpdate();
+                    },
+                    child: CircleAvatar(
+                      child: Icon(Icons.add),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
           ConstrainedBox(
