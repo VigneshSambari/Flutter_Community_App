@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:rive/rive.dart';
 import 'package:sessions/bloc/room/room_bloc_imports.dart';
 import 'package:sessions/bloc/user/user_bloc.dart';
@@ -91,6 +92,11 @@ class _EntryPointState extends State<EntryPoint>
 
   @override
   void initState() {
+    UserState userState = BlocProvider.of<UserBloc>(context).state;
+    if (userState is UserSignedInState) {
+      OneSignal.shared.setExternalUserId(userState.user.userId! ?? "");
+    }
+
     setSocketServer();
     _animationController = AnimationController(
       vsync: this,

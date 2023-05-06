@@ -11,8 +11,10 @@ import 'package:sessions/components/utils.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/models/profile.model.dart';
 import 'package:sessions/models/room.model.dart';
+import 'package:sessions/models/session.model.dart';
 import 'package:sessions/notifications/onesignal/push_notifications.dart';
 import 'package:sessions/repositories/room_repository.dart';
+import 'package:sessions/repositories/session_repository.dart';
 import 'package:sessions/utils/classes.dart';
 
 class SessionSearchScreen extends StatefulWidget {
@@ -184,7 +186,7 @@ class _SearchRoomTileState extends State<SearchRoomTile> {
   bool isDisposed = false, isLoading = false;
   RoomRepository roomRepository = RoomRepository();
   final PushNotifications notifications = PushNotifications();
-
+  SessionRepository sessionRepository = SessionRepository();
   @override
   void initState() {
     currentStatus = widget.status;
@@ -204,6 +206,13 @@ class _SearchRoomTileState extends State<SearchRoomTile> {
           joinOrLeave: "join",
         ),
       );
+      SessionModel session = await sessionRepository.findByRoomID(
+          httpData: IdObject(widget.room.roomId ?? ""));
+      await sessionRepository.addSession(
+          httpData: SessionAddRemove(
+        userId: widget.userId,
+        sessionId: session.sessionId,
+      ));
 
       if (number == "1") {
         notifications.sendPushNotification(
