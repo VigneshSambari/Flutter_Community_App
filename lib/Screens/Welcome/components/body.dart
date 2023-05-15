@@ -46,7 +46,7 @@ class CenterBody extends StatelessWidget {
             style: titleBlueFontStyle(),
           ),
           Text(
-            "Community Application",
+            "Campus Connect",
             style: titleBlueFontStyle(),
           ),
           SizedBox(
