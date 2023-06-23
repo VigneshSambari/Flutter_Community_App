@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:sessions/components/file_pickers.dart';
 import 'package:sessions/constants.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class AddImageIcon extends StatelessWidget {
   const AddImageIcon({
@@ -22,7 +23,7 @@ class AddImageIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        File? selectedFile = await pickFile();
+        File? selectedFile = await pickFile(allowMultipleFiles: false);
         if (selectedFile != null) {
           String filePath = await saveFile(
             file: selectedFile,
@@ -99,6 +100,72 @@ class ProfileImage extends StatelessWidget {
           fit: BoxFit.fitHeight,
           height: radius * 3,
           width: radius * 3,
+        ),
+      ),
+    );
+  }
+}
+
+class CoverPhotoNetwok extends StatelessWidget {
+  const CoverPhotoNetwok({
+    super.key,
+    required this.coverPicPath,
+    required this.size,
+    this.height = 230,
+  });
+
+  final String coverPicPath;
+  final Size size;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(15),
+      child: Center(
+        child: CachedNetworkImage(
+          imageUrl: coverPicPath,
+          fit: BoxFit.cover,
+          height: height,
+          width: size.width,
+          placeholder: (context, url) =>
+              Center(child: CircularProgressIndicator()),
+          errorWidget: (context, url, error) =>
+              Center(child: Icon(Icons.error)),
+        ),
+      ),
+    );
+  }
+}
+
+class ProfileImageNetwork extends StatelessWidget {
+  const ProfileImageNetwork({
+    super.key,
+    required this.profilePicPath,
+    required this.radius,
+  });
+
+  final String profilePicPath;
+
+  final double radius;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipOval(
+      child: CircleAvatar(
+        backgroundColor: kPrimaryLightColor,
+        radius: radius,
+        child: Center(
+          child: CachedNetworkImage(
+            imageUrl: profilePicPath,
+            fit: BoxFit.cover,
+            height: radius * 2,
+            width: radius * 2,
+            placeholder: (context, url) =>
+                Center(child: CircularProgressIndicator()),
+            errorWidget: (context, url, error) =>
+                Center(child: Icon(Icons.error)),
+          ),
         ),
       ),
     );

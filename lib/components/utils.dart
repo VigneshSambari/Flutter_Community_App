@@ -1,10 +1,13 @@
-// ignore_for_file: prefer_const_constructors, non_constant_identifier_names
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, sized_box_for_whitespace
 
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rive/rive.dart';
+import 'package:sessions/assets.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/utils/navigations.dart';
 
@@ -145,18 +148,32 @@ class InfoCard extends StatelessWidget {
     super.key,
     required this.title,
     required this.subtitle,
+    required this.url,
   });
 
-  final String title, subtitle;
+  final String title, subtitle, url;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Colors.white24,
-        child: Icon(
-          CupertinoIcons.person,
-          color: Colors.white,
+      leading: ClipRRect(
+        borderRadius: BorderRadius.circular(25),
+        child: CircleAvatar(
+          radius: 22.5,
+          backgroundColor: Colors.white24,
+          child: url != ""
+              ? CachedNetworkImage(
+                  imageUrl: url,
+                  fit: BoxFit.cover,
+                  width: 125,
+                  height: 125,
+                  errorWidget: (context, url, error) =>
+                      Center(child: Icon(Icons.error)),
+                )
+              : Icon(
+                  CupertinoIcons.person,
+                  color: Colors.white,
+                ),
         ),
       ),
       title: Text(
@@ -253,6 +270,137 @@ class ClipTitle extends StatelessWidget {
           color: backgroundColor2.withOpacity(0.825),
           fontSize: 20,
           fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+}
+
+class CircularProgressIndicatorOnStack extends StatelessWidget {
+  const CircularProgressIndicatorOnStack({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: kPrimaryColor.withOpacity(0.15),
+      child: Center(
+        child: Container(
+          height: MediaQuery.of(context).size.width * 0.135,
+          width: MediaQuery.of(context).size.width * 0.135,
+          child: RiveAnimation.asset(
+            Assets.assetsRiveAssetsLoadingcircular,
+            fit: BoxFit.contain,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class LoadingIndicator extends StatefulWidget {
+  const LoadingIndicator({
+    super.key,
+    this.circularBlue = false,
+  });
+
+  final bool circularBlue;
+
+  @override
+  State<LoadingIndicator> createState() => _LoadingIndicatorState();
+}
+
+class _LoadingIndicatorState extends State<LoadingIndicator> {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SizedBox(
+        height: widget.circularBlue
+            ? MediaQuery.of(context).size.height * 0.135
+            : MediaQuery.of(context).size.width * 0.225,
+        width: widget.circularBlue
+            ? MediaQuery.of(context).size.width * 0.135
+            : MediaQuery.of(context).size.width * 0.225,
+        child: RiveAnimation.asset(
+          widget.circularBlue
+              ? Assets.assetsRiveAssetsLoadingcircular
+              : Assets.assetsRiveAssetsLoading,
+          fit: BoxFit.contain,
+        ),
+      ),
+    );
+  }
+}
+
+class DateTimeText extends StatelessWidget {
+  const DateTimeText({
+    super.key,
+    required this.dateTime,
+  });
+
+  final String dateTime;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      dateTime,
+      style: TextStyle(
+        color: Colors.white,
+      ),
+    );
+  }
+}
+
+class ExistingRoomTitle extends StatelessWidget {
+  final String title;
+  const ExistingRoomTitle({
+    super.key,
+    required this.title,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        margin: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        decoration: BoxDecoration(
+          color: kPrimaryColor,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Text(
+          title,
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 17,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ListTileTrailing extends StatelessWidget {
+  final String title;
+  final Color color;
+  final Function? callBack;
+  const ListTileTrailing(
+      {super.key, required this.title, required this.color, this.callBack});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Text(
+        title,
+        style: TextStyle(
+          color: Colors.white,
         ),
       ),
     );

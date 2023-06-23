@@ -6,30 +6,16 @@ import 'package:sessions/screens/profile/components/tabbar.dart';
 import 'package:sessions/screens/profile/components/tiles.dart';
 import 'package:sessions/screens/profile/components/utils.dart';
 
-List<InterestClip> interests = [
-  InterestClip(title: "Coding"),
-  InterestClip(title: "Sleeping"),
-  InterestClip(title: "VideoGames"),
-  InterestClip(title: "Coding"),
-  InterestClip(title: "Sleeping"),
-  InterestClip(title: "Games"),
-  InterestClip(title: "Playing"),
-];
-
-List<LinkClip> links = [
-  LinkClip(title: "Github", url: "www.google.com"),
-  LinkClip(title: "Linkedin", url: "www.google.com"),
-  LinkClip(title: "GooglePhotos", url: "www.google.com"),
-  LinkClip(title: "Instagram", url: "www.google.com"),
-  LinkClip(title: "Youtube", url: "www.google.com"),
-  LinkClip(title: "Social", url: "www.google.com"),
-  LinkClip(title: "Facebook", url: "www.google.com"),
-];
-
 class MyBottomSheet extends StatefulWidget {
   final double minHeight;
-
-  const MyBottomSheet({super.key, required this.minHeight});
+  final List<InterestClip> interests;
+  final List<LinkClip> links;
+  const MyBottomSheet({
+    super.key,
+    required this.minHeight,
+    required this.interests,
+    required this.links,
+  });
   @override
   _MyBottomSheetState createState() => _MyBottomSheetState();
 }
@@ -41,11 +27,11 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
 
   @override
   void initState() {
-    _currentHeight = widget.minHeight - 65;
+    _currentHeight = widget.minHeight - 60;
 
     controller.addListener(() {
       setState(() {
-        _currentHeight = controller.pixels - 80;
+        _currentHeight = controller.pixels - 5;
       });
     });
 
@@ -96,7 +82,10 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
                     BlurDivider(size: size),
                     Container(
                       height: _currentHeight - 10,
-                      child: AnimatedTabBar(),
+                      child: AnimatedTabBar(
+                        interests: widget.interests,
+                        links: widget.links,
+                      ),
                     ),
                   ],
                 ),

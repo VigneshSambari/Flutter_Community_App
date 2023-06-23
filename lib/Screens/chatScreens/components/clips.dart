@@ -2,46 +2,59 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sessions/assets.dart';
 import 'package:sessions/constants.dart';
 import 'package:sessions/screens/chatScreens/components/tiles.dart';
+import 'package:sessions/utils/enums.dart';
 
 class RoomClip extends StatelessWidget {
   const RoomClip({
     super.key,
     required this.title,
     this.assetUrl = "assets/global/noimage.png",
+    this.onPressed,
+    this.roomType,
   });
 
+  final Function({required RoomTypesEnum roomType})? onPressed;
   final String title;
   final String assetUrl;
+  final RoomTypesEnum? roomType;
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Container(
-      decoration: BoxDecoration(
-        color: kPrimaryLightColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      padding: EdgeInsets.all(5),
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: size.width * 0.045,
-            backgroundColor: kPrimaryLightColor,
-            child: Image.asset(
-              assetUrl,
-              fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: onPressed != null && roomType != null
+          ? () {
+              onPressed!(roomType: roomType!);
+            }
+          : null,
+      child: Container(
+        decoration: BoxDecoration(
+          color: kPrimaryLightColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        padding: EdgeInsets.all(5),
+        child: Column(
+          children: [
+            CircleAvatar(
+              radius: size.width * 0.045,
+              backgroundColor: kPrimaryLightColor,
+              child: Image.asset(
+                assetUrl,
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          Text(
-            title,
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-            ),
-          )
-        ],
+            Text(
+              title,
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -60,7 +73,7 @@ class _ExpandableWidgetState extends State<ExpandableWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
-  bool _expanded = false;
+  bool _expanded = false, _isDispose = false;
 
   @override
   void initState() {
@@ -72,6 +85,7 @@ class _ExpandableWidgetState extends State<ExpandableWidget>
 
   @override
   void dispose() {
+    _isDispose = true;
     _animationController.dispose();
     super.dispose();
   }
@@ -97,6 +111,9 @@ class _ExpandableWidgetState extends State<ExpandableWidget>
               children: [
                 GestureDetector(
                   onTap: () {
+                    if (_isDispose || !mounted) {
+                      return;
+                    }
                     setState(() {
                       _expanded = !_expanded;
                       if (_expanded) {
@@ -114,8 +131,9 @@ class _ExpandableWidgetState extends State<ExpandableWidget>
                     child: Row(
                       children: [
                         RoomClip(
-                            title: "College",
-                            assetUrl: "assets/chatEntry/college.png"),
+                          title: "College",
+                          assetUrl: Assets.assetsChatEntryCollege,
+                        ),
                         Icon(
                           !_expanded
                               ? Icons.arrow_right_rounded

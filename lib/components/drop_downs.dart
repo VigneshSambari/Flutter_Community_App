@@ -2,16 +2,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:sessions/constants.dart';
+import 'package:sessions/utils/enums.dart';
 
 class CustomDropdownButton extends StatefulWidget {
   final List<String> options;
   final String fieldName;
-  final IconData prefixIcon;
-
+  final IconData? prefixIcon;
+  final Function changeValue;
+  final DropTypes dropType;
+  final bool sharpCorner;
   CustomDropdownButton({
     required this.options,
     required this.fieldName,
     required this.prefixIcon,
+    required this.changeValue,
+    required this.dropType,
+    this.sharpCorner = false,
   });
 
   @override
@@ -20,68 +26,41 @@ class CustomDropdownButton extends StatefulWidget {
 
 class _CustomDropdownButtonState extends State<CustomDropdownButton> {
   String selectedOption = "";
+
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 5),
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      width: size.width,
-      decoration: BoxDecoration(
-        color: kPrimaryLightColor,
-        borderRadius: BorderRadius.circular(25),
-      ),
-      child: Builder(
-        builder: (context) {
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: size.width * 0.8,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(right: 7),
-                          child: Icon(
-                            widget.prefixIcon,
-                            color: kPrimaryColor,
-                          ),
-                        ),
-                        Text(
-                          selectedOption == ""
-                              ? widget.fieldName
-                              : selectedOption,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: selectedOption == ""
-                                ? Colors.grey[700]
-                                : Colors.black,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                IconButton(
-                  splashRadius: 1,
-                  icon: Icon(Icons.arrow_drop_down),
-                  onPressed: () {
-                    _showDropdownMenu(context);
-                  },
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+    Widget dropDownWid = DropDownChild(
+      fieldName: widget.fieldName,
+      prefixIcon: widget.prefixIcon!,
+      selectedOption: selectedOption,
+      showDropdownMenu: _showDropdownMenu,
+      sharpCorner: widget.sharpCorner,
     );
+    final size = MediaQuery.of(context).size;
+    return widget.sharpCorner
+        ? Container(
+            // margin: EdgeInsets.all(5),
+            height: 55,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(
+                width: 1,
+                color: Colors.grey,
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: dropDownWid,
+          )
+        : Container(
+            margin: EdgeInsets.symmetric(vertical: 5),
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            width: size.width,
+            decoration: BoxDecoration(
+              color: kPrimaryLightColor,
+              borderRadius: BorderRadius.circular(25),
+            ),
+            child: dropDownWid,
+          );
   }
 
   void _showDropdownMenu(BuildContext context) {
@@ -127,12 +106,77 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
         ),
       ],
     ).then((String? newValue) {
+      widget.changeValue(value: newValue, dropType: widget.dropType);
       if (newValue != null) {
         setState(() {
           selectedOption = newValue;
         });
       }
     });
+  }
+}
+
+class DropDownChild extends StatelessWidget {
+  final Function showDropdownMenu;
+  final String fieldName;
+  final IconData prefixIcon;
+  final String selectedOption;
+  final bool sharpCorner;
+  const DropDownChild({
+    super.key,
+    required this.showDropdownMenu,
+    required this.fieldName,
+    required this.prefixIcon,
+    required this.selectedOption,
+    this.sharpCorner = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Builder(
+      builder: (context) {
+        return SizedBox(
+          width: size.width,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  sharpCorner
+                      ? SizedBox(
+                          width: 10,
+                        )
+                      : Padding(
+                          padding: EdgeInsets.only(right: 7),
+                          child: Icon(
+                            prefixIcon,
+                            color: kPrimaryColor,
+                          ),
+                        ),
+                  Text(
+                    selectedOption == "" ? fieldName : selectedOption,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: selectedOption == ""
+                          ? Colors.grey[700]
+                          : Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+              IconButton(
+                splashRadius: 1,
+                icon: Icon(Icons.arrow_drop_down),
+                onPressed: () {
+                  showDropdownMenu(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 

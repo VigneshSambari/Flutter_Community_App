@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, must_be_immutable
 
 import 'package:flutter/material.dart';
 import '../constants.dart';
@@ -11,8 +11,12 @@ class OutlinedInputField extends StatefulWidget {
     required this.prefixIcon,
     this.password = false,
     this.enabled = true,
+    this.controller,
+    this.error,
   });
 
+  String? error;
+  TextEditingController? controller;
   final String labelText;
   final String hintText;
   final Icon prefixIcon;
@@ -32,6 +36,7 @@ class _OutlinedInputFieldState extends State<OutlinedInputField> {
       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
       width: size.width * 0.84,
       child: TextFormField(
+        controller: widget.controller,
         onTapOutside: (value) {
           setState(() {
             passwordVisible = false;
@@ -72,6 +77,7 @@ class _OutlinedInputFieldState extends State<OutlinedInputField> {
             borderSide: BorderSide(color: kPrimaryColor),
             borderRadius: BorderRadius.circular(25),
           ),
+          errorText: widget.error,
           labelText: widget.labelText,
           hintText: widget.hintText,
         ),
@@ -89,19 +95,25 @@ class RoundedInputField extends StatelessWidget {
     this.extensible = false,
     this.height = 0,
     this.enabled = true,
+    this.controller,
+    this.maxLength,
   });
 
+  final TextEditingController? controller;
   final String fieldName;
   final Color iconColor;
   final double height;
   final IconData iconData;
   final bool extensible, enabled;
+  final int? maxLength;
 
   @override
   Widget build(BuildContext context) {
     return TextFieldContainer(
       widget: TextField(
+        maxLength: maxLength,
         enabled: enabled,
+        controller: controller,
         maxLines: extensible ? 10 : 2,
         minLines: 1,
         decoration: InputDecoration(
@@ -137,7 +149,7 @@ class TextFieldContainer extends StatelessWidget {
       //height: height == 0 ? null : height,
       width: size.width,
       margin: EdgeInsets.symmetric(
-        vertical: 10,
+        vertical: 5,
       ),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       decoration: BoxDecoration(
@@ -155,25 +167,36 @@ class SizedInputField extends StatelessWidget {
     this.enabled = true,
     required this.fieldName,
     this.height = 60,
+    this.controller,
+    this.icon,
+    this.extensible = false,
+    this.maxLength,
   });
 
+  final TextEditingController? controller;
   final String fieldName;
   final bool enabled;
   final double height;
+  final IconData? icon;
+  final bool extensible;
+  final int? maxLength;
   @override
   Widget build(BuildContext context) {
     return RoundedInputField(
       fieldName: fieldName,
-      iconData: Icons.abc,
+      iconData: icon != null ? icon! : Icons.abc,
       height: height,
-      extensible: false,
+      extensible: extensible,
       enabled: enabled,
+      controller: controller,
+      maxLength: maxLength,
     );
   }
 }
 
 class SearchBar extends StatelessWidget {
-  const SearchBar({super.key, required this.controller});
+  final VoidCallback fetch;
+  const SearchBar({super.key, required this.controller, required this.fetch});
 
   final TextEditingController controller;
 
@@ -195,6 +218,9 @@ class SearchBar extends StatelessWidget {
           children: [
             Expanded(
               child: TextField(
+                onChanged: (String value) {
+                  fetch();
+                },
                 controller: controller,
                 maxLines: 1,
                 decoration: InputDecoration(
@@ -208,7 +234,9 @@ class SearchBar extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                fetch();
+              },
               child: Icon(
                 Icons.search_rounded,
                 color: kPrimaryColor,
@@ -216,5 +244,108 @@ class SearchBar extends StatelessWidget {
             )
           ],
         ));
+  }
+}
+
+class EntryField extends StatelessWidget {
+  final String? title, hintText;
+  final int? maxLines, maxLength;
+  final TextInputType inputType;
+  final Widget suffix;
+  final bool enabled;
+  final TextEditingController? controller;
+  EntryField({
+    super.key,
+    this.title,
+    this.hintText,
+    this.maxLines = 1,
+    this.maxLength,
+    this.inputType = TextInputType.text,
+    this.suffix = const SizedBox(),
+    this.controller,
+    this.enabled = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title!,
+            style: TextStyle(
+              fontSize: 16,
+              color: kPrimaryDarkColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          BlueOutlinedInputField(
+            hintText: hintText,
+            maxLength: maxLength,
+            maxLines: maxLines,
+            inputType: inputType,
+            suffix: suffix,
+            controller: controller,
+            enabled: enabled,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BlueOutlinedInputField extends StatelessWidget {
+  final String? hintText;
+  final TextInputType inputType;
+  final int? maxLines, maxLength;
+  final Widget suffix;
+  final TextEditingController? controller;
+  final bool enabled;
+  const BlueOutlinedInputField({
+    super.key,
+    this.hintText,
+    this.maxLength,
+    this.maxLines = 1,
+    this.inputType = TextInputType.text,
+    this.suffix = const SizedBox(),
+    this.controller,
+    this.enabled = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        TextField(
+          enabled: enabled,
+          controller: controller,
+          keyboardType: inputType,
+          maxLength: maxLength,
+          maxLines: maxLines,
+          minLines: 1,
+          decoration: InputDecoration(
+            hintText: hintText,
+            border: OutlineInputBorder(
+              borderSide: BorderSide(
+                width: 1,
+                color: kPrimaryColor,
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        ),
+        Positioned(
+          right: 0,
+          top: 0,
+          bottom: 0,
+          child: suffix,
+        )
+      ],
+    );
   }
 }

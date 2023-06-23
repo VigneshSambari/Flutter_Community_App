@@ -8,21 +8,29 @@ const TextStyle titleTextStyle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
+TextStyle titleBlueFontStyle() {
+  return TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: kPrimaryDarkColor,
+  );
+}
+
 const TextStyle sideMenuTileStyle = TextStyle(
   fontWeight: FontWeight.bold,
   color: Colors.white,
 );
 
 const TextStyle blogTitleStyle = TextStyle(
-  fontWeight: FontWeight.bold,
-  fontSize: 18,
-  color: Colors.white,
+  fontWeight: FontWeight.w500,
+  fontSize: 17,
+  color: Colors.black87,
 );
 
 const TextStyle blogSubtitleStyle = TextStyle(
-  fontWeight: FontWeight.w200,
-  fontSize: 10,
-  color: Colors.white,
+  fontWeight: FontWeight.w500,
+  fontSize: 13,
+  color: kPrimaryDarkColor,
 );
 
 TextStyle popUpMenuItemStyle() {

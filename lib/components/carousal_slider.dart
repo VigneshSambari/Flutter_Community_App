@@ -7,8 +7,19 @@ import 'package:flutter/material.dart';
 class CarouselSlider extends StatefulWidget {
   final List<Widget> items;
   final double height;
+  final double margin;
+  final bool scroll;
+  final double widthRatio;
+  final Function({required int value})? pageChange;
 
-  CarouselSlider({required this.items, required this.height});
+  CarouselSlider({
+    required this.items,
+    required this.height,
+    this.margin = 10,
+    this.scroll = true,
+    this.pageChange,
+    this.widthRatio = .95,
+  });
 
   @override
   _CarouselSliderState createState() => _CarouselSliderState();
@@ -22,7 +33,10 @@ class _CarouselSliderState extends State<CarouselSlider> {
   @override
   void initState() {
     super.initState();
-    _startTimer();
+
+    if (widget.scroll) {
+      _startTimer();
+    }
   }
 
   @override
@@ -48,9 +62,9 @@ class _CarouselSliderState extends State<CarouselSlider> {
     Size size = MediaQuery.of(context).size;
     return Container(
       alignment: Alignment.center,
-      margin: EdgeInsets.all(10),
+      margin: EdgeInsets.all(widget.margin),
       height: widget.height,
-      width: size.width * 0.95,
+      width: size.width * widget.widthRatio,
       child: Center(
         child: GestureDetector(
           onLongPressDown: (details) {
@@ -64,6 +78,9 @@ class _CarouselSliderState extends State<CarouselSlider> {
             onPageChanged: (index) {
               setState(() {
                 _currentPage = index;
+                if (widget.pageChange != null) {
+                  widget.pageChange!(value: index);
+                }
               });
             },
             children: widget.items,
